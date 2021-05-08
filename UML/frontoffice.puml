@@ -1,0 +1,115 @@
+@startuml office
+
+actor Admin
+actor Member
+actor User
+participant System as System
+database Database as Database
+User -> System : Connexion au blog
+activate Admin
+activate Member
+activate User
+activate System
+return Page d'accueil 
+deactivate User
+deactivate Member
+deactivate Admin
+User -> System : Demande de contact
+activate Admin
+activate Member
+activate User
+activate System
+System -> Database : Enregistrement des infos du formulaire
+activate Database
+return Confirmation enregistrement
+return Confirmation prise en compte demande de contact 
+deactivate User
+deactivate Member
+deactivate Admin
+User -> System : Télécharge le CV
+activate Admin
+activate Member
+activate User
+activate System
+return Téléchargement du CV
+deactivate User
+deactivate Member
+deactivate Admin
+
+User -> System : Clique lien création de compte
+activate User
+activate System
+return Page formulaire création de compte
+User -> System : renvoi formulaire rempli
+activate System
+System -> Database : Enregistrement des informations de nouveau compte
+activate Database
+return Informations enregistrées
+return confirmation d'inscription
+deactivate User
+
+User -> System : Demande liste de Posts
+activate Admin
+activate Member
+activate User 
+activate System
+System -> Database : Recuperation de la liste de Posts
+activate Database
+return Liste des Posts
+return Page liste des Posts
+deactivate User
+deactivate Member
+deactivate Admin
+
+User -> System : Demande détails d'un Post
+activate Admin
+activate Member
+activate User
+activate System
+return Page détails du Post
+deactivate User
+deactivate Member
+deactivate Admin
+
+Member -> System : Authentification
+activate Admin
+activate Member
+activate System
+System -> Database : Demande information utilisateur
+activate Database
+return Informations utilisateur
+System -> System : Vérification identifiant et mot de passe
+alt authentification réussie
+    System -> Member : Authentification acceptée
+else echec authentification
+    return: Authentification refusée
+end
+deactivate Member
+deactivate Admin
+
+Member -> System : Ajoute un commentaire 
+activate Admin
+activate Member
+activate System
+System -> Database : Enregistre commentaire
+activate Database
+return Commentaire enregistré
+return Confirmation commentaire en attente de validation
+deactivate Member
+deactivate Admin
+
+Admin -> System : Demande à acceder au Back-Office
+activate Admin
+activate System
+System -> Database : Verification des droits administrateur
+activate Database
+return Informations utilisateur
+System -> System : Verification des droits utilisateurs
+alt Utilisateur autorisé
+    System -> Admin : Page accueil Back-Office
+else Utilisateur non-autorisé
+    return Accès interdit
+end
+
+
+@enduml
