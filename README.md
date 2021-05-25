@@ -1,1 +1,2 @@
 # My-blog
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/946b9f36132d4e06a4fe652d68b026ae)](https://www.codacy.com/gh/d4rkstrife/My-blog/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=d4rkstrife/My-blog&amp;utm_campaign=Badge_Grade)
