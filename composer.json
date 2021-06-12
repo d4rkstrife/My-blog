@@ -1,0 +1,22 @@
+{
+    "name": "pgdc8/pr-go-hc-sfad-master",
+    "authors": [
+        {
+            "name": "d4rkstrife",
+            "email": "p.gdc85@gmail.com"
+        }
+    ],
+    "require-dev": {
+        "filp/whoops": "^2.12",
+        "squizlabs/php_codesniffer": "^3.6",
+        "phpstan/phpstan": "^0.12.88"
+    },
+    "require": {
+        "twig/twig": "^3.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    }
+}

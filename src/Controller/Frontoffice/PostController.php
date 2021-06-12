@@ -44,7 +44,6 @@ final class PostController
     public function displayAllAction(): Response
     {
         $posts = $this->postRepository->findAll();
-
         return new Response($this->view->render([
             'template' => 'posts',
             'data' => ['posts' => $posts],
