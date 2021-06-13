@@ -1,16 +1,30 @@
 {% extends "/frontoffice/base.html.twig" %}
 
-{% block title %}Tous les posts{% endblock %}
+{% block title %}Tous les posts
+{% endblock %}
 
-{% block content %} 
-    <h2>Tous les posts</h2>
-    {% for post in posts %}
-        <article>
-            <h2>title = {{ post.title }}</h2>
-            <p>text = {{ post.text}}</p>
-            <p>id = {{ post.id}}</p>
-            <a href="index.php?action=post&id={{ post.id}}">Lire le post</a>
-            <hr>
-        </article>
-    {% endfor %}
+{% block content %}
+	<header id="head" class="secondary"></header>
+	<div class="container">
+		<div class="row">
+
+
+			<header class="page-header">
+				<h1 class="page-title">Tous les posts</h1>
+			</header>
+			{% for post in posts %}
+				<article class="col-sm-8 maincontent">
+
+					<h3>{{ post.title }}</h3>
+					<p>{{ post.text}}</p>
+					<p>id =
+						{{ post.id}}</p>
+					<a href="index.php?action=post&id={{ post.id}}">Lire le post</a>
+
+
+				</article>
+
+			{% endfor %}
+		</div>
+	</div>
 {% endblock %}
