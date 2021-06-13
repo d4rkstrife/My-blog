@@ -41,10 +41,9 @@ final class Router
         //Déterminer sur quelle route nous sommes // Attention algorithme naïf
         // *** @Route http://localhost:8000/?action=home ***
         if ($action === 'home') {
-
             $controller = new HomeController($this->view);
             return $controller->displayAllAction();
-        
+
         // *** @Route http://localhost:8000/?action=posts ***
         } elseif ($action === 'posts') {
             //injection des dépendances et instanciation du controller
