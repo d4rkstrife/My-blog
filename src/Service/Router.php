@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace  App\Service;
 
+use App\Controller\Frontoffice\HomeController;
 use App\Controller\Frontoffice\PostController;
 use App\Controller\Frontoffice\UserController;
 use App\Model\Repository\PostRepository;
@@ -35,12 +36,17 @@ final class Router
     public function run(): Response
     {
         //On test si une action a été défini ? si oui alors on récupére l'action : sinon on mets une action par défaut (ici l'action posts)
-        $action = $this->request->query()->has('action') ? $this->request->query()->get('action') : 'posts';
+        $action = $this->request->query()->has('action') ? $this->request->query()->get('action') : 'home';
 
         //Déterminer sur quelle route nous sommes // Attention algorithme naïf
+        // *** @Route http://localhost:8000/?action=home ***
+        if ($action === 'home') {
 
+            $controller = new HomeController($this->view);
+            return $controller->displayAllAction();
+        
         // *** @Route http://localhost:8000/?action=posts ***
-        if ($action === 'posts') {
+        } elseif ($action === 'posts') {
             //injection des dépendances et instanciation du controller
             $postRepo = new PostRepository($this->database);
             $controller = new PostController($postRepo, $this->view);
@@ -72,6 +78,6 @@ final class Router
             return $controller->logoutAction();
         }
 
-        return new Response("Error 404 - cette page n'existe pas<br><a href='index.php?action=posts'>Aller Ici</a>", 404);
+        return new Response("Error 404 - cette page n'existe pas<br><a href='index.php?action=home'>Aller Ici</a>", 404);
     }
 }

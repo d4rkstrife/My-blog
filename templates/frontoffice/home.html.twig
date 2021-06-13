@@ -1,0 +1,52 @@
+{% extends "/frontoffice/base.html.twig" %}
+
+{% block title %}Contact
+{% endblock %}
+
+{% block content %}
+
+	<!-- Header -->
+	<header id="head">
+		<div class="container">
+			<div class="row">
+				<h1 class="lead">Mon incroyable blog</h1>
+				<p class="tagline">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed mollis dignissim erat eget viverra. Sed.</p>
+			</div>
+		</div>
+	</header>
+	<div class="container">
+		<div
+			class="row">
+
+			<!-- Article main content -->
+			<article class="col-sm-12 maincontent">
+				<header class="page-header">
+					<h1 class="page-title">Contactez nous</h1>
+				</header>
+
+				<form>
+					<div class="row">
+						<div class="col-sm-6">
+							<input class="form-control" type="text" placeholder="Nom">
+						</div>
+						<div class="col-sm-6">
+							<input class="form-control" type="text" placeholder="Email">
+						</div>
+
+					</div>
+					<br>
+					<div class="row">
+						<div class="col-sm-12">
+							<textarea placeholder="Tapez votre message ici" class="form-control" rows="9"></textarea>
+						</div>
+					</div>
+					<br>
+					<div class="row">
+						<div class="col-sm-6">
+							<input class="btn btn-action" type="submit" value="Send message">
+						</div>
+					</div>
+				</form>
+
+			</article>
+		{% endblock %}
