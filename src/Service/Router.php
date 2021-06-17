@@ -17,6 +17,7 @@ use App\View\View;
 
 // TODO cette classe router est un exemple très basic. Cette façon de faire n'est pas optimale
 // TODO Le router ne devrait pas avoir la responsabilité de l'injection des dépendances
+
 final class Router
 {
     private Database $database;
@@ -42,7 +43,7 @@ final class Router
         // *** @Route http://localhost:8000/?action=home ***
         if ($action === 'home') {
             $controller = new HomeController($this->view);
-            return $controller->displayAllAction();
+            return $controller->homeAction();
 
         // *** @Route http://localhost:8000/?action=posts ***
         } elseif ($action === 'posts') {
@@ -68,6 +69,13 @@ final class Router
             $controller = new UserController($userRepo, $this->view, $this->session);
 
             return $controller->loginAction($this->request);
+
+        // *** @Route http://localhost:8000/?action=register ***
+        } elseif ($action === 'register') {
+            $userRepo = new UserRepository($this->database);
+            $controller = new UserController($userRepo, $this->view, $this->session);
+
+            return $controller->registerAction();
 
         // *** @Route http://localhost:8000/?action=logout ***
         } elseif ($action === 'logout') {
