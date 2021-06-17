@@ -15,11 +15,12 @@ final class HomeController
     {
         $this->view = $view;
     }
-    public function displayAllAction(): Response
+    public function homeAction(): Response
     {
         return new Response($this->view->render([
             'template' => 'home',
             'data' => [],
         ]));
     }
+   
 }

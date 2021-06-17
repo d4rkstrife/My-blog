@@ -57,4 +57,11 @@ final class UserController
         $this->session->remove('user');
         return new Response('<h1>Utilisateur déconnecté</h1><h2>faire une redirection vers la page d\'accueil</h2><a href="index.php?action=posts">Liste des posts</a><br>', 200);
     }
+    public function registerAction(): Response
+    {
+        return new Response($this->view->render([
+            'template' => 'register',
+            'data' => [],
+        ]));
+    }
 }
