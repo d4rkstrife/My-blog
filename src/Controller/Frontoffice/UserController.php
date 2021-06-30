@@ -26,7 +26,7 @@ final class UserController
 
         $user = $this->userRepository->findOneBy(['email' => $infoUser['email']]);
         if ($user === null || $infoUser['password'] !== $user->getPassword()) {
-             return false;
+            return false;
         }
 
         $this->session->set('user', $user);

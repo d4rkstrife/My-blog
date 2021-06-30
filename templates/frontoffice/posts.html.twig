@@ -14,10 +14,12 @@
 				<article class="col-sm-8 maincontent">
 
 					<h3>{{ post.title }}</h3>
-					<p>{{ post.text}}</p>
-					<p>id =
-						{{ post.id}}</p>
-					<a href="index.php?action=post&id={{ post.id}}">Lire le post</a>
+					<p>{{ post.chapo }}</p>
+					<p>Auteur =
+						{{ post.autor.pseudo }}
+						le
+						{{ post.date }}</p>
+					<a href="index.php?action=post&id={{ post.id }}">Lire le post</a>
 				</article>
 
 			{% endfor %}

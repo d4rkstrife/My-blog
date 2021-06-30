@@ -1,29 +1,58 @@
 {% extends "/frontoffice/base.html.twig" %}
 
-{% block title %}post.title
+{% block title %}
+	{{ post.title }}
 {% endblock %}
 
 {% block content %}
 	<header id="head" class="secondary"></header>
 	<div class="container">
-		<div class="row">
+		<div class="row post-page">
 			<header class="page-header">
 				<h1 class="page-title">{{ post.title }}</h1>
 			</header>
-			<article>
+			<article class="col-sm-12 maincontent">
+				<h3>{{ post.chapo }}</h3>
 				<p>{{ post.text }}</p>
+				<p>{{ post.autor.pseudo }}
+					le
+					{{ post.date }}</p>
 			</article>
 
-			<section>
-				<h3>Commentaires</h3>
+			<form method="POST">
+				<div class="top-margin">
+					<label for="comment">Commentaire
+						<span class="text-danger">*</span>
+					</label>
+					<input type="text" id="comment" name="comment" class="form-control">
+				</div>
+
+
+				<hr>
+
+				<div class="row">
+
+					<div class="col-lg-4 text-right">
+						<button class="btn btn-action" type="submit">Valider</button>
+					</div>
+				</div>
+			</form>
+
+			<section class="com-section">
+				<h4>Commentaires</h4>
 				{% if comments %}
 					{% for comment in comments %}
-						<p>id =
-							{{ comment.id }}<br>
-							pseudo =
-							{{ comment.pseudo }}<br>
-							text =
-							{{ comment.text }}</p>
+						<article class="col-sm-7">
+							<h5>
+								{{ comment.user.pseudo }}
+								le
+								{{ comment.date }}<br>
+
+							</h5>
+							<p>{{ comment.text }}</p>
+
+						</article>
+
 					{% endfor %}
 				{% else %}
 					<h4>Aucun commentaires</h4>
