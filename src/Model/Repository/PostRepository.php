@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace App\Model\Repository;
 
 use App\Model\Entity\Post;
+use App\Model\Entity\User;
 use App\Service\Database;
 use App\Model\Repository\Interfaces\EntityRepositoryInterface;
+
+use \PDO;
 
 final class PostRepository implements EntityRepositoryInterface
 {
@@ -24,10 +27,23 @@ final class PostRepository implements EntityRepositoryInterface
 
     public function findOneBy(array $criteria, array $orderBy = null): ?Post
     {
-        $this->database->prepare('select * from post where id=:id');
-        $data = $this->database->execute($criteria);
-        // réfléchir à l'hydratation des entités;
-        return $data === null ? $data : new Post($data['id'], $data['title'], $data['text']);
+        $stmt = $this->database->getPDO()->prepare('
+        SELECT * FROM post
+        INNER JOIN user
+        ON post.fk_user = user.user_id
+        WHERE post.id=:id');
+        $stmt->execute($criteria);
+        $data = $stmt->fetch();
+
+        if ($data === null) {
+            return null;
+        }
+
+        $post = new Post((int)$data['id'], $data['title'], $data['content'], $data['chapo']);
+        $user = new User((int) $data['fk_user'], (string) $data['pseudo'], (string) $data['mail'], (string) $data['password']);
+        $post->setAutor($user);
+        $post->setDate($data['date']);
+        return $post;
     }
 
     public function findBy(array $criteria, array $orderBy = null, int $limit = null, int $offset = null): ?array
@@ -37,20 +53,23 @@ final class PostRepository implements EntityRepositoryInterface
 
     public function findAll(): ?array
     {
-        // SB ici faire l'hydratation des objets
-        $this->database->prepare('select * from post');
-        $data = $this->database->execute();
-
+        $stmt = $this->database->getPDO()->prepare('
+        SELECT * FROM post
+        INNER JOIN user
+        ON post.fk_user = user.user_id');
+        $stmt->execute();
+        $data = $stmt->fetchAll();
         if ($data === null) {
             return null;
         }
-
-        // réfléchir à l'hydratation des entités;
         $posts = [];
         foreach ($data as $post) {
-            $posts[] = new Post((int)$post['id'], $post['title'], $post['text']);
+            $postObj = new Post((int)$post['id'], $post['title'], $post['content'], $post['chapo']);
+            $user = new User((int) $post['fk_user'], (string) $post['pseudo'], (string) $post['mail'], (string) $post['password']);
+            $postObj->setAutor($user);
+            $postObj->setDate($post['date']);
+            $posts[] = $postObj;
         }
-
         return $posts;
     }
 

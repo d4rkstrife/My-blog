@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace App\Model\Repository;
 
 use App\Service\Database;
+use App\Model\Entity\User;
 use App\Model\Entity\Comment;
 use App\Model\Entity\Interfaces\EntityObjectInterface;
 use App\Model\Repository\Interfaces\EntityRepositoryInterface;
+
+use \PDO;
 
 final class CommentRepository implements EntityRepositoryInterface
 {
@@ -30,8 +33,13 @@ final class CommentRepository implements EntityRepositoryInterface
 
     public function findBy(array $criteria, array $orderBy = null, int $limit = null, int $offset = null): ?array
     {
-        $this->database->prepare('select * from comment where idPost=:idPost');
-        $data = $this->database->execute($criteria);
+        $stmt = $this->database->getPDO()->prepare('
+        SELECT * FROM comment
+        INNER JOIN user
+        ON comment.fk_user = user.user_id
+        WHERE comment.fk_post=:idPost');
+        $stmt->execute($criteria);
+        $data = $stmt->fetchAll();
 
         if ($data === null) {
             return null;
@@ -40,7 +48,11 @@ final class CommentRepository implements EntityRepositoryInterface
         // réfléchir à l'hydratation des entités;
         $comments = [];
         foreach ($data as $comment) {
-            $comments[] = new Comment((int)$comment['id'], $comment['pseudo'], $comment['text'], (int)$comment['idPost']);
+            $newComment = new Comment((int)$comment['id'], $comment['content'], (int)$comment['fk_post']);
+            $user = new User((int) $comment['fk_user'], (string) $comment['pseudo'], (string) $comment['mail'], (string) $comment['password']);
+            $newComment->setUser($user);
+            $newComment->setDate($comment['date']);
+            $comments[] = $newComment;
         }
 
         return $comments;
@@ -53,7 +65,7 @@ final class CommentRepository implements EntityRepositoryInterface
 
     public function create(object $comment): bool
     {
-        return false ;
+        return false;
     }
 
     public function update(object $comment): bool

@@ -28,7 +28,7 @@ final class Router
     public function __construct(Request $request)
     {
         // dépendance
-        $this->database = new Database();
+        $this->database = new Database('myblog', 'localhost', 'root', 'root');
         $this->session = new Session();
         $this->view = new View($this->session);
         $this->request = $request;
@@ -45,7 +45,7 @@ final class Router
             $controller = new HomeController($this->view);
             return $controller->homeAction();
 
-        // *** @Route http://localhost:8000/?action=posts ***
+            // *** @Route http://localhost:8000/?action=posts ***
         } elseif ($action === 'posts') {
             //injection des dépendances et instanciation du controller
             $postRepo = new PostRepository($this->database);
@@ -53,7 +53,7 @@ final class Router
 
             return $controller->displayAllAction();
 
-        // *** @Route http://localhost:8000/?action=post&id=5 ***
+            // *** @Route http://localhost:8000/?action=post&id=5 ***
         } elseif ($action === 'post' && $this->request->query()->has('id')) {
             //injection des dépendances et instanciation du controller
             $postRepo = new PostRepository($this->database);
@@ -63,21 +63,21 @@ final class Router
 
             return $controller->displayOneAction((int) $this->request->query()->get('id'), $commentRepo);
 
-        // *** @Route http://localhost:8000/?action=login ***
+            // *** @Route http://localhost:8000/?action=login ***
         } elseif ($action === 'login') {
             $userRepo = new UserRepository($this->database);
             $controller = new UserController($userRepo, $this->view, $this->session);
 
             return $controller->loginAction($this->request);
 
-        // *** @Route http://localhost:8000/?action=register ***
+            // *** @Route http://localhost:8000/?action=register ***
         } elseif ($action === 'register') {
             $userRepo = new UserRepository($this->database);
             $controller = new UserController($userRepo, $this->view, $this->session);
 
             return $controller->registerAction();
 
-        // *** @Route http://localhost:8000/?action=logout ***
+            // *** @Route http://localhost:8000/?action=logout ***
         } elseif ($action === 'logout') {
             $userRepo = new UserRepository($this->database);
             $controller = new UserController($userRepo, $this->view, $this->session);
