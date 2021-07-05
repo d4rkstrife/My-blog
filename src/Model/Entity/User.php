@@ -13,17 +13,23 @@ final class User
     private string $pseudo;
     private string $password;
 
-    public function __construct(int $id, string $pseudo, string $email, string $password)
+    /*public function __construct(int $id, string $pseudo, string $email, string $password)
     {
         $this->id = $id;
         $this->pseudo = $pseudo;
         $this->email = $email;
         $this->password = $password;
-    }
+    }*/
 
     public function getId(): int
     {
         return $this->id;
+    }
+
+    public function setId($id): self
+    {
+        $this->id = (int) $id;
+        return $this;
     }
 
     public function getPseudo(): string

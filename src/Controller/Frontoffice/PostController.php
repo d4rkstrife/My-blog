@@ -23,16 +23,16 @@ final class PostController
     public function displayOneAction(int $id, CommentRepository $commentRepository): Response
     {
         $post = $this->postRepository->findOneBy(['id' => $id]);
-        $comments = $commentRepository->findBy(['idPost' => $id]);
+        $comments = $commentRepository->findBy(['idPost' => $id, 'state' => 1]);
         $response = new Response('<h1>faire une redirection vers la page d\'erreur, ce post n\'existe pas</h1><a href="index.php?action=posts">Liste des posts</a><br>', 404);
 
         if ($post !== null) {
             $response = new Response($this->view->render(
                 [
-                'template' => 'post',
-                'data' => [
-                    'post' => $post,
-                    'comments' => $comments,
+                    'template' => 'post',
+                    'data' => [
+                        'post' => $post,
+                        'comments' => $comments,
                     ],
                 ],
             ));
@@ -44,7 +44,7 @@ final class PostController
     public function displayAllAction(): Response
     {
         $posts = $this->postRepository->findAll();
-     //   var_dump(($posts[0])->getChapo());die();
+        //   var_dump(($posts[0])->getChapo());die();
         return new Response($this->view->render([
             'template' => 'posts',
             'data' => ['posts' => $posts],

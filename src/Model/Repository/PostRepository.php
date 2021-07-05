@@ -39,10 +39,18 @@ final class PostRepository implements EntityRepositoryInterface
             return null;
         }
 
-        $post = new Post((int)$data['id'], $data['title'], $data['content'], $data['chapo']);
-        $user = new User((int) $data['fk_user'], (string) $data['pseudo'], (string) $data['mail'], (string) $data['password']);
-        $post->setAutor($user);
-        $post->setDate($data['date']);
+        $post = new Post();
+        $user = new User();
+        $user
+            ->setId($data['fk_user'])
+            ->setPseudo($data['pseudo'])
+            ->setEmail($data['mail']);
+        $post->setAutor($user)
+            ->setId($data['id'])
+            ->setTitle($data['title'])
+            ->setContent($data['content'])
+            ->setChapo($data['chapo'])
+            ->setDate($data['date']);
         return $post;
     }
 
@@ -55,19 +63,31 @@ final class PostRepository implements EntityRepositoryInterface
     {
         $stmt = $this->database->getPDO()->prepare('
         SELECT * FROM post
-        INNER JOIN user
+        INNER JOIN user    
         ON post.fk_user = user.user_id');
         $stmt->execute();
         $data = $stmt->fetchAll();
+
+
         if ($data === null) {
             return null;
         }
         $posts = [];
         foreach ($data as $post) {
-            $postObj = new Post((int)$post['id'], $post['title'], $post['content'], $post['chapo']);
-            $user = new User((int) $post['fk_user'], (string) $post['pseudo'], (string) $post['mail'], (string) $post['password']);
-            $postObj->setAutor($user);
-            $postObj->setDate($post['date']);
+            $postObj = new Post();
+            $user = new User();
+            $user
+                ->setId($post['fk_user'])
+                ->setPseudo($post['pseudo'])
+                ->setEmail($post['mail']);
+            $postObj
+                ->setAutor($user)
+                ->setId($post['id'])
+                ->setTitle($post['title'])
+                ->setContent($post['content'])
+                ->setChapo($post['chapo'])
+                ->setDate($post['date']);
+
             $posts[] = $postObj;
         }
         return $posts;

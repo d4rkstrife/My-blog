@@ -18,7 +18,7 @@
 					<p>Auteur =
 						{{ post.autor.pseudo }}
 						le
-						{{ post.date }}</p>
+						{{ post.date | date("d/m/Y à h\\hm") }}</p>
 					<a href="index.php?action=post&id={{ post.id }}">Lire le post</a>
 				</article>
 

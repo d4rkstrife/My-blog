@@ -10,22 +10,23 @@ use PDO;
 // *** exemple fictif d'accès à la base de données
 class Database
 {
-    private $dbName;
-    private $dbUser;
-    private $dbPass;
-    private $dbHost;
+    private string $dbName;
+    private string $dbUser;
+    private string $dbPass;
+    private string $dbHost;
 
-    private $pdo;
+    private ?\PDO $pdo;
 
-    public function __construct($dbName, $dbHost, $dbUser, $dbPass)
+    public function __construct(string $dbName, string $dbHost, string $dbUser, string $dbPass)
     {
         $this->dbName = $dbName;
         $this->dbUser = $dbUser;
         $this->dbPass = $dbPass;
         $this->dbHost = $dbHost;
+        $this->pdo = null;
     }
 
-    public function getPDO()
+    public function getPDO(): \PDO
     {
         if ($this->pdo === null) {
             $pdo = new PDO("mysql:dbname={$this->dbName};host={$this->dbHost};port=3307", $this->dbUser, $this->dbPass);
