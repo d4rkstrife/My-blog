@@ -37,7 +37,8 @@ final class CommentRepository implements EntityRepositoryInterface
         SELECT * FROM comment
         INNER JOIN user
         ON comment.fk_user = user.user_id
-        WHERE comment.fk_post=:idPost');
+        WHERE comment.fk_post=:idPost 
+        AND comment.state=:state');
         $stmt->execute($criteria);
         $data = $stmt->fetchAll();
 
@@ -48,10 +49,18 @@ final class CommentRepository implements EntityRepositoryInterface
         // réfléchir à l'hydratation des entités;
         $comments = [];
         foreach ($data as $comment) {
-            $newComment = new Comment((int)$comment['id'], $comment['content'], (int)$comment['fk_post']);
-            $user = new User((int) $comment['fk_user'], (string) $comment['pseudo'], (string) $comment['mail'], (string) $comment['password']);
-            $newComment->setUser($user);
-            $newComment->setDate($comment['date']);
+            $newComment = new Comment();
+            $user = new User();
+            $user
+                ->setId($comment['fk_user'])
+                ->setPseudo($comment['pseudo'])
+                ->setEmail($comment['mail']);
+            $newComment
+                ->setId($comment['id'])
+                ->setText($comment['content'])
+                ->setUser($user)
+                ->setIdPost($comment['fk_post'])
+                ->setDate($comment['date']);
             $comments[] = $newComment;
         }
 

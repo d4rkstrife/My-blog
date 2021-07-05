@@ -10,21 +10,26 @@ final class Post
 {
     private int $id;
     private string $title;
-    private string $text;
+    private string $content;
     private string $chapo;
     private string $date;
 
-    public function __construct(int $id, string $title, string $text, string $chapo)
+    /*   public function __construct(int $id, string $title, string $text, string $chapo)
     {
         $this->id = $id;
         $this->title = $title;
         $this->text = $text;
         $this->chapo = $chapo;
-    }
+    }*/
 
     public function getId(): int
     {
         return $this->id;
+    }
+    public function setId($id): self
+    {
+        $this->id = (int)$id;
+        return $this;
     }
 
     public function getTitle(): string
@@ -38,14 +43,14 @@ final class Post
         return $this;
     }
 
-    public function getText(): string
+    public function getContent(): string
     {
-        return $this->text;
+        return $this->content;
     }
 
-    public function setText(string $text): self
+    public function setContent(string $content): self
     {
-        $this->text = $text;
+        $this->content = $content;
         return $this;
     }
     public function getChapo(): string

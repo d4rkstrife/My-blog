@@ -13,16 +13,14 @@ final class Comment
     private int $idPost;
     private User $user;
 
-    public function __construct(int $id, string $text, int $idPost)
-    {
-        $this->id = $id;
-        $this->text = $text;
-        $this->idPost = $idPost;
-    }
-
     public function getId(): int
     {
         return $this->id;
+    }
+    public function setId($id): self
+    {
+        $this->id = (int) $id;
+        return $this;
     }
 
     public function getText(): string
@@ -39,6 +37,11 @@ final class Comment
     public function getIdPost(): int
     {
         return $this->idPost;
+    }
+    public function setIdPost($idPost): self
+    {
+        $this->idPost = (int)$idPost;
+        return $this;
     }
     public function getUser(): User
     {

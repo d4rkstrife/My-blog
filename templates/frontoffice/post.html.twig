@@ -13,31 +13,31 @@
 			</header>
 			<article class="col-sm-12 maincontent">
 				<h3>{{ post.chapo }}</h3>
-				<p>{{ post.text }}</p>
+				<p>{{ post.content }}</p>
 				<p>{{ post.autor.pseudo }}
 					le
 					{{ post.date }}</p>
 			</article>
-
-			<form method="POST">
-				<div class="top-margin">
-					<label for="comment">Commentaire
-						<span class="text-danger">*</span>
-					</label>
-					<input type="text" id="comment" name="comment" class="form-control">
-				</div>
-
-
-				<hr>
-
-				<div class="row">
-
-					<div class="col-lg-4 text-right">
-						<button class="btn btn-action" type="submit">Valider</button>
+			{% if session.user %}
+				<form method="POST">
+					<div class="top-margin">
+						<label for="comment">Commentaire
+							<span class="text-danger">*</span>
+						</label>
+						<input type="text" id="comment" name="comment" class="form-control">
 					</div>
-				</div>
-			</form>
 
+
+					<hr>
+
+					<div class="row">
+
+						<div class="col-lg-4 text-right">
+							<button class="btn btn-action" type="submit">Valider</button>
+						</div>
+					</div>
+				</form>
+			{% endif %}
 			<section class="com-section">
 				<h4>Commentaires</h4>
 				{% if comments %}

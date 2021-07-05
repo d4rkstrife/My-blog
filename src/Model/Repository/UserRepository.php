@@ -29,8 +29,16 @@ final class UserRepository implements EntityRepositoryInterface
         $stmt->execute($criteria);
         $data = $stmt->fetch();
 
-        // réfléchir à l'hydratation des entités;
-        return $data === null ? null : new user((int)$data['user_id'], $data['pseudo'], $data['mail'], $data['password']);
+        if ($data === null) {
+            return null;
+        }
+        $user = new User((int)$data['user_id'], $data['pseudo'], $data['mail'], $data['password']);
+        $user
+            ->setId($data['user_id'])
+            ->setPseudo($data['pseudo'])
+            ->setEmail($data['mail'])
+            ->setPassword($data['password']);
+        return $user;
     }
 
     public function findBy(array $criteria, array $orderBy = null, int $limit = null, int $offset = null): ?array
