@@ -29,7 +29,7 @@ final class UserRepository implements EntityRepositoryInterface
         $stmt->execute($criteria);
         $data = $stmt->fetch();
 
-        if ($data === null) {
+        if ($data === false) {
             return null;
         }
         $user = new User((int)$data['user_id'], $data['pseudo'], $data['mail'], $data['password']);
