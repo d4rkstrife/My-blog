@@ -16,7 +16,9 @@
 				<p>{{ post.content }}</p>
 				<p>{{ post.autor.pseudo }}
 					le
-					{{ post.date }}</p>
+					{{ post.date }}
+					modifié le
+					{{ comment.modif  | date("d/m/Y à h\\hm") }}</p>
 			</article>
 			{% if session.user %}
 				<form method="POST">
@@ -46,7 +48,8 @@
 							<h5>
 								{{ comment.user.pseudo }}
 								le
-								{{ comment.date }}<br>
+								{{ comment.date  | date("d/m/Y à h\\hm") }}
+								<br>
 
 							</h5>
 							<p>{{ comment.text }}</p>

@@ -15,10 +15,12 @@
 
 					<h3>{{ post.title }}</h3>
 					<p>{{ post.chapo }}</p>
-					<p>Auteur =
+					<p>Ecrit par
 						{{ post.autor.pseudo }}
 						le
 						{{ post.date | date("d/m/Y à h\\hm") }}</p>
+					<p>Dernière modification le
+						{{ post.modif | date("d/m/Y à h\\hm") }}</p>
 					<a href="index.php?action=post&id={{ post.id }}">Lire le post</a>
 				</article>
 

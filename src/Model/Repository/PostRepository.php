@@ -44,12 +44,15 @@ final class PostRepository implements EntityRepositoryInterface
         $user
             ->setId($data['fk_user'])
             ->setPseudo($data['pseudo'])
+            ->setName($data['name'])
+            ->setSurname($data['surname'])
             ->setEmail($data['mail']);
         $post->setAutor($user)
             ->setId($data['id'])
             ->setTitle($data['title'])
             ->setContent($data['content'])
             ->setChapo($data['chapo'])
+            ->setModif($data['date_modif'])
             ->setDate($data['date']);
         return $post;
     }
@@ -79,6 +82,8 @@ final class PostRepository implements EntityRepositoryInterface
             $user
                 ->setId($post['fk_user'])
                 ->setPseudo($post['pseudo'])
+                ->setName($post['name'])
+                ->setSurname($post['surname'])
                 ->setEmail($post['mail']);
             $postObj
                 ->setAutor($user)
@@ -86,6 +91,7 @@ final class PostRepository implements EntityRepositoryInterface
                 ->setTitle($post['title'])
                 ->setContent($post['content'])
                 ->setChapo($post['chapo'])
+                ->setModif($post['date_modif'])
                 ->setDate($post['date']);
 
             $posts[] = $postObj;

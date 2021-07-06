@@ -54,6 +54,8 @@ final class CommentRepository implements EntityRepositoryInterface
             $user
                 ->setId($comment['fk_user'])
                 ->setPseudo($comment['pseudo'])
+                ->setName($comment['name'])
+                ->setSurname($comment['surname'])
                 ->setEmail($comment['mail']);
             $newComment
                 ->setId($comment['id'])
