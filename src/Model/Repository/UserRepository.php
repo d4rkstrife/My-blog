@@ -32,12 +32,13 @@ final class UserRepository implements EntityRepositoryInterface
         if ($data === false) {
             return null;
         }
-        $user = new User((int)$data['user_id'], $data['pseudo'], $data['mail'], $data['password']);
+        $user = new User();
         $user
             ->setId($data['user_id'])
             ->setPseudo($data['pseudo'])
             ->setEmail($data['mail'])
-            ->setPassword($data['password']);
+            ->setPassword($data['password'])
+            ->setGrade($data['grade']);
         return $user;
     }
 

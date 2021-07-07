@@ -22,4 +22,11 @@ final class HomeController
             'data' => [],
         ]));
     }
+    public function administrationAction(): Response
+    {
+        return new Response($this->view->render([
+            'template' => 'administration',
+            'data' => [],
+        ]));
+    }
 }

@@ -21,7 +21,7 @@
 		class="home">
 		<!-- Fixed navbar -->
 		<div class="navbar navbar-inverse navbar-fixed-top headroom">
-			<div class="container">
+			<div class="container" style="display: flex; justify-content: space-around">
 				<div
 					class="navbar-header">
 					<!-- Button for smallest screens -->
@@ -32,7 +32,7 @@
 					</button>
 					<h1 class="navbar-brand">Pierre Grandclement</h1>
 				</div>
-				<div c lass="navbar-collapse collapse">
+				<div class="navbar-collapse collapse">
 					<ul class="nav navbar-nav pull-right">
 						<li class="active">
 							<a href="index.php?action=home">Accueil</a><br>
@@ -43,34 +43,33 @@
 						<li>
 							<a href="CV.pdf">Mon CV</a>
 						</li>
-						{% if session.user %}
-						</ul>
-						<div class="user-connected">
-							<p style="color:white">{{ session.user.pseudo }}</p>
-							<p style="color:white">{{ session.user.email }}</p>
-							<a href="index.php?action=logout" style="color : red">Se Déconnecter</a><br>
-						</div>
-
-					{% else %}
-						<li><a class="btn" href="index.php?action=login">SIGN IN / SIGN UP</a></li>
 					</ul>
+				</div>
+				{% if session.user %}
+
+					<div class="user-connected">
+						<p style="color:white">{{ session.user.pseudo }}</p>
+						<a href="index.php?action=logout" style="color : red">Se Déconnecter</a><br>
+					</div>
+
+				{% else %}
+					<a class="btn" href="index.php?action=login">SIGN IN / SIGN UP</a>
+
 				{% endif %}
-
-
+				<!--/.nav-collapse -->
 			</div>
-			<!--/.nav-collapse -->
-		</div>
+		</body>
 	</body>
 </html></body></html></div><!-- /.navbar --><!-- Navigation --><main>{% for message in flashes %}{# TODO Gérer les différents type de message flash #}<h2 class="danger">
 {{ message }}</h2>{% endfor %}{% block content %}{% endblock %}</main><footer id="footer" class="top-space"><div class="footer1"><div class="container">
-<div class="row">
 
+
+<div class="row" style="display: flex;justify-content: space-around;">
 	<div class="col-md-3 widget">
 		<h3 class="widget-title">Contact</h3>
 		<div class="widget-body">
 			<p>0616165257<br>
-				<a href="mailto:#">p.gdc85@gmail.com</a><br>
-				<br>
+
 				Rue F. Mermet, 69160 Tassin-La-Demi-Lune
 			</p>
 		</div>
@@ -90,12 +89,10 @@
 		</div>
 	</div>
 
-	<div class="col-md-6 widget">
-		<h3 class="widget-title">Text widget</h3>
-		<div class="widget-body">
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Excepturi, dolores, quibusdam architecto voluptatem amet fugiat nesciunt placeat provident cumque accusamus itaque voluptate modi quidem dolore optio velit hic iusto vero praesentium repellat commodi ad id expedita cupiditate repellendus possimus unde?</p>
-			<p>Eius consequatur nihil quibusdam! Laborum, rerum, quis, inventore ipsa autem repellat provident assumenda labore soluta minima alias temporibus facere distinctio quas adipisci nam sunt explicabo officia tenetur at ea quos doloribus dolorum voluptate reprehenderit architecto sint libero illo et hic.</p>
-		</div>
+	<div class="col-md-3 widget">
+
+		<a href="index.php?action=administration">Administration</a>
+
 	</div>
 
 </div>

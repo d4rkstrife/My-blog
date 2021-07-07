@@ -17,12 +17,12 @@ class Database
 
     private ?\PDO $pdo;
 
-    public function __construct(string $dbName, string $dbHost, string $dbUser, string $dbPass)
+    public function __construct($config)
     {
-        $this->dbName = $dbName;
-        $this->dbUser = $dbUser;
-        $this->dbPass = $dbPass;
-        $this->dbHost = $dbHost;
+        $this->dbName = $config->dbName;
+        $this->dbUser = $config->dbUser;
+        $this->dbPass = $config->dbPass;
+        $this->dbHost = $config->dbHost;
         $this->pdo = null;
     }
 

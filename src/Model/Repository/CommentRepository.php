@@ -48,8 +48,10 @@ final class CommentRepository implements EntityRepositoryInterface
 
         // réfléchir à l'hydratation des entités;
         $comments = [];
+        $users = [];
         foreach ($data as $comment) {
             $newComment = new Comment();
+            //tester si l utilisateur existe déjà
             $user = new User();
             $user
                 ->setId($comment['fk_user'])
