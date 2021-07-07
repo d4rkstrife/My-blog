@@ -10,21 +10,27 @@
 			<header class="page-header">
 				<h1 class="page-title">Tous les posts</h1>
 			</header>
-			{% for post in posts %}
-				<article class="col-sm-8 maincontent">
+			{% if posts %}
 
-					<h3>{{ post.title }}</h3>
-					<p>{{ post.chapo }}</p>
-					<p>Ecrit par
-						{{ post.autor.pseudo }}
-						le
-						{{ post.date | date("d/m/Y à h\\hm") }}</p>
-					<p>Dernière modification le
-						{{ post.modif | date("d/m/Y à h\\hm") }}</p>
-					<a href="index.php?action=post&id={{ post.id }}">Lire le post</a>
-				</article>
+				{% for post in posts %}
+					<article class="col-sm-8 maincontent">
 
-			{% endfor %}
+						<h3>{{ post.title }}</h3>
+						<p>{{ post.chapo }}</p>
+						<p>Ecrit par
+							{{ post.autor.pseudo }}
+							le
+							{{ post.date | date("d/m/Y à h\\hm") }}</p>
+						<p>Dernière modification le
+							{{ post.modif | date("d/m/Y à h\\hm") }}</p>
+						<a href="index.php?action=post&id={{ post.id }}">Lire le post</a>
+					</article>
+
+				{% endfor %}
+
+			{% else %}
+				<p>Oups il n' y a rien ici</p>
+			{% endif %}
 		</div>
 	</div>
 {% endblock %}

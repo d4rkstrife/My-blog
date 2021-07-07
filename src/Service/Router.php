@@ -24,11 +24,13 @@ final class Router
     private View $view;
     private Request $request;
     private Session $session;
+    private ParseConfig $parseConfig;
 
     public function __construct(Request $request)
     {
         // dépendance
-        $this->database = new Database('myblog', 'localhost', 'root', 'root');
+        $this->parseConfig = new ParseConfig('../config.ini');
+        $this->database = new Database($this->parseConfig->parseFile());
         $this->session = new Session();
         $this->view = new View($this->session);
         $this->request = $request;
@@ -44,6 +46,12 @@ final class Router
         if ($action === 'home') {
             $controller = new HomeController($this->view);
             return $controller->homeAction();
+
+            // *** @Route http://localhost:8000/?action=administration ***
+        } elseif ($action === 'administration') {
+            $controller = new HomeController($this->view);
+            return $controller->administrationAction();
+
 
             // *** @Route http://localhost:8000/?action=posts ***
         } elseif ($action === 'posts') {
