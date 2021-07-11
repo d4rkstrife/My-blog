@@ -19,8 +19,8 @@ class ParametersBag
     }
 
     /**
-    * @return mixed
-    */
+     * @return mixed
+     */
     public function get(string $key) //: mixed //uniquement en PHP 8.0
     {
         return $this->has($key) ? $this->parameters[$key] : null;

@@ -45,7 +45,7 @@ final class Router
         // *** @Route http://localhost:8000/?action=home ***
         if ($action === 'home') {
             $controller = new HomeController($this->view);
-            return $controller->homeAction();
+            return $controller->homeAction($this->request);
 
             // *** @Route http://localhost:8000/?action=administration ***
         } elseif ($action === 'administration') {

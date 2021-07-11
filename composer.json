@@ -12,7 +12,8 @@
         "phpstan/phpstan": "^0.12.88"
     },
     "require": {
-        "twig/twig": "^3.3"
+        "twig/twig": "^3.3",
+        "phpmailer/phpmailer": "^6.5"
     },
     "autoload": {
         "psr-4": {
