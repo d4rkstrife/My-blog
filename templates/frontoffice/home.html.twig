@@ -24,23 +24,27 @@
 					<h1 class="page-title">Contactez nous</h1>
 				</header>
 
-				<form>
+				<form method="Post">
 					<div class="row" style="display: flex">
-						<div class=" col-sm-6">
-							<input class="form-control" id="name" name="name" type="text" placeholder="Nom">
+						<div class=" col-sm-3">
+							<label for='name'>Nom</label>
+							<input class="form-control" id="name" name="name" type="text" required>
 						</div>
-						<div class="col-sm-6">
-							<input class="form-control" id="surname" name="surname" type="text" placeholder="Prénom">
+						<div class="col-sm-3">
+							<label for='surname'>Prénom</label>
+							<input class="form-control" id="surname" name="surname" type="text" required>
 						</div>
-						<div class="col-sm-6">
-							<input class="form-control" type="text" placeholder="Email">
+						<div class="col-sm-3">
+							<label for='mail'>Email</label>
+							<input class="form-control" id="mail" name="mail" type="email" required>
 						</div>
 
 					</div>
 					<br>
 					<div class="row">
 						<div class="col-sm-12">
-							<textarea placeholder="Tapez votre message ici" class="form-control" rows="9"></textarea>
+							<label for='content'>Votre message</label>
+							<textarea id="content" name="content" class="form-control" rows="9" required></textarea>
 						</div>
 					</div>
 					<br>
