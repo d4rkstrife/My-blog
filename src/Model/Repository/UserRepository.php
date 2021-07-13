@@ -47,7 +47,7 @@ final class UserRepository implements EntityRepositoryInterface
         return null;
     }
 
-    public function findAll(): ?array
+    public function findAll($page): ?array
     {
         return null;
     }

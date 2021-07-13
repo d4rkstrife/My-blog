@@ -16,28 +16,23 @@
 				<p>{{ post.content }}</p>
 				<p>{{ post.autor.pseudo }}
 					le
-					{{ post.date }}
-					modifié le
-					{{ comment.modif  | date("d/m/Y à h\\hm") }}</p>
+					{{ post.date | date("d/m/Y à h\\hm") }}
+					{% if post.modif != NULL %}
+						modifié le
+						{{ comment.modif  | date("d/m/Y à h\\hm") }}</p>
+				{% endif %}
 			</article>
+
 			{% if session.user %}
 				<form method="POST">
-					<div class="top-margin">
-						<label for="comment">Commentaire
-							<span class="text-danger">*</span>
-						</label>
-						<input type="text" id="comment" name="comment" class="form-control">
-					</div>
+					<label for="comment">Commentaire
+					</label>
+					<input type="text" id="comment" name="comment" class="form-control">
 
 
-					<hr>
+					<button class="btn btn-action" type="submit" value="Send comment">Valider</button>
 
-					<div class="row">
 
-						<div class="col-lg-4 text-right">
-							<button class="btn btn-action" type="submit">Valider</button>
-						</div>
-					</div>
 				</form>
 			{% endif %}
 			<section class="com-section">

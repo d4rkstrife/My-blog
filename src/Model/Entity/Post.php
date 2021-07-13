@@ -13,7 +13,7 @@ final class Post
     private string $content;
     private string $chapo;
     private string $date;
-    private string $modif;
+    private ?string $modif;
 
     /*   public function __construct(int $id, string $title, string $text, string $chapo)
     {
@@ -81,11 +81,11 @@ final class Post
         $this->date = $date;
         return $this;
     }
-    public function getModif(): string
+    public function getModif(): ?string
     {
         return $this->modif;
     }
-    public function setModif(string $modif): self
+    public function setModif(?string $modif): self
     {
         $this->modif = $modif;
         return $this;

@@ -55,11 +55,12 @@ final class Router
 
             // *** @Route http://localhost:8000/?action=posts ***
         } elseif ($action === 'posts') {
+            $page = $this->request->query()->get('page');
             //injection des dépendances et instanciation du controller
             $postRepo = new PostRepository($this->database);
             $controller = new PostController($postRepo, $this->view);
 
-            return $controller->displayAllAction();
+            return $controller->displayAllAction($page);
 
             // *** @Route http://localhost:8000/?action=post&id=5 ***
         } elseif ($action === 'post' && $this->request->query()->has('id')) {
@@ -69,7 +70,8 @@ final class Router
 
             $commentRepo = new CommentRepository($this->database);
 
-            return $controller->displayOneAction((int) $this->request->query()->get('id'), $commentRepo);
+            //  return $controller->displayOneAction((int) $this->request->query()->get('id'), $commentRepo);
+            return $controller->displayOneAction((object) $this->request, $commentRepo);
 
             // *** @Route http://localhost:8000/?action=login ***
         } elseif ($action === 'login') {

@@ -71,14 +71,20 @@ final class CommentRepository implements EntityRepositoryInterface
         return $comments;
     }
 
-    public function findAll(): ?array
+    public function findAll($page): ?array
     {
         return null;
     }
 
-    public function create(object $comment): bool
+    public function create(object $criteria): bool
     {
-        return false;
+        $comment = (string)$criteria->get('comment');
+        var_dump($comment);
+        $stmt = $this->database->getPDO()->prepare("
+        INSERT INTO `comment` (`content`, `state`, `fk_user`, `fk_post`, `date`, `id`) 
+        VALUES ($comment, '0', '3', '2', CURRENT_TIMESTAMP, NULL);");
+        $stmt->execute();
+        return true;
     }
 
     public function update(object $comment): bool

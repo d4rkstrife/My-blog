@@ -22,10 +22,6 @@ final class HomeController
     public function homeAction(Request $request): Response
     {
         if (!empty($request->request()->all())) {
-            $test = $request->request()->all();
-            foreach ($test as $key => $value) {
-                var_dump($value);
-            }
             $mail = new Mailer();
             $mail->send($request->request()->all());
         }
