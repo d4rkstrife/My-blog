@@ -24,13 +24,14 @@ final class Router
     private View $view;
     private Request $request;
     private Session $session;
-    private ParseConfig $parseConfig;
+    private ParseConfig $config;
 
-    public function __construct(Request $request)
+    public function __construct(Request $request, ParseConfig $config)
     {
         // dépendance
-        $this->parseConfig = new ParseConfig('../config.ini');
-        $this->database = new Database($this->parseConfig->parseFile());
+        $this->config = $config;
+        $this->database = new Database($this->config->getConfig()->dbHost, $this->config->getConfig()->dbName, $this->config->getConfig()->dbUser, $this->config->getConfig()->dbPass, $this->config->getConfig()->dbPort);
+
         $this->session = new Session();
         $this->view = new View($this->session);
         $this->request = $request;
