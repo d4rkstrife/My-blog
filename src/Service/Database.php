@@ -14,6 +14,7 @@ class Database
     private string $dbUser;
     private string $dbPass;
     private string $dbHost;
+    private string $dbPort;
 
     private ?\PDO $pdo;
 
@@ -23,13 +24,14 @@ class Database
         $this->dbUser = $config->dbUser;
         $this->dbPass = $config->dbPass;
         $this->dbHost = $config->dbHost;
+        $this->dbPort = $config->dbPort;
         $this->pdo = null;
     }
 
     public function getPDO(): \PDO
     {
         if ($this->pdo === null) {
-            $pdo = new PDO("mysql:dbname={$this->dbName};host={$this->dbHost};port=3306", $this->dbUser, $this->dbPass);
+            $pdo = new PDO("mysql:dbname={$this->dbName};host={$this->dbHost};port={$this->dbPort}", $this->dbUser, $this->dbPass);
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->pdo = $pdo;
         }

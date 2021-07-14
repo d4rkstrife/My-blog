@@ -47,9 +47,9 @@ class Mailer
         //Content
         $mail->isHTML(true);                                  //Set email format to HTML
         $mail->Subject = 'Demande de contact';
-        $mail->Body    = 'Nom : ' . $infoObject->name . ' ' . $infoObject->surname . '<br/>
-        Mail : ' . $infoObject->mail . '<br/>
-        Message : ' . $infoObject->content;
+        $mail->Body    = 'Nom : ' . htmlspecialchars($infoObject->name) . ' ' . htmlspecialchars($infoObject->surname) . '<br/>
+        Mail : ' . htmlspecialchars($infoObject->mail) . '<br/>
+        Message : ' . htmlspecialchars($infoObject->content);
 
         $mail->send();
     }
