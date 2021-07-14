@@ -18,13 +18,13 @@ class Database
 
     private ?\PDO $pdo;
 
-    public function __construct($config)
+    public function __construct(string $dbHost, string $dbName, string $dbUser, string $dbPass, string $dbPort)
     {
-        $this->dbName = $config->dbName;
-        $this->dbUser = $config->dbUser;
-        $this->dbPass = $config->dbPass;
-        $this->dbHost = $config->dbHost;
-        $this->dbPort = $config->dbPort;
+        $this->dbName = $dbName;
+        $this->dbUser = $dbUser;
+        $this->dbPass = $dbPass;
+        $this->dbHost = $dbHost;
+        $this->dbPort = $dbPort;
         $this->pdo = null;
     }
 
