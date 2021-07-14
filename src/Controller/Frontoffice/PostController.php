@@ -27,7 +27,7 @@ final class PostController
         $comments = $commentRepository->findBy(['idPost' => $id, 'state' => 1]);
         $response = new Response('<h1>faire une redirection vers la page d\'erreur, ce post n\'existe pas</h1><a href="index.php?action=posts">Liste des posts</a><br>', 404);
         if ($request->request()->has('comment')) {
-            $commentRepository->create($request->request());
+            $commentRepository->create($request);
         }
 
         if ($post !== null) {
