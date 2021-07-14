@@ -29,7 +29,7 @@ class Database
     public function getPDO(): \PDO
     {
         if ($this->pdo === null) {
-            $pdo = new PDO("mysql:dbname={$this->dbName};host={$this->dbHost};port=3307", $this->dbUser, $this->dbPass);
+            $pdo = new PDO("mysql:dbname={$this->dbName};host={$this->dbHost};port=3306", $this->dbUser, $this->dbPass);
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->pdo = $pdo;
         }
