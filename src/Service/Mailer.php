@@ -6,23 +6,33 @@ namespace App\Service;
 
 use App\Service\ParseConfig;
 use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
 
 
 class Mailer
 {
+    private ParseConfig $config;
+    private Object $smtpInfos;
+    private string $host;
+    private string $username;
+    private string $password;
+
+    public function __construct(string $host, string $userName, string $password)
+    {
+        $this->config = new ParseConfig('../config.ini');
+        $this->host = $host;
+        $this->username = $userName;
+        $this->password = $password;
+    }
     public function send($infoUser)
     {
-        $config = new ParseConfig('../config.ini');
-        $smtpInfos = $config->parseFile();
+
         $infoObject = (object)$infoUser;
         $mail = new PHPMailer(true);
         $mail->isSMTP();                                            //Send using SMTP
-        $mail->Host       = $smtpInfos->host;                     //Set the SMTP server to send through
+        $mail->Host       = $this->host;                     //Set the SMTP server to send through
         $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-        $mail->Username   = $smtpInfos->username;                     //SMTP username
-        $mail->Password   = $smtpInfos->password;                               //SMTP password
+        $mail->Username   = $this->username;                     //SMTP username
+        $mail->Password   = $this->password;                               //SMTP password
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
         $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
@@ -36,9 +46,9 @@ class Mailer
         //Content
         $mail->isHTML(true);                                  //Set email format to HTML
         $mail->Subject = 'Demande de contact';
-        $mail->Body    = 'Nom : ' . $infoObject->name . ' ' . $infoObject->surname . '<br/>
-        Mail : ' . $infoObject->mail . '<br/>
-        Message : ' . $infoObject->content;
+        $mail->Body    = 'Nom : ' . htmlspecialchars($infoObject->name) . ' ' . htmlspecialchars($infoObject->surname) . '<br/>
+        Mail : ' . htmlspecialchars($infoObject->mail) . '<br/>
+        Message : ' . htmlspecialchars($infoObject->content);
 
         $mail->send();
     }

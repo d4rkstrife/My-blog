@@ -14,22 +14,24 @@ class Database
     private string $dbUser;
     private string $dbPass;
     private string $dbHost;
+    private string $dbPort;
 
     private ?\PDO $pdo;
 
-    public function __construct($config)
+    public function __construct(string $dbHost, string $dbName, string $dbUser, string $dbPass, string $dbPort)
     {
-        $this->dbName = $config->dbName;
-        $this->dbUser = $config->dbUser;
-        $this->dbPass = $config->dbPass;
-        $this->dbHost = $config->dbHost;
+        $this->dbName = $dbName;
+        $this->dbUser = $dbUser;
+        $this->dbPass = $dbPass;
+        $this->dbHost = $dbHost;
+        $this->dbPort = $dbPort;
         $this->pdo = null;
     }
 
     public function getPDO(): \PDO
     {
         if ($this->pdo === null) {
-            $pdo = new PDO("mysql:dbname={$this->dbName};host={$this->dbHost};port=3307", $this->dbUser, $this->dbPass);
+            $pdo = new PDO("mysql:dbname={$this->dbName};host={$this->dbHost};port={$this->dbPort}", $this->dbUser, $this->dbPass);
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->pdo = $pdo;
         }

@@ -24,13 +24,14 @@ final class Router
     private View $view;
     private Request $request;
     private Session $session;
-    private ParseConfig $parseConfig;
+    private ParseConfig $config;
 
-    public function __construct(Request $request)
+    public function __construct(Request $request, ParseConfig $config)
     {
         // dépendance
-        $this->parseConfig = new ParseConfig('../config.ini');
-        $this->database = new Database($this->parseConfig->parseFile());
+        $this->config = $config;
+        $this->database = new Database($this->config->getConfig()->dbHost, $this->config->getConfig()->dbName, $this->config->getConfig()->dbUser, $this->config->getConfig()->dbPass, $this->config->getConfig()->dbPort);
+
         $this->session = new Session();
         $this->view = new View($this->session);
         $this->request = $request;
@@ -44,22 +45,23 @@ final class Router
         //Déterminer sur quelle route nous sommes // Attention algorithme naïf
         // *** @Route http://localhost:8000/?action=home ***
         if ($action === 'home') {
-            $controller = new HomeController($this->view);
+            $controller = new HomeController($this->view, $this->config);
             return $controller->homeAction($this->request);
 
             // *** @Route http://localhost:8000/?action=administration ***
         } elseif ($action === 'administration') {
-            $controller = new HomeController($this->view);
+            $controller = new HomeController($this->view, $this->config);
             return $controller->administrationAction();
 
 
             // *** @Route http://localhost:8000/?action=posts ***
         } elseif ($action === 'posts') {
+            $page = $this->request->query()->get('page');
             //injection des dépendances et instanciation du controller
             $postRepo = new PostRepository($this->database);
             $controller = new PostController($postRepo, $this->view);
 
-            return $controller->displayAllAction();
+            return $controller->displayAllAction($page);
 
             // *** @Route http://localhost:8000/?action=post&id=5 ***
         } elseif ($action === 'post' && $this->request->query()->has('id')) {
@@ -69,7 +71,8 @@ final class Router
 
             $commentRepo = new CommentRepository($this->database);
 
-            return $controller->displayOneAction((int) $this->request->query()->get('id'), $commentRepo);
+            //  return $controller->displayOneAction((int) $this->request->query()->get('id'), $commentRepo);
+            return $controller->displayOneAction((object) $this->request, $commentRepo, $this->session->get('user'));
 
             // *** @Route http://localhost:8000/?action=login ***
         } elseif ($action === 'login') {
