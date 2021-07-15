@@ -78,11 +78,12 @@ final class CommentRepository implements EntityRepositoryInterface
 
     public function create(object $criteria): bool
     {
-        $newComment = $criteria->request()->get('comment');
-        var_dump($newComment);
         $stmt = $this->database->getPDO()->prepare("
         INSERT INTO `comment` (`content`, `state`, `fk_user`, `fk_post`, `date`, `id`) 
-        VALUES ($newComment, '0', '3', '2', CURRENT_TIMESTAMP, NULL);");
+        VALUES (:text, '0', :user, :idPost, CURRENT_TIMESTAMP, NULL);");
+        $stmt->bindValue('text', $criteria->getText());
+        $stmt->bindValue('idPost', $criteria->getIdPost());
+        $stmt->bindValue('user', $criteria->getUser()->getId());
         $stmt->execute();
         return true;
     }

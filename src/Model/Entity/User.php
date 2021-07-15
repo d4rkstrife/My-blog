@@ -16,14 +16,6 @@ final class User
     private string $surname;
     private string $grade;
 
-    /*public function __construct(int $id, string $pseudo, string $email, string $password)
-    {
-        $this->id = $id;
-        $this->pseudo = $pseudo;
-        $this->email = $email;
-        $this->password = $password;
-    }*/
-
     public function getId(): int
     {
         return $this->id;

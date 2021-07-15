@@ -16,13 +16,12 @@ class Mailer
     private string $username;
     private string $password;
 
-    public function __construct()
+    public function __construct(string $host, string $userName, string $password)
     {
         $this->config = new ParseConfig('../config.ini');
-        $this->smtpInfos = $this->config->parseFile();
-        $this->host = $this->smtpInfos->host;
-        $this->username = $this->smtpInfos->username;
-        $this->password = $this->smtpInfos->password;
+        $this->host = $host;
+        $this->username = $userName;
+        $this->password = $password;
     }
     public function send($infoUser)
     {

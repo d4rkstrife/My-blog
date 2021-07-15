@@ -45,12 +45,12 @@ final class Router
         //Déterminer sur quelle route nous sommes // Attention algorithme naïf
         // *** @Route http://localhost:8000/?action=home ***
         if ($action === 'home') {
-            $controller = new HomeController($this->view);
+            $controller = new HomeController($this->view, $this->config);
             return $controller->homeAction($this->request);
 
             // *** @Route http://localhost:8000/?action=administration ***
         } elseif ($action === 'administration') {
-            $controller = new HomeController($this->view);
+            $controller = new HomeController($this->view, $this->config);
             return $controller->administrationAction();
 
 
@@ -72,7 +72,7 @@ final class Router
             $commentRepo = new CommentRepository($this->database);
 
             //  return $controller->displayOneAction((int) $this->request->query()->get('id'), $commentRepo);
-            return $controller->displayOneAction((object) $this->request, $commentRepo);
+            return $controller->displayOneAction((object) $this->request, $commentRepo, $this->session->get('user'));
 
             // *** @Route http://localhost:8000/?action=login ***
         } elseif ($action === 'login') {
