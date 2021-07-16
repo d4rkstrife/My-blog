@@ -8,6 +8,7 @@ use App\View\View;
 use App\Model\Entity\User;
 use App\Model\Entity\Comment;
 use App\Service\Http\Response;
+use App\Service\DataValidation;
 use App\Model\Repository\PostRepository;
 use App\Model\Repository\CommentRepository;
 
@@ -30,15 +31,19 @@ final class PostController
         $response = new Response('<h1>faire une redirection vers la page d\'erreur, ce post n\'existe pas</h1><a href="index.php?action=posts">Liste des posts</a><br>', 404);
         
         if ($request->request()->has('comment')) {
-            $newComment = new Comment ();
-            $newUser = new User();
-            $newUser->setId($user->getId());
-            $newComment
-            ->setText(htmlspecialchars($request->request()->get('comment')))
-            ->setIdPost($id)
-            ->setUser($newUser);
-            
-            $commentRepository->create($newComment);
+            $content = $request->request()->get('comment');
+            if($content != ''){
+                $newComment = new Comment ();
+                $validation = new DataValidation;
+                $newUser = new User();
+                $newUser->setId($user->getId());
+                $newComment
+                ->setText($validation->validate($content))
+                ->setIdPost($id)
+                ->setUser($newUser);
+                
+                $commentRepository->create($newComment);
+            }            
         }
 
         if ($post !== null) {
