@@ -71,7 +71,7 @@ final class CommentRepository implements EntityRepositoryInterface
         return $comments;
     }
 
-    public function findAll($page): ?array
+    public function findAll(): ?array
     {
         return null;
     }

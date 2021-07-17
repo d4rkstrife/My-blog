@@ -61,9 +61,9 @@ final class PostController
         return $response;
     }
 
-    public function displayAllAction($page): Response
+    public function displayAllAction(): Response
     {
-        $posts = $this->postRepository->findAll($page);
+        $posts = $this->postRepository->findAll();
 
         return new Response($this->view->render([
             'template' => 'posts',

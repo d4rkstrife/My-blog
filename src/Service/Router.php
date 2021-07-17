@@ -56,12 +56,11 @@ final class Router
 
             // *** @Route http://localhost:8000/?action=posts ***
         } elseif ($action === 'posts') {
-            $page = $this->request->query()->get('page');
             //injection des dépendances et instanciation du controller
             $postRepo = new PostRepository($this->database);
             $controller = new PostController($postRepo, $this->view);
 
-            return $controller->displayAllAction($page);
+            return $controller->displayAllAction();
 
             // *** @Route http://localhost:8000/?action=post&id=5 ***
         } elseif ($action === 'post' && $this->request->query()->has('id')) {
