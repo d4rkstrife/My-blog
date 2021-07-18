@@ -47,7 +47,7 @@ final class PostController
         }
 
         if ($post !== null) {
-            $response = new Response($this->view->render(
+            $response = new Response($this->view->renderFront(
                 [
                     'template' => 'post',
                     'data' => [
@@ -65,7 +65,7 @@ final class PostController
     {
         $posts = $this->postRepository->findAll();
 
-        return new Response($this->view->render([
+        return new Response($this->view->renderFront([
             'template' => 'posts',
             'data' => ['posts' => $posts],
         ]));

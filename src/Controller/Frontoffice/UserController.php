@@ -49,7 +49,7 @@ final class UserController
             }
             $this->session->addFlashes('error', 'Mauvais identifiants');
         }
-        return new Response($this->view->render(['template' => 'login', 'data' => []]));
+        return new Response($this->view->renderFront(['template' => 'login', 'data' => []]));
     }
 
     public function logoutAction(): Response
@@ -60,7 +60,7 @@ final class UserController
 
     public function registerAction(): Response
     {
-        return new Response($this->view->render([
+        return new Response($this->view->renderFront([
             'template' => 'register',
             'data' => [],
         ]));

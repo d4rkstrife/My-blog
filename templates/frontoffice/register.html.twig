@@ -46,6 +46,9 @@
 											<a href="">Mot de passe oublié?</a>
 										</b>
 									</div>
+									{% for message in flashes %}{# TODO Gérer les différents type de message flash #}<h2 class="danger">
+											{{ message }}</h2>
+									{% endfor %}
 									<div class="col-lg-4 text-right">
 										<button class="btn btn-action" type="submit">Se connecter</button>
 									</div>

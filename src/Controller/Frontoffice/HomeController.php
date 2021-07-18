@@ -25,10 +25,10 @@ final class HomeController
     public function homeAction(Request $request): Response
     {
         if (!empty($request->request()->all())) {
-            $mail = new Mailer($this->config->getConfig()->host,$this->config->getConfig()->username,$this->config->getConfig()->password);
+            $mail = new Mailer($this->config->getConfig()->host, $this->config->getConfig()->username, $this->config->getConfig()->password);
             $mail->send($request->request()->all());
         }
-        return new Response($this->view->render([
+        return new Response($this->view->renderFront([
             'template' => 'home',
             'data' => [],
         ]));
@@ -36,8 +36,8 @@ final class HomeController
 
     public function administrationAction(): Response
     {
-        return new Response($this->view->render([
-            'template' => 'administration',
+        return new Response($this->view->renderBack([
+            'template' => 'home',
             'data' => [],
         ]));
     }
