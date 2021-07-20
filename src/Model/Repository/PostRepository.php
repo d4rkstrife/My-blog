@@ -35,7 +35,7 @@ final class PostRepository implements EntityRepositoryInterface
         $stmt->execute($criteria);
         $data = $stmt->fetch();
 
-        if ($data === null) {
+        if ($data == null) {
             return null;
         }
 
@@ -64,7 +64,7 @@ final class PostRepository implements EntityRepositoryInterface
 
     public function findAll(): ?array
     {
-        
+
 
         $stmt = $this->database->getPDO()->prepare('
         SELECT * FROM post

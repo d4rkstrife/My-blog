@@ -49,11 +49,48 @@ final class UserRepository implements EntityRepositoryInterface
 
     public function findAll(): ?array
     {
-        return null;
+        $stmt = $this->database->getPDO()->prepare('
+        SELECT * FROM user
+        ');
+        $stmt->execute();
+        $data = $stmt->fetchAll();
+
+        if ($data === null) {
+            return null;
+        }
+        $users = [];
+        foreach ($data as $user) {
+
+            $newUser = new User();
+            $newUser
+                ->setId($user['user_id'])
+                ->setPseudo($user['pseudo'])
+                ->setName($user['name'])
+                ->setSurname($user['surname'])
+                ->setEmail($user['mail'])
+                ->setGrade($user['grade'])
+                ->setDate($user['inscription_date'])
+                ->setState((int) $user['is_validate']);
+
+            $users[] = $newUser;
+        }
+        return $users;
     }
 
     public function create(object $user): bool
     {
+        $data = $user->all();
+
+        $newUser = new User();
+        $newUser
+            ->setName($data['nom'])
+            ->setSurname($data['prenom'])
+            ->setPseudo($data['pseudo'])
+            ->setPassword($data['password'])
+            ->setEmail($data['email']);
+        var_dump($newUser);
+        die;
+
         return false;
     }
 

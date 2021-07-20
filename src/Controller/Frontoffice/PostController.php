@@ -17,7 +17,7 @@ final class PostController
     private PostRepository $postRepository;
     private View $view;
 
-    public function __construct(PostRepository $postRepository, View $view )
+    public function __construct(PostRepository $postRepository, View $view)
     {
         $this->postRepository = $postRepository;
         $this->view = $view;
@@ -29,21 +29,21 @@ final class PostController
         $post = $this->postRepository->findOneBy(['id' => $id]);
         $comments = $commentRepository->findBy(['idPost' => $id, 'state' => 1]);
         $response = new Response('<h1>faire une redirection vers la page d\'erreur, ce post n\'existe pas</h1><a href="index.php?action=posts">Liste des posts</a><br>', 404);
-        
-        if ($request->request()->has('comment')) {
+
+        if (($post != null) && ($request->request()->has('comment'))) {
             $content = $request->request()->get('comment');
-            if($content != ''){
-                $newComment = new Comment ();
+            if ($content != '') {
+                $newComment = new Comment();
                 $validation = new DataValidation;
                 $newUser = new User();
                 $newUser->setId($user->getId());
                 $newComment
-                ->setText($validation->validate($content))
-                ->setIdPost($id)
-                ->setUser($newUser);
-                
+                    ->setText($validation->validate($content))
+                    ->setIdPost($id)
+                    ->setUser($newUser);
+
                 $commentRepository->create($newComment);
-            }            
+            }
         }
 
         if ($post !== null) {
