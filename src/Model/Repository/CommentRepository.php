@@ -7,9 +7,7 @@ namespace App\Model\Repository;
 use App\Service\Database;
 use App\Model\Entity\User;
 use App\Model\Entity\Comment;
-use App\Model\Entity\Interfaces\EntityObjectInterface;
 use App\Model\Repository\Interfaces\EntityRepositoryInterface;
-use PDO;
 
 final class CommentRepository implements EntityRepositoryInterface
 {
