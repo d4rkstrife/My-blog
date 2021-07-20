@@ -39,7 +39,7 @@ final class PostController
                 $newUser->setId($user->getId());
                 $newComment
                     ->setText($validation->validate($content))
-                    ->setIdPost($id)
+                    ->setIdPost((int) $id)
                     ->setUser($newUser);
 
                 $commentRepository->create($newComment);
