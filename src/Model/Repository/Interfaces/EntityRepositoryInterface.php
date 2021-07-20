@@ -10,7 +10,7 @@ interface EntityRepositoryInterface
 
     public function findOneBy(array $criteria, array $orderBy = null): ?object;
 
-    public function findAll(?int $page): ?array;
+    public function findAll(): ?array;
 
     public function findBy(array $criteria, array $orderBy = null, int $limit = null, int $offset = null): ?array;
 

@@ -39,6 +39,10 @@
 									</label>
 									<input type="password" id="password" name="password" class="form-control" required>
 								</div>
+								<div>{% for message in flashes %}{# TODO Gérer les différents type de message flash #}<p class="danger">
+											{{ message }}</p>
+									{% endfor %}
+								</div>
 
 								<hr>
 
@@ -48,6 +52,7 @@
 											<a href="">Mot de passe oublié?</a>
 										</b>
 									</div>
+									
 									<div class="col-lg-4 text-right">
 										<button class="btn btn-action" type="submit">Se connecter</button>
 									</div>

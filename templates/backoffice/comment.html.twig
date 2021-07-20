@@ -1,0 +1,37 @@
+{% extends "/backoffice/base.html.twig" %}
+
+{% block title %}Administration
+{% endblock %}
+
+{% block content %}
+		
+		<div class="app-main__inner">
+            
+            <div class="col-lg-8">
+                                <div class="main-card mb-3 card">
+                                    <div class="card-body"><h5 class="card-title">commentaire en attente</h5>
+                                        <table class="mb-0 table table-bordered">
+                                            <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Contenu</th>
+                                                <th>Auteur</th>
+                                                <th>Date de mise en ligne</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for comment in comments %}
+                                            <tr>
+                                                <th scope="row">{{ comment.id}}</th>
+                                                <td>{{ comment.text }}</td>
+                                                <td>{{ comment.user.pseudo }}</td>
+                                                <td>{{ comment.date }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>	
+        </div>
+    </div>
+{% endblock %}

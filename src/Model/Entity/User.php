@@ -15,6 +15,8 @@ final class User
     private string $name;
     private string $surname;
     private string $grade;
+    private string $date;
+    private int $state;
 
     public function getId(): int
     {
@@ -86,6 +88,26 @@ final class User
     public function setPassword(string $password): self
     {
         $this->password = $password;
+        return $this;
+    }
+    public function getDate(): string
+    {
+        return $this->date;
+    }
+
+    public function setDate(string $date): self
+    {
+        $this->date = $date;
+        return $this;
+    }
+    public function getState(): int
+    {
+        return $this->state;
+    }
+
+    public function setState(int $state): self
+    {
+        $this->state = $state;
         return $this;
     }
 }

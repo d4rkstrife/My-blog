@@ -35,7 +35,7 @@ final class PostRepository implements EntityRepositoryInterface
         $stmt->execute($criteria);
         $data = $stmt->fetch();
 
-        if ($data === null) {
+        if ($data == null) {
             return null;
         }
 
@@ -62,36 +62,16 @@ final class PostRepository implements EntityRepositoryInterface
         return null;
     }
 
-    public function findAll($page): ?array
+    public function findAll(): ?array
     {
-        // On détermine le nombre total d'articles
-        $sql = 'SELECT COUNT(*) AS nb_articles FROM `post`;';
 
-        // On prépare la requête
-        $query = $this->database->getPDO()->prepare($sql);
-
-        // On exécute
-        $query->execute();
-
-        // On récupère le nombre d'articles
-        $result = $query->fetch();
-
-        $nbArticles = (int) $result['nb_articles'];
-
-        // On détermine le nombre d'articles par page
-        $parPage = 4;
-
-        // Calcul du 1er article de la page
-        $premier = ($page * $parPage) - $parPage;
 
         $stmt = $this->database->getPDO()->prepare('
         SELECT * FROM post
         INNER JOIN user    
         ON post.fk_user = user.user_id
         ORDER BY post.date
-        DESC LIMIT :premier, :parpage');
-        $stmt->bindValue(':premier', $premier, PDO::PARAM_INT);
-        $stmt->bindValue(':parpage', $parPage, PDO::PARAM_INT);
+        DESC');
         $stmt->execute();
         $data = $stmt->fetchAll();
 

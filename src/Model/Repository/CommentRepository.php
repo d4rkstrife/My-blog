@@ -71,10 +71,45 @@ final class CommentRepository implements EntityRepositoryInterface
         return $comments;
     }
 
-    public function findAll($page): ?array
+    public function findAll(): ?array
     {
-        return null;
+        $stmt = $this->database->getPDO()->prepare('
+        SELECT * FROM comment
+        INNER JOIN user
+        ON comment.fk_user = user.user_id
+        WHERE comment.state = 0 ');
+        $stmt->execute();
+        $data = $stmt->fetchAll();
+
+        if ($data === null) {
+            return null;
+        }
+
+        // réfléchir à l'hydratation des entités;
+        $comments = [];
+        $users = [];
+        foreach ($data as $comment) {
+            $newComment = new Comment();
+            //tester si l utilisateur existe déjà
+            $user = new User();
+            $user
+                ->setId($comment['fk_user'])
+                ->setPseudo($comment['pseudo'])
+                ->setName($comment['name'])
+                ->setSurname($comment['surname'])
+                ->setEmail($comment['mail']);
+            $newComment
+                ->setId($comment['id'])
+                ->setText($comment['content'])
+                ->setUser($user)
+                ->setIdPost($comment['fk_post'])
+                ->setDate($comment['date']);
+            $comments[] = $newComment;
+        }
+
+        return $comments;
     }
+
 
     public function create(object $criteria): bool
     {

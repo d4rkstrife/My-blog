@@ -20,11 +20,18 @@ final class View
         $this->session = $session;
     }
 
-    public function render(array $data): string
+    public function renderFront(array $data): string
     {
         $data['data']['session'] = $this->session->toArray();
         $data['data']['flashes'] = $this->session->getFlashes();
 
         return $this->twig->render("frontoffice/${data['template']}.html.twig", $data['data']);
+    }
+    public function renderBack(array $data): string
+    {
+        $data['data']['session'] = $this->session->toArray();
+        $data['data']['flashes'] = $this->session->getFlashes();
+
+        return $this->twig->render("backoffice/${data['template']}.html.twig", $data['data']);
     }
 }

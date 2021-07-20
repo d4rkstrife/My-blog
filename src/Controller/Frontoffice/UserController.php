@@ -45,22 +45,25 @@ final class UserController
     {
         if ($request->getMethod() === 'POST') {
             if ($this->isValidLoginForm($request->request()->all())) {
-                return new Response('<h1>Utilisateur connecté</h1><h2>faire une redirection vers la page d\'accueil</h2><a href="index.php?action=posts&page=1">Liste des posts</a><br>', 200);
+                return new Response('<h1>Utilisateur connecté</h1><h2>faire une redirection vers la page d\'accueil</h2><a href="index.php?action=posts">Liste des posts</a><br>', 200);
             }
             $this->session->addFlashes('error', 'Mauvais identifiants');
         }
-        return new Response($this->view->render(['template' => 'login', 'data' => []]));
+        return new Response($this->view->renderFront(['template' => 'login', 'data' => []]));
     }
 
     public function logoutAction(): Response
     {
         $this->session->remove('user');
-        return new Response('<h1>Utilisateur déconnecté</h1><h2>faire une redirection vers la page d\'accueil</h2><a href="index.php?action=posts&page=1">Liste des posts</a><br>', 200);
+        return new Response('<h1>Utilisateur déconnecté</h1><h2>faire une redirection vers la page d\'accueil</h2><a href="index.php?action=posts">Liste des posts</a><br>', 200);
     }
 
-    public function registerAction(): Response
+    public function registerAction(Request $request): Response
     {
-        return new Response($this->view->render([
+        if ($request->getMethod() === 'POST') {
+            $this->userRepository->create($request->request());
+        }
+        return new Response($this->view->renderFront([
             'template' => 'register',
             'data' => [],
         ]));
