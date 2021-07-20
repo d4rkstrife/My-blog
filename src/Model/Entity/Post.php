@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Model\Entity;
 
+use App\Model\Entity\User;
 use App\Model\Entity\Interfaces\EntityObjectInterface;
 
 final class Post
@@ -14,6 +15,7 @@ final class Post
     private string $chapo;
     private string $date;
     private ?string $modif;
+    private User $autor;
 
     /*   public function __construct(int $id, string $title, string $text, string $chapo)
     {
@@ -27,9 +29,9 @@ final class Post
     {
         return $this->id;
     }
-    public function setId($id): self
+    public function setId(int $id): self
     {
-        $this->id = (int)$id;
+        $this->id = $id;
         return $this;
     }
 

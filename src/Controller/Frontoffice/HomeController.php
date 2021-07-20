@@ -12,14 +12,14 @@ use App\Service\ParseConfig;
 use App\Service\Http\Request;
 use App\Service\Http\Response;
 
-
 final class HomeController
 {
     private View $view;
     private ParseConfig $config;
-    private Object $repository;
+    private object $repository;
+    private Database $database;
 
-    public function __construct(View $view, ParseConfig $config, Database $database, Object $repository)
+    public function __construct(View $view, ParseConfig $config, Database $database, object $repository)
     {
 
         $this->view = $view;

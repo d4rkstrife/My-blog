@@ -9,8 +9,7 @@ use App\Model\Entity\User;
 use App\Model\Entity\Comment;
 use App\Model\Entity\Interfaces\EntityObjectInterface;
 use App\Model\Repository\Interfaces\EntityRepositoryInterface;
-
-use \PDO;
+use PDO;
 
 final class CommentRepository implements EntityRepositoryInterface
 {
@@ -42,7 +41,7 @@ final class CommentRepository implements EntityRepositoryInterface
         $stmt->execute($criteria);
         $data = $stmt->fetchAll();
 
-        if ($data === null) {
+        if ($data == null) {
             return null;
         }
 
@@ -54,16 +53,16 @@ final class CommentRepository implements EntityRepositoryInterface
             //tester si l utilisateur existe déjà
             $user = new User();
             $user
-                ->setId($comment['fk_user'])
+                ->setId((int) $comment['fk_user'])
                 ->setPseudo($comment['pseudo'])
                 ->setName($comment['name'])
                 ->setSurname($comment['surname'])
                 ->setEmail($comment['mail']);
             $newComment
-                ->setId($comment['id'])
+                ->setId((int) $comment['id'])
                 ->setText($comment['content'])
                 ->setUser($user)
-                ->setIdPost($comment['fk_post'])
+                ->setIdPost((int) $comment['fk_post'])
                 ->setDate($comment['date']);
             $comments[] = $newComment;
         }
@@ -81,7 +80,7 @@ final class CommentRepository implements EntityRepositoryInterface
         $stmt->execute();
         $data = $stmt->fetchAll();
 
-        if ($data === null) {
+        if ($data == null) {
             return null;
         }
 
@@ -93,16 +92,16 @@ final class CommentRepository implements EntityRepositoryInterface
             //tester si l utilisateur existe déjà
             $user = new User();
             $user
-                ->setId($comment['fk_user'])
+                ->setId((int) $comment['fk_user'])
                 ->setPseudo($comment['pseudo'])
                 ->setName($comment['name'])
                 ->setSurname($comment['surname'])
                 ->setEmail($comment['mail']);
             $newComment
-                ->setId($comment['id'])
+                ->setId((int) $comment['id'])
                 ->setText($comment['content'])
                 ->setUser($user)
-                ->setIdPost($comment['fk_post'])
+                ->setIdPost((int) $comment['fk_post'])
                 ->setDate($comment['date']);
             $comments[] = $newComment;
         }

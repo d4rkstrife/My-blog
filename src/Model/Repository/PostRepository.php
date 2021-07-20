@@ -8,8 +8,7 @@ use App\Model\Entity\Post;
 use App\Model\Entity\User;
 use App\Service\Database;
 use App\Model\Repository\Interfaces\EntityRepositoryInterface;
-
-use \PDO;
+use PDO;
 
 final class PostRepository implements EntityRepositoryInterface
 {
@@ -42,13 +41,13 @@ final class PostRepository implements EntityRepositoryInterface
         $post = new Post();
         $user = new User();
         $user
-            ->setId($data['fk_user'])
+            ->setId((int) $data['fk_user'])
             ->setPseudo($data['pseudo'])
             ->setName($data['name'])
             ->setSurname($data['surname'])
             ->setEmail($data['mail']);
         $post->setAutor($user)
-            ->setId($data['id'])
+            ->setId((int) $data['id'])
             ->setTitle($data['title'])
             ->setContent($data['content'])
             ->setChapo($data['chapo'])
@@ -76,7 +75,7 @@ final class PostRepository implements EntityRepositoryInterface
         $data = $stmt->fetchAll();
 
 
-        if ($data === null) {
+        if ($data == null) {
             return null;
         }
         $posts = [];
@@ -84,14 +83,14 @@ final class PostRepository implements EntityRepositoryInterface
             $postObj = new Post();
             $user = new User();
             $user
-                ->setId($post['fk_user'])
+                ->setId((int) $post['fk_user'])
                 ->setPseudo($post['pseudo'])
                 ->setName($post['name'])
                 ->setSurname($post['surname'])
                 ->setEmail($post['mail']);
             $postObj
                 ->setAutor($user)
-                ->setId($post['id'])
+                ->setId((int) $post['id'])
                 ->setTitle($post['title'])
                 ->setContent($post['content'])
                 ->setChapo($post['chapo'])

@@ -2,8 +2,8 @@
 -- version 4.9.5
 -- https://www.phpmyadmin.net/
 --
--- Hôte : localhost:3307
--- Généré le : mar. 13 juil. 2021 à 21:22
+-- Hôte : localhost:3306
+-- Généré le : mar. 20 juil. 2021 à 10:09
 -- Version du serveur :  5.7.24
 -- Version de PHP : 7.4.1
 
@@ -46,7 +46,9 @@ INSERT INTO `comment` (`content`, `state`, `fk_user`, `fk_post`, `date`, `id`) V
 ('Génial!', 0, 3, 1, '2021-06-30 08:06:43', 2),
 ('Bienvenue!', 1, 4, 2, '2021-06-30 08:06:43', 3),
 ('Bienvenue à elle!', 1, 4, 7, '2021-06-30 08:06:43', 4),
-('On comprend rien!!', 1, 4, 9, '2021-06-30 08:06:43', 6);
+('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sed malesuada mi. Vestibulum accumsan, sem sed iaculis rhoncus, libero justo feugiat mauris, a gravida sapien quam dignissim ipsum. Nulla vulputate varius lacus auctor ultricies. Morbi vel justo lectus. Donec sit amet suscipit odio, et dictum nibh. Phasellus sapien massa, semper at consequat eu, accumsan a neque. Sed imperdiet malesuada ligula ac posuere. Duis aliquam venenatis lacinia. ', 0, 4, 9, '2021-06-30 08:06:43', 6),
+('hello', 0, 3, 2, '2021-07-14 08:23:03', 20),
+('Elle est trop sympa en plus!', 0, 1, 7, '2021-07-19 10:35:26', 21);
 
 -- --------------------------------------------------------
 
@@ -87,8 +89,8 @@ CREATE TABLE `user` (
   `mail` varchar(256) NOT NULL,
   `grade` enum('member','admin','superAdmin') NOT NULL,
   `password` varchar(256) NOT NULL,
-  `inscription_date` datetime NOT NULL,
-  `is_validate` tinyint(1) NOT NULL,
+  `inscription_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `is_validate` tinyint(1) NOT NULL DEFAULT '0',
   `user_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -101,7 +103,10 @@ INSERT INTO `user` (`name`, `surname`, `pseudo`, `mail`, `grade`, `password`, `i
 ('Antoine', 'Zavatta', 'Savate', 'zavatta@gmail.com', 'member', '12345', '2021-06-15 13:17:20', 1, 2),
 ('Felipa', 'Sanchez', 'Nounia', 'f.sanchez@hotmail.com', 'member', '12345', '2021-06-15 22:17:54', 1, 3),
 ('Farouk', 'Martin', 'Fartin', 'fartin@gmail.com', 'member', '12345', '2021-06-15 23:21:24', 1, 4),
-('Carole', 'La Chouette', 'Hulule', 'hulule@gmail.com', 'admin', '12345', '2021-06-15 11:25:42', 1, 5);
+('Carole', 'La Chouette', 'Hulule', 'hulule@gmail.com', 'admin', '12345', '2021-06-15 11:25:42', 1, 5),
+('nom', 'prénom', 'pseudo', 'mail', 'member', '12345', '2021-07-20 11:34:22', 0, 6),
+('Grandclement', 'Pierre', 'D4rkstrife', 'p.gdc85@gmail.com', 'superAdmin', '15ju1985', '2021-07-20 11:44:40', 1, 8),
+('Bla', 'Blabla', 'Blablabla', 'blabla@gmail.com', 'member', '$2y$10$GFWGpTg9wiNf.lkD07HdHewh6w5XsFE68XrLETSBx/57vcSd2PFhG', '2021-07-20 12:00:50', 0, 9);
 
 --
 -- Index pour les tables déchargées
@@ -140,7 +145,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT pour la table `comment`
 --
 ALTER TABLE `comment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT pour la table `post`
@@ -152,7 +157,7 @@ ALTER TABLE `post`
 -- AUTO_INCREMENT pour la table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Contraintes pour les tables déchargées

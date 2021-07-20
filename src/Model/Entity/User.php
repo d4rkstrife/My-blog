@@ -23,9 +23,9 @@ final class User
         return $this->id;
     }
 
-    public function setId($id): self
+    public function setId(int $id): self
     {
-        $this->id = (int) $id;
+        $this->id = $id;
         return $this;
     }
     public function getName(): string

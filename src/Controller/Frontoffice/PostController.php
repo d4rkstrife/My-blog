@@ -34,7 +34,7 @@ final class PostController
             $content = $request->request()->get('comment');
             if ($content != '') {
                 $newComment = new Comment();
-                $validation = new DataValidation;
+                $validation = new DataValidation();
                 $newUser = new User();
                 $newUser->setId($user->getId());
                 $newComment
