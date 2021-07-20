@@ -34,7 +34,7 @@ final class UserRepository implements EntityRepositoryInterface
         }
         $user = new User();
         $user
-            ->setId($data['user_id'])
+            ->setId((int) $data['user_id'])
             ->setPseudo($data['pseudo'])
             ->setEmail($data['mail'])
             ->setPassword($data['password'])
@@ -62,7 +62,7 @@ final class UserRepository implements EntityRepositoryInterface
         foreach ($data as $user) {
             $newUser = new User();
             $newUser
-                ->setId($user['user_id'])
+                ->setId((int) $user['user_id'])
                 ->setPseudo($user['pseudo'])
                 ->setName($user['name'])
                 ->setSurname($user['surname'])

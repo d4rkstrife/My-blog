@@ -53,16 +53,16 @@ final class CommentRepository implements EntityRepositoryInterface
             //tester si l utilisateur existe déjà
             $user = new User();
             $user
-                ->setId($comment['fk_user'])
+                ->setId((int) $comment['fk_user'])
                 ->setPseudo($comment['pseudo'])
                 ->setName($comment['name'])
                 ->setSurname($comment['surname'])
                 ->setEmail($comment['mail']);
             $newComment
-                ->setId($comment['id'])
+                ->setId((int) $comment['id'])
                 ->setText($comment['content'])
                 ->setUser($user)
-                ->setIdPost($comment['fk_post'])
+                ->setIdPost((int) $comment['fk_post'])
                 ->setDate($comment['date']);
             $comments[] = $newComment;
         }
@@ -92,16 +92,16 @@ final class CommentRepository implements EntityRepositoryInterface
             //tester si l utilisateur existe déjà
             $user = new User();
             $user
-                ->setId($comment['fk_user'])
+                ->setId((int) $comment['fk_user'])
                 ->setPseudo($comment['pseudo'])
                 ->setName($comment['name'])
                 ->setSurname($comment['surname'])
                 ->setEmail($comment['mail']);
             $newComment
-                ->setId($comment['id'])
+                ->setId((int) $comment['id'])
                 ->setText($comment['content'])
                 ->setUser($user)
-                ->setIdPost($comment['fk_post'])
+                ->setIdPost((int) $comment['fk_post'])
                 ->setDate($comment['date']);
             $comments[] = $newComment;
         }
