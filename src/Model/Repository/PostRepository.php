@@ -8,8 +8,7 @@ use App\Model\Entity\Post;
 use App\Model\Entity\User;
 use App\Service\Database;
 use App\Model\Repository\Interfaces\EntityRepositoryInterface;
-
-use \PDO;
+use PDO;
 
 final class PostRepository implements EntityRepositoryInterface
 {
@@ -76,7 +75,7 @@ final class PostRepository implements EntityRepositoryInterface
         $data = $stmt->fetchAll();
 
 
-        if ($data === null) {
+        if ($data == null) {
             return null;
         }
         $posts = [];

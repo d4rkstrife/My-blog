@@ -9,8 +9,7 @@ use App\Model\Entity\User;
 use App\Model\Entity\Comment;
 use App\Model\Entity\Interfaces\EntityObjectInterface;
 use App\Model\Repository\Interfaces\EntityRepositoryInterface;
-
-use \PDO;
+use PDO;
 
 final class CommentRepository implements EntityRepositoryInterface
 {
@@ -42,7 +41,7 @@ final class CommentRepository implements EntityRepositoryInterface
         $stmt->execute($criteria);
         $data = $stmt->fetchAll();
 
-        if ($data === null) {
+        if ($data == null) {
             return null;
         }
 
@@ -81,7 +80,7 @@ final class CommentRepository implements EntityRepositoryInterface
         $stmt->execute();
         $data = $stmt->fetchAll();
 
-        if ($data === null) {
+        if ($data == null) {
             return null;
         }
 

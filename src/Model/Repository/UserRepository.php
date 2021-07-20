@@ -55,12 +55,11 @@ final class UserRepository implements EntityRepositoryInterface
         $stmt->execute();
         $data = $stmt->fetchAll();
 
-        if ($data === null) {
+        if ($data == null) {
             return null;
         }
         $users = [];
         foreach ($data as $user) {
-
             $newUser = new User();
             $newUser
                 ->setId($user['user_id'])
@@ -88,8 +87,7 @@ final class UserRepository implements EntityRepositoryInterface
             ->setPseudo($data['pseudo'])
             ->setPassword($data['password'])
             ->setEmail($data['email']);
-        var_dump($newUser);
-        die;
+
 
         return false;
     }

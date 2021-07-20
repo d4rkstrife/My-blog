@@ -22,28 +22,28 @@ final class Counter
         $req = $this->database->getPDO()->query("SELECT COUNT(*) as NbrPosts from post");
         $donnees = $req->fetch();
         $req->closeCursor();
-        $this->setNbrPost($donnees['NbrPosts']);
+        $this->setNbrPost((int) $donnees['NbrPosts']);
 
         //compter le nombre d utilisateurs
         $req = $this->database->getPDO()->query("SELECT COUNT(*) as NbrUsers from user");
         $donnees = $req->fetch();
         $req->closeCursor();
-        $this->setNbrUser($donnees['NbrUsers']);
+        $this->setNbrUser((int) $donnees['NbrUsers']);
 
         //compter le nombre de commentaires
         $req = $this->database->getPDO()->query("SELECT COUNT(*) as NbrComment from comment");
         $donnees = $req->fetch();
         $req->closeCursor();
-        $this->setNbrComment($donnees['NbrComment']);
+        $this->setNbrComment((int) $donnees['NbrComment']);
     }
     public function getNbrPost(): int
     {
         return $this->nbrPost;
     }
 
-    public function setNbrPost($nbr): self
+    public function setNbrPost(int $nbr): self
     {
-        $this->nbrPost = (int) $nbr;
+        $this->nbrPost = $nbr;
         return $this;
     }
     public function getNbrComment(): int
@@ -51,9 +51,9 @@ final class Counter
         return $this->nbrComment;
     }
 
-    public function setNbrComment($nbr): self
+    public function setNbrComment(int $nbr): self
     {
-        $this->nbrComment = (int) $nbr;
+        $this->nbrComment = $nbr;
         return $this;
     }
     public function getNbrUser(): int
@@ -61,9 +61,9 @@ final class Counter
         return $this->nbrUser;
     }
 
-    public function setNbrUser($nbr): self
+    public function setNbrUser(int $nbr): self
     {
-        $this->nbrUser = (int) $nbr;
+        $this->nbrUser = $nbr;
         return $this;
     }
 }

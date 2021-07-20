@@ -7,7 +7,6 @@ namespace App\Service;
 use App\Service\ParseConfig;
 use PHPMailer\PHPMailer\PHPMailer;
 
-
 class Mailer
 {
     private string $host;
@@ -22,7 +21,7 @@ class Mailer
         $this->password = $password;
         $this->validator = new DataValidation();
     }
-    public function send($infoUser)
+    public function send(array $infoUser): void
     {
 
         $infoObject = (object)$infoUser;

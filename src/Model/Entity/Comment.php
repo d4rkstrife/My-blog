@@ -12,12 +12,13 @@ final class Comment
     private string $text;
     private int $idPost;
     private User $user;
+    private string $date;
 
     public function getId(): int
     {
         return $this->id;
     }
-    public function setId($id): self
+    public function setId(int $id): self
     {
         $this->id = (int) $id;
         return $this;
@@ -38,9 +39,9 @@ final class Comment
     {
         return $this->idPost;
     }
-    public function setIdPost($idPost): self
+    public function setIdPost(int $idPost): self
     {
-        $this->idPost = (int)$idPost;
+        $this->idPost = $idPost;
         return $this;
     }
     public function getUser(): User
