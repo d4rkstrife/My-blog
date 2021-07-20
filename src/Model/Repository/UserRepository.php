@@ -80,16 +80,19 @@ final class UserRepository implements EntityRepositoryInterface
     {
         $data = $user->all();
 
-        $newUser = new User();
-        $newUser
-            ->setName($data['nom'])
-            ->setSurname($data['prenom'])
-            ->setPseudo($data['pseudo'])
-            ->setPassword($data['password'])
-            ->setEmail($data['email']);
+        $stmt = $this->database->getPDO()->prepare('
+        INSERT INTO `user`(`name`, `surname`, `pseudo`, `mail`, `password`)
+        VALUES (:name, :surname, :pseudo, :mail, :password)
+        ');
+        $stmt->bindValue('name', $data['nom']);
+        $stmt->bindValue('surname', $data['prenom']);
+        $stmt->bindValue('pseudo', $data['pseudo']);
+        $stmt->bindValue('mail', $data['email']);
+        $stmt->bindValue('password', password_hash($data['password'], PASSWORD_DEFAULT));
 
+        $stmt->execute();
 
-        return false;
+        return true;
     }
 
     public function update(object $user): bool

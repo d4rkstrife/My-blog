@@ -25,7 +25,7 @@ final class UserController
         }
 
         $user = $this->userRepository->findOneBy(['email' => $infoUser['email']]);
-        if ($user === null || $infoUser['password'] !== $user->getPassword()) {
+        if ($user === null || !password_verify($infoUser['password'], $user->getPassword())) {
             return false;
         }
 
