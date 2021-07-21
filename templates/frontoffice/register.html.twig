@@ -4,6 +4,7 @@
 {% endblock %}
 
 {% block content %}
+{% if not session.user %}
 	<header id="head" class="secondary"></header>
 	<div class="container">
 
@@ -77,5 +78,16 @@
 
 		</div>
 	</div>
+	{% else %}
+	<header id="head" class="secondary"></header>
+	<div class="container">
+
+
+		<div class="row">
+	<h3>Vous n'êtes pas autorisé à acceder à cette page! <a href='index.php?action=home'>Retour à l'accueil</a></h3>
+		</div>
+		</div>
+	{% endif %}
+
 
 {% endblock %}

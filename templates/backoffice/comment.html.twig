@@ -17,15 +17,23 @@
                                                 <th>Contenu</th>
                                                 <th>Auteur</th>
                                                 <th>Date de mise en ligne</th>
+                                                <th>Administration</th>
                                             </tr>
                                             </thead>
                                             <tbody>
                                             {% for comment in comments %}
                                             <tr>
-                                                <th scope="row">{{ comment.id}}</th>
+                                                <th scope="row">{{ comment.id }}</th>
                                                 <td>{{ comment.text }}</td>
                                                 <td>{{ comment.user.pseudo }}</td>
                                                 <td>{{ comment.date }}</td>
+                                                <td>
+                                                <form method='POST'>
+                                                <button type="submit" name="validate" value="{{ comment.id }}" class="btn-wide btn btn-success">Valider</button>
+                                                
+                                                <button type="submit" name="delete" value="{{ comment.id }}" class="btn-wide btn-shadow btn btn-danger">Supprimer</button>
+                                                </form>
+                                                </td>
                                             </tr>
                                             {% endfor %}
                                             </tbody>

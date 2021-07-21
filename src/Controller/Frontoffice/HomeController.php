@@ -61,9 +61,35 @@ final class HomeController
             'data' => ['posts' => $posts],
         ]));
     }
-    public function postCommentAction(): Response
+    public function postCommentAction(Request $request): Response
     {
+
+        //si un des boutons a été cliqué
+        if (!empty($request->request()->all())) {
+            $post = (object) $request->request()->all();
+
+            //bouton supprimer
+            if (isset($post->delete)) {
+                $criteria = array(
+                    'id' => $post->delete
+                );
+                $comment = $this->repository->findOneBy($criteria);
+                $this->repository->delete($comment);
+
+                //bouton valider
+            } elseif (isset($post->validate)) {
+                $criteria = array(
+                    'id' => $post->validate
+                );
+                $comment = $this->repository->findOneBy($criteria);
+                $this->repository->update($comment);
+            }
+        }
+
+
         $comments = $this->repository->findAll();
+
+
 
         return new Response($this->view->renderBack([
             'template' => 'comment',
