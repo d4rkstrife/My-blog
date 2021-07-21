@@ -25,10 +25,9 @@ final class UserController
         }
 
         $user = $this->userRepository->findOneBy(['email' => $infoUser['email']]);
-        if ($user === null || !password_verify($infoUser['password'], $user->getPassword())) {
+        if ($user === null || !password_verify($infoUser['password'], $user->getPassword()) || $user->getState() != 1) {
             return false;
         }
-
         $this->session->set('user', $user);
 
         return true;
@@ -44,10 +43,12 @@ final class UserController
     public function loginAction(Request $request): Response
     {
         if ($request->getMethod() === 'POST') {
+
             if ($this->isValidLoginForm($request->request()->all())) {
+
                 return new Response('<h1>Utilisateur connecté</h1><h2>faire une redirection vers la page d\'accueil</h2><a href="index.php?action=posts">Liste des posts</a><br>', 200);
             }
-            $this->session->addFlashes('error', 'Mauvais identifiants');
+            $this->session->addFlashes('error', 'Mauvais identifiants ou compte non validé');
         }
         return new Response($this->view->renderFront(['template' => 'login', 'data' => []]));
     }

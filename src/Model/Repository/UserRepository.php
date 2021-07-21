@@ -38,7 +38,8 @@ final class UserRepository implements EntityRepositoryInterface
             ->setPseudo($data['pseudo'])
             ->setEmail($data['mail'])
             ->setPassword($data['password'])
-            ->setGrade($data['grade']);
+            ->setGrade($data['grade'])
+            ->setState((int) $data['is_validate']);
         return $user;
     }
 
@@ -79,20 +80,36 @@ final class UserRepository implements EntityRepositoryInterface
     public function create(object $user): bool
     {
         $data = $user->all();
+        if (
+            !empty($data['nom'])
+            && strlen($data['nom']) <= 20
+            && preg_match("/^[A-Za-z '-]+$/", $data['nom'])
+            && !empty($data['prenom'])
+            && strlen($data['prenom']) <= 20
+            && preg_match("/^[A-Za-z '-]+$/", $data['prenom'])
+            && !empty($data['pseudo'])
+            && strlen($data['pseudo']) <= 20
+            && preg_match("/^[A-Za-z '-]+$/", $data['pseudo'])
+            && !empty($data['password'])
+            && strlen($data['password']) <= 20
+            && !empty($data['email'])
+            && filter_var($data['email'], FILTER_VALIDATE_EMAIL)
+        ) {
+            $stmt = $this->database->getPDO()->prepare('
+            INSERT INTO `user`(`name`, `surname`, `pseudo`, `mail`, `password`)
+            VALUES (:name, :surname, :pseudo, :mail, :password)
+            ');
+            $stmt->bindValue('name', $data['nom']);
+            $stmt->bindValue('surname', $data['prenom']);
+            $stmt->bindValue('pseudo', $data['pseudo']);
+            $stmt->bindValue('mail', $data['email']);
+            $stmt->bindValue('password', password_hash($data['password'], PASSWORD_DEFAULT));
 
-        $stmt = $this->database->getPDO()->prepare('
-        INSERT INTO `user`(`name`, `surname`, `pseudo`, `mail`, `password`)
-        VALUES (:name, :surname, :pseudo, :mail, :password)
-        ');
-        $stmt->bindValue('name', $data['nom']);
-        $stmt->bindValue('surname', $data['prenom']);
-        $stmt->bindValue('pseudo', $data['pseudo']);
-        $stmt->bindValue('mail', $data['email']);
-        $stmt->bindValue('password', password_hash($data['password'], PASSWORD_DEFAULT));
+            $stmt->execute();
 
-        $stmt->execute();
-
-        return true;
+            return true;
+        }
+        return false;
     }
 
     public function update(object $user): bool
