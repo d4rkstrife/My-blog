@@ -66,7 +66,7 @@ final class Router
         } elseif ($action === 'commentAdmin') {
             $commentRepo = new commentRepository($this->database);
             $controller = new HomeController($this->view, $this->config, $this->database, $commentRepo);
-            return $controller->postCommentAction();
+            return $controller->postCommentAction($this->request);
 
             // *** @Route http://localhost:8000/?action=userAdmin ***
         } elseif ($action === 'userAdmin') {

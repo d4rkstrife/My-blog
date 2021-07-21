@@ -25,7 +25,16 @@ final class CommentRepository implements EntityRepositoryInterface
 
     public function findOneBy(array $criteria, array $orderBy = null): ?Comment
     {
-        return null;
+        $stmt = $this->database->getPDO()->prepare('
+        SELECT * FROM comment        
+        WHERE comment.id=:id
+        ');
+        $stmt->execute($criteria);
+        $data = $stmt->fetchAll();
+        $comment = new Comment();
+        $comment
+            ->setId((int) $criteria['id']);
+        return $comment;
     }
 
     public function findBy(array $criteria, array $orderBy = null, int $limit = null, int $offset = null): ?array
@@ -122,11 +131,21 @@ final class CommentRepository implements EntityRepositoryInterface
 
     public function update(object $comment): bool
     {
-        return false;
+        $stmt = $this->database->getPDO()->prepare('
+        UPDATE `comment` SET `state`= 1 WHERE id = :id
+        ');
+        $stmt->bindValue('id', $comment->getId());
+        $stmt->execute();
+        return true;
     }
 
     public function delete(object $comment): bool
     {
-        return false;
+        $stmt = $this->database->getPDO()->prepare('
+        DELETE FROM `comment` WHERE id = :id
+        ');
+        $stmt->bindValue('id', $comment->getId());
+        $stmt->execute();
+        return true;
     }
 }
