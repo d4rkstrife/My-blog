@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:3306
--- Généré le : mar. 20 juil. 2021 à 21:23
+-- Généré le : jeu. 22 juil. 2021 à 07:14
 -- Version du serveur :  5.7.24
 -- Version de PHP : 7.4.1
 
@@ -43,7 +43,8 @@ CREATE TABLE `comment` (
 
 INSERT INTO `comment` (`content`, `state`, `fk_user`, `fk_post`, `date`, `id`) VALUES
 ('Hate de te lire!! A très vite :)', 1, 11, 10, '2021-07-20 23:06:34', 24),
-('En plus tu écris tellement bien...', 0, 11, 10, '2021-07-20 23:21:57', 25);
+('En plus tu écris tellement bien...', 1, 11, 10, '2021-07-20 23:21:57', 25),
+('Merci!', 1, 10, 10, '2021-07-22 00:03:12', 30);
 
 -- --------------------------------------------------------
 
@@ -92,7 +93,8 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`name`, `surname`, `pseudo`, `mail`, `grade`, `password`, `inscription_date`, `is_validate`, `user_id`) VALUES
 ('Grandclement', 'Pierre', 'D4rkstrife', 'p.gdc85@gmail.com', 'superAdmin', '$2y$10$8cRhFES66gzPA3PS6ZN.f.sFSSdCENa2pCLmu92EdH6RkFnS6gV0m', '2021-07-20 22:59:27', 1, 10),
-('Patrice', 'Dupont', 'Patoche', 'patoche@gmail.com', 'member', '$2y$10$d9oHQ1nahTiHlY3YUBXX5eUaVVPj0tmz0npsYo3isErXv8GBKPngW', '2021-07-20 23:00:04', 1, 11);
+('Patrice', 'Dupont', 'Patoche', 'patoche@gmail.com', 'member', '$2y$10$d9oHQ1nahTiHlY3YUBXX5eUaVVPj0tmz0npsYo3isErXv8GBKPngW', '2021-07-20 23:00:04', 1, 11),
+('Sue', 'Ellen', 'Jack Daniels', 'sue.ellen@gmail.com', 'member', '$2y$10$deaFmcCFq0VRt4JsRGFP3ew4W2qKUtJmOr.Ltkf8S/zB0Z/Lqijsu', '2021-07-21 12:50:11', 0, 17);
 
 --
 -- Index pour les tables déchargées
@@ -131,7 +133,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT pour la table `comment`
 --
 ALTER TABLE `comment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT pour la table `post`
@@ -143,7 +145,7 @@ ALTER TABLE `post`
 -- AUTO_INCREMENT pour la table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- Contraintes pour les tables déchargées
