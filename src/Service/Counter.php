@@ -10,6 +10,7 @@ final class Counter
     private int $nbrPost;
     private int $nbrComment;
     private int $nbrUser;
+    private int $nbrPage;
 
     public function __construct(Database $database)
     {
@@ -36,6 +37,18 @@ final class Counter
         $req->closeCursor();
         $this->setNbrComment((int) $donnees['NbrComment']);
     }
+
+    public function getNbrPage(): int
+    {
+        return $this->nbrPage;
+    }
+
+    public function setNbrPage(int $nbrPost, int $maxPerPage): self
+    {
+        $this->nbrPage = $nbrPost / $maxPerPage;
+        return $this;
+    }
+
     public function getNbrPost(): int
     {
         return $this->nbrPost;

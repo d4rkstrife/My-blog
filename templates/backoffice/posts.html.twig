@@ -4,36 +4,37 @@
 {% endblock %}
 
 {% block content %}
-		
-		<div class="app-main__inner">
-            
-            <div class="col-lg-12">
-                                <div class="main-card mb-3 card">
-                                    <div class="card-body"><h5 class="card-title">Liste des Posts</h5>
-                                        <table class="mb-0 table table-bordered">
-                                            <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Titre</th>
-                                                <th>Auteur</th>
-                                                <th>Date de mise en ligne</th>
-                                                <th>Dernière modification</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            {% for post in posts %}
-                                            <tr>
-                                                <th scope="row">{{ post.id}}</th>
-                                                <td>{{ post.title }}</td>
-                                                <td>{{ post.autor.pseudo }}</td>
-                                                <td>{{ post.date  }}</td>
-                                                <td>{{ post.modif }}</td>
-                                            </tr>
-                                            {% endfor %}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>	
-        </div>
-    </div>
+
+	<div class="app-main__inner">
+
+		<div class="col-lg-12">
+			<div class="main-card mb-3 card">
+				<div class="card-body">
+					<h5 class="card-title">Liste des Posts</h5>
+					<table class="mb-0 table table-bordered">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Titre</th>
+								<th>Auteur</th>
+								<th>Date de mise en ligne</th>
+								<th>Dernière modification</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for post in posts %}
+								<tr>
+									<th scope="row">{{ post.id}}</th>
+									<td>{{ post.title }}</td>
+									<td>{{ post.autor.pseudo }}</td>
+									<td>{{ post.date  }}</td>
+									<td>{{ post.modif }}</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}

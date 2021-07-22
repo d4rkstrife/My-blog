@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace  App\Service;
 
 use App\View\View;
+use App\Service\Counter;
 use App\Service\Database;
 use App\Service\Http\Request;
 use App\Service\Http\Response;
@@ -26,6 +27,7 @@ final class Router
     private Request $request;
     private Session $session;
     private ParseConfig $config;
+    private Counter $counter;
 
     public function __construct(Request $request, ParseConfig $config)
     {
@@ -36,6 +38,7 @@ final class Router
         $this->session = new Session();
         $this->view = new View($this->session);
         $this->request = $request;
+        $this->counter = new Counter($this->database);
     }
 
     public function run(): Response
