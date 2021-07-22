@@ -22,6 +22,11 @@
 					<div class="panel panel-default">
 						<div class="panel-body">
 							<h3 class="thin text-center">Créer un compte</h3>
+							{% for message in flashes %}
+								<div>
+								<p class="danger">{{ message }}</p>
+											</div>
+							{% endfor %}
 
 							<hr>
 							<form method="POST">
@@ -59,9 +64,7 @@
                                             </div>
 											<div class="row">
                                             <div class="col-lg-4 text-left">
-										{% for message in flashes %}{# TODO Gérer les différents type de message flash #}<p class="danger">
-											{{ message }}</p>
-									{% endfor %}
+										
 									</div>
                                             <button class="mt-2 btn btn-primary">Sign in</button>
 											</div>

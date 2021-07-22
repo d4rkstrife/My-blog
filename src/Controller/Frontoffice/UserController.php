@@ -46,7 +46,7 @@ final class UserController
 
             if ($this->isValidLoginForm($request->request()->all())) {
 
-                return new Response('<h1>Utilisateur connecté</h1><h2>faire une redirection vers la page d\'accueil</h2><a href="index.php?action=posts">Liste des posts</a><br>', 200);
+                return new Response($this->view->renderFront(['template' => 'home', 'data' => []]), 200);
             }
             $this->session->addFlashes('error', 'Mauvais identifiants ou compte non validé');
         }
@@ -56,13 +56,14 @@ final class UserController
     public function logoutAction(): Response
     {
         $this->session->remove('user');
-        return new Response('<h1>Utilisateur déconnecté</h1><h2>faire une redirection vers la page d\'accueil</h2><a href="index.php?action=posts">Liste des posts</a><br>', 200);
+        return new Response($this->view->renderFront(['template' => 'home', 'data' => []]), 200);
     }
 
     public function registerAction(Request $request): Response
     {
         if ($request->getMethod() === 'POST') {
             $this->userRepository->create($request->request());
+            $this->session->addFlashes('success', 'Compte créé,connectez vous');
         }
         return new Response($this->view->renderFront([
             'template' => 'register',
