@@ -106,7 +106,6 @@ final class UserRepository implements EntityRepositoryInterface
             $stmt->bindValue('password', password_hash($data['password'], PASSWORD_DEFAULT));
 
             $stmt->execute();
-
             return true;
         }
         return false;
@@ -119,6 +118,11 @@ final class UserRepository implements EntityRepositoryInterface
 
     public function delete(object $user): bool
     {
-        return false;
+        $stmt = $this->database->getPDO()->prepare('
+        DELETE FROM `user` WHERE user_id = :id
+        ');
+        $stmt->bindValue('id', $user->getId());
+        $stmt->execute();
+        return true;
     }
 }

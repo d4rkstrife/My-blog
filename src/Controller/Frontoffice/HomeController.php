@@ -52,6 +52,7 @@ final class HomeController
             ],
         ]));
     }
+
     public function postAdminAction(): Response
     {
         $posts = $this->repository->findAll();
@@ -61,6 +62,7 @@ final class HomeController
             'data' => ['posts' => $posts],
         ]));
     }
+
     public function postCommentAction(Request $request): Response
     {
 
@@ -85,19 +87,26 @@ final class HomeController
                 $this->repository->update($comment);
             }
         }
-
-
         $comments = $this->repository->findAll();
-
-
 
         return new Response($this->view->renderBack([
             'template' => 'comment',
             'data' => ['comments' => $comments],
         ]));
     }
-    public function userAction(): Response
+
+    public function userAction(Request $request): Response
     {
+        //si le bouton supprimer a été cliqué
+        if (!empty($request->request()->all())) {
+            $post = (object) $request->request()->all();
+            $criteria = array(
+                'email' => $post->delete
+            );
+            $user = $this->repository->findOneBy($criteria);
+            $this->repository->delete($user);
+        }
+
         $users = $this->repository->findAll();
 
         return new Response($this->view->renderBack([

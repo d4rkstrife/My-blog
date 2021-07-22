@@ -72,7 +72,7 @@ final class Router
         } elseif ($action === 'userAdmin') {
             $userRepo = new userRepository($this->database);
             $controller = new HomeController($this->view, $this->config, $this->database, $userRepo);
-            return $controller->userAction();
+            return $controller->userAction($this->request);
 
 
             // *** @Route http://localhost:8000/?action=posts ***
