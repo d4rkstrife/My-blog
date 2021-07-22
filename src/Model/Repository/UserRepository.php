@@ -83,15 +83,19 @@ final class UserRepository implements EntityRepositoryInterface
         if (
             !empty($data['nom'])
             && strlen($data['nom']) <= 20
+            && strlen($data['nom']) > 1
             && preg_match("/^[A-Za-z '-]+$/", $data['nom'])
             && !empty($data['prenom'])
             && strlen($data['prenom']) <= 20
+            && strlen($data['prenom']) > 1
             && preg_match("/^[A-Za-z '-]+$/", $data['prenom'])
             && !empty($data['pseudo'])
             && strlen($data['pseudo']) <= 20
+            && strlen($data['pseudo']) > 1
             && preg_match("/^[A-Za-z '-]+$/", $data['pseudo'])
             && !empty($data['password'])
             && strlen($data['password']) <= 20
+            && strlen($data['password']) > 4
             && !empty($data['email'])
             && filter_var($data['email'], FILTER_VALIDATE_EMAIL)
         ) {

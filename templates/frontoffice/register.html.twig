@@ -4,91 +4,91 @@
 {% endblock %}
 
 {% block content %}
-{% if not session.user %}
-	<header id="head" class="secondary"></header>
-	<div class="container">
+	{% if not session.user %}
+		<header id="head" class="secondary"></header>
+		<div class="container">
 
 
-		<div
-			class="row">
+			<div
+				class="row">
 
-			<!-- Article main content -->
-			<article class="col-xs-12 maincontent">
-				<header class="page-header">
-					<h1 class="page-title">Créer un compte</h1>
-				</header>
+				<!-- Article main content -->
+				<article class="col-xs-12 maincontent">
+					<header class="page-header">
+						<h1 class="page-title">Créer un compte</h1>
+					</header>
 
-				<div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-					<div class="panel panel-default">
-						<div class="panel-body">
-							<h3 class="thin text-center">Créer un compte</h3>
-							{% for message in flashes %}
-								<div>
-								<p class="danger">{{ message }}</p>
-											</div>
-							{% endfor %}
-
-							<hr>
-							<form method="POST">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="position-relative form-group">
-													<label for="exampleEmail11" class="">Email</label>
-													<input name="email" id="exampleEmail11" placeholder="" type="email" class="form-control" required>
-													</div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="position-relative form-group">
-													<label for="examplePassword11" class="">Mot de passe</label>
-													<input name="password" id="examplePassword11" placeholder="" type="password" class="form-control" required>
-													</div>
-                                                </div>
-												<div class="col-md-6">
-                                                    <div class="position-relative form-group">
-													<label for="nom" class="">Nom</label>
-													<input name="nom" id="nom" placeholder="" type="text" class="form-control" required>
-													</div>
-                                                </div>
-												<div class="col-md-6">
-                                                    <div class="position-relative form-group">
-													<label for="prenom" class="">Prénom</label>
-													<input name="prenom" id="prenom" placeholder="" type="text" class="form-control" required>
-													</div>
-                                                </div>
-												<div class="col-md-6">
-                                                    <div class="position-relative form-group">
-													<label for="pseudo" class="">Pseudo</label>
-													<input name="pseudo" id="pseudo" placeholder="" type="text" class="form-control" required>
-													</div>
-                                                </div>
-                                            </div>
-											<div class="row">
-                                            <div class="col-lg-4 text-left">
-										
+					<div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+						<div class="panel panel-default">
+							<div class="panel-body">
+								<h3 class="thin text-center">Créer un compte</h3>
+								{% for message in flashes %}
+									<div>
+										<p class="danger">{{ message }}</p>
 									</div>
-                                            <button class="mt-2 btn btn-primary">Sign in</button>
-											</div>
-                                        </form>
+								{% endfor %}
 
-							
+								<hr>
+								<form method="POST">
+									<div class="row">
+										<div class="col-md-6">
+											<div class="position-relative form-group">
+												<label for="exampleEmail11" class="">Email</label>
+												<input name="email" id="exampleEmail11" placeholder="" type="email" class="form-control" required>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="position-relative form-group">
+												<label for="examplePassword11" class="">Mot de passe</label>
+												<input name="password" id="examplePassword11" placeholder="" type="password" class="form-control" minlength="4" max="length"20"" required>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="position-relative form-group">
+												<label for="nom" class="">Nom</label>
+												<input name="nom" id="nom" placeholder="" type="text" class="form-control" minlength="2" maxlength="20" required>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="position-relative form-group">
+												<label for="prenom" class="">Prénom</label>
+												<input name="prenom" id="prenom" placeholder="" type="text" class="form-control" minlength="2" maxlength="20" required>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="position-relative form-group">
+												<label for="pseudo" class="">Pseudo</label>
+												<input name="pseudo" id="pseudo" placeholder="" type="text" class="form-control" minlength="2" maxlength="20" required>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-lg-4 text-left"></div>
+										<button class="mt-2 btn btn-primary">Sign in</button>
+									</div>
+								</form>
+
+
+							</div>
 						</div>
+
 					</div>
 
-				</div>
+				</article>
+				<!-- /Article -->
 
-			</article>
-			<!-- /Article -->
-
+			</div>
 		</div>
-	</div>
 	{% else %}
-	<header id="head" class="secondary"></header>
-	<div class="container">
+		<header id="head" class="secondary"></header>
+		<div class="container">
 
 
-		<div class="row">
-	<h3>Vous n'êtes pas autorisé à acceder à cette page! <a href='index.php?action=home'>Retour à l'accueil</a></h3>
-		</div>
+			<div class="row">
+				<h3>Vous n'êtes pas autorisé à acceder à cette page!
+					<a href='index.php?action=home'>Retour à l'accueil</a>
+				</h3>
+			</div>
 		</div>
 	{% endif %}
 
