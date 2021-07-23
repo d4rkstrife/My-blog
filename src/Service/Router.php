@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace  App\Service;
 
 use App\View\View;
-use App\Service\Counter;
 use App\Service\Database;
 use App\Service\Http\Request;
 use App\Service\Http\Response;
@@ -16,6 +15,10 @@ use App\Model\Repository\CommentRepository;
 use App\Controller\Frontoffice\HomeController;
 use App\Controller\Frontoffice\PostController;
 use App\Controller\Frontoffice\UserController;
+use App\Controller\Backoffice\CommentController;
+use App\Controller\Backoffice\HomeController as BackofficeHomeController;
+use App\Controller\Backoffice\PostController as BackofficePostController;
+use App\Controller\Backoffice\UserController as BackofficeUserController;
 
 // TODO cette classe router est un exemple très basic. Cette façon de faire n'est pas optimale
 // TODO Le router ne devrait pas avoir la responsabilité de l'injection des dépendances
@@ -27,18 +30,16 @@ final class Router
     private Request $request;
     private Session $session;
     private ParseConfig $config;
-    private Counter $counter;
 
     public function __construct(Request $request, ParseConfig $config)
     {
         // dépendance
         $this->config = $config;
-        $this->database = new Database($this->config->getConfig()->dbHost, $this->config->getConfig()->dbName, $this->config->getConfig()->dbUser, $this->config->getConfig()->dbPass, $this->config->getConfig()->dbPort);
+        $this->database = new Database($this->config->getConfig('dbHost'), $this->config->getConfig('dbName'), $this->config->getConfig('dbUser'), $this->config->getConfig('dbPass'), $this->config->getConfig('dbPort'));
 
         $this->session = new Session();
         $this->view = new View($this->session);
         $this->request = $request;
-        $this->counter = new Counter($this->database);
     }
 
     public function run(): Response
@@ -50,31 +51,31 @@ final class Router
         // *** @Route http://localhost:8000/?action=home ***
         if ($action === 'home') {
             $postRepo = new PostRepository($this->database);
-            $controller = new HomeController($this->view, $this->config, $this->database, $postRepo);
+            $controller = new HomeController($this->view, $this->config, $this->database);
             return $controller->homeAction($this->request);
 
             // *** @Route http://localhost:8000/?action=administration ***
         } elseif ($action === 'administration') {
             $postRepo = new PostRepository($this->database);
-            $controller = new HomeController($this->view, $this->config, $this->database, $postRepo);
+            $controller = new BackofficeHomeController($this->view, $this->config, $this->database);
             return $controller->administrationAction();
 
             // *** @Route http://localhost:8000/?action=postsAdmin ***
         } elseif ($action === 'postsAdmin') {
             $postRepo = new PostRepository($this->database);
-            $controller = new HomeController($this->view, $this->config, $this->database, $postRepo);
+            $controller = new BackofficePostController($postRepo, $this->view, $this->session);
             return $controller->postAdminAction();
 
             // *** @Route http://localhost:8000/?action=commentAdmin ***
         } elseif ($action === 'commentAdmin') {
             $commentRepo = new commentRepository($this->database);
-            $controller = new HomeController($this->view, $this->config, $this->database, $commentRepo);
+            $controller = new CommentController($commentRepo, $this->view);
             return $controller->postCommentAction($this->request);
 
             // *** @Route http://localhost:8000/?action=userAdmin ***
         } elseif ($action === 'userAdmin') {
             $userRepo = new userRepository($this->database);
-            $controller = new HomeController($this->view, $this->config, $this->database, $userRepo);
+            $controller = new BackofficeUserController($userRepo, $this->view, $this->session);
             return $controller->userAction($this->request);
 
 

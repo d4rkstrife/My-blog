@@ -16,8 +16,13 @@ final class UserController
     private View $view;
     private Session $session;
 
-    // TODO => ne doit pas resté dans le controller, voir comment on peut en faire
-    // un service générique de validation
+    public function __construct(UserRepository $userRepository, View $view, Session $session)
+    {
+        $this->userRepository = $userRepository;
+        $this->view = $view;
+        $this->session = $session;
+    }
+
     private function isValidLoginForm(?array $infoUser): bool
     {
         if ($infoUser === null) {
@@ -33,12 +38,7 @@ final class UserController
         return true;
     }
 
-    public function __construct(UserRepository $userRepository, View $view, Session $session)
-    {
-        $this->userRepository = $userRepository;
-        $this->view = $view;
-        $this->session = $session;
-    }
+
 
     public function loginAction(Request $request): Response
     {
@@ -46,28 +46,29 @@ final class UserController
 
             if ($this->isValidLoginForm($request->request()->all())) {
 
-                return new Response($this->view->renderFront(['template' => 'home', 'data' => []]), 200);
+                return new Response($this->view->render(['template' => 'home', 'data' => []], 'Frontoffice'), 200);
             }
             $this->session->addFlashes('error', 'Mauvais identifiants ou compte non validé');
         }
-        return new Response($this->view->renderFront(['template' => 'login', 'data' => []]));
+        return new Response($this->view->render(['template' => 'login', 'data' => []], 'Frontoffice'), 200);
     }
 
     public function logoutAction(): Response
     {
         $this->session->remove('user');
-        return new Response($this->view->renderFront(['template' => 'home', 'data' => []]), 200);
+        return new Response($this->view->render(['template' => 'home', 'data' => []], 'Frontoffice'), 200);
     }
 
     public function registerAction(Request $request): Response
     {
         if ($request->getMethod() === 'POST') {
+            //validation ici
             $this->userRepository->create($request->request());
             $this->session->addFlashes('success', 'Compte créé,connectez vous');
         }
-        return new Response($this->view->renderFront([
+        return new Response($this->view->render([
             'template' => 'register',
-            'data' => [],
-        ]));
+            'data' => []
+        ], 'Frontoffice'));
     }
 }

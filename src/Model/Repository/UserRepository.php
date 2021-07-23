@@ -80,6 +80,7 @@ final class UserRepository implements EntityRepositoryInterface
     public function create(object $user): bool
     {
         $data = $user->all();
+        //sortir le if
         if (
             !empty($data['nom'])
             && strlen($data['nom']) <= 20
@@ -128,5 +129,12 @@ final class UserRepository implements EntityRepositoryInterface
         $stmt->bindValue('id', $user->getId());
         $stmt->execute();
         return true;
+    }
+    public function count(): int
+    {
+        $req = $this->database->getPDO()->query("SELECT COUNT(*) as Nbr from user");
+        $donnees = $req->fetch();
+        $req->closeCursor();
+        return (int) $donnees['Nbr'];
     }
 }

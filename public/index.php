@@ -13,7 +13,7 @@ $config = new ParseConfig('../config.ini');
 $config->parseFile();
 
 
-if ($config->getConfig()->appEnv === 'dev') {
+if ($config->getConfig('appEnv') === 'dev') {
     $whoops = new \Whoops\Run();
     $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler());
     $whoops->register();

@@ -79,8 +79,14 @@ final class PostRepository implements EntityRepositoryInterface
             return null;
         }
         $posts = [];
+        $users = [];
         foreach ($data as $post) {
             $postObj = new Post();
+            //si $post['fk_user'] n existe pas dans $users alors
+            //création $user
+            //$users[$post['fk_user']] = $user
+            //fin si 
+            //$postObject->setAutor($users[$post['fk_user']])
             $user = new User();
             $user
                 ->setId((int) $post['fk_user'])
@@ -115,5 +121,12 @@ final class PostRepository implements EntityRepositoryInterface
     public function delete(object $post): bool
     {
         return false;
+    }
+    public function count(): int
+    {
+        $req = $this->database->getPDO()->query("SELECT COUNT(*) as NbrPosts from post");
+        $donnees = $req->fetch();
+        $req->closeCursor();
+        return (int) $donnees['NbrPosts'];
     }
 }
