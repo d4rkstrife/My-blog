@@ -116,19 +116,24 @@ final class CommentRepository implements EntityRepositoryInterface
         return $comments;
     }
 
-
-    public function create(object $criteria): bool
+    /**
+     * @param Comment $comment
+     */
+    public function create(object $comment): bool
     {
         $stmt = $this->database->getPDO()->prepare("
         INSERT INTO `comment` (`content`, `state`, `fk_user`, `fk_post`, `date`, `id`) 
         VALUES (:text, '0', :user, :idPost, CURRENT_TIMESTAMP, NULL);");
-        $stmt->bindValue('text', $criteria->getText());
-        $stmt->bindValue('idPost', $criteria->getIdPost());
-        $stmt->bindValue('user', $criteria->getUser()->getId());
+        $stmt->bindValue('text', $comment->getText());
+        $stmt->bindValue('idPost', $comment->getIdPost());
+        $stmt->bindValue('user', $comment->getUser()->getId());
         $stmt->execute();
         return true;
     }
 
+    /**
+     * @param Comment $comment
+     */
     public function update(object $comment): bool
     {
         $stmt = $this->database->getPDO()->prepare('
@@ -139,6 +144,9 @@ final class CommentRepository implements EntityRepositoryInterface
         return true;
     }
 
+    /**
+     * @param Comment $comment
+     */
     public function delete(object $comment): bool
     {
         $stmt = $this->database->getPDO()->prepare('
@@ -147,5 +155,12 @@ final class CommentRepository implements EntityRepositoryInterface
         $stmt->bindValue('id', $comment->getId());
         $stmt->execute();
         return true;
+    }
+    public function count(): int
+    {
+        $stmt = $this->database->getPDO()->prepare("SELECT COUNT(*) as Nbr from comment");
+        $stmt->execute();
+        $donnees = $stmt->fetch();
+        return (int) $donnees['Nbr'];
     }
 }

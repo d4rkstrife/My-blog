@@ -7,6 +7,7 @@ namespace  App\Controller\Frontoffice;
 use App\View\View;
 use App\Model\Entity\User;
 use App\Model\Entity\Comment;
+use App\Service\Http\Request;
 use App\Service\Http\Response;
 use App\Service\DataValidation;
 use App\Model\Repository\PostRepository;
@@ -23,14 +24,14 @@ final class PostController
         $this->view = $view;
     }
 
-    public function displayOneAction(object $request, CommentRepository $commentRepository, ?User $user): Response
+    public function displayOneAction(Request $request, CommentRepository $commentRepository, ?User $user): Response
     {
         $id = $request->query()->get('id');
         $post = $this->postRepository->findOneBy(['id' => $id]);
         $comments = $commentRepository->findBy(['idPost' => $id, 'state' => 1]);
         $response = new Response('<h1>faire une redirection vers la page d\'erreur, ce post n\'existe pas</h1><a href="index.php?action=posts">Liste des posts</a><br>', 404);
 
-        if (($post != null) && ($request->request()->has('comment'))) {
+        if (($post !== null) && ($request->request()->has('comment'))) {
             $content = $request->request()->get('comment');
             if ($content != '') {
                 $newComment = new Comment();
@@ -47,14 +48,15 @@ final class PostController
         }
 
         if ($post !== null) {
-            $response = new Response($this->view->renderFront(
+            $response = new Response($this->view->render(
                 [
                     'template' => 'post',
                     'data' => [
                         'post' => $post,
-                        'comments' => $comments,
+                        'comments' => $comments
                     ],
                 ],
+                'Frontoffice'
             ));
         }
 
@@ -65,9 +67,9 @@ final class PostController
     {
         $posts = $this->postRepository->findAll();
 
-        return new Response($this->view->renderFront([
+        return new Response($this->view->render([
             'template' => 'posts',
             'data' => ['posts' => $posts],
-        ]));
+        ], 'Frontoffice'));
     }
 }

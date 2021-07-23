@@ -7,20 +7,20 @@ namespace App\Service;
 class ParseConfig
 {
     public string $file;
-    public object $config;
+    public array $config;
 
     public function __construct(string $file)
     {
         $this->file = $file;
     }
 
-    public function parseFile(): void
+    public function parseFile()
     {
         $iniArray = parse_ini_file($this->file);
-        $this->config = (object) $iniArray;
+        $this->config = $iniArray;
     }
-    public function getConfig(): object
+    public function getConfig(string $param): string
     {
-        return $this->config;
+        return $this->config[$param];
     }
 }

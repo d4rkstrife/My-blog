@@ -15,6 +15,10 @@ use App\Model\Repository\CommentRepository;
 use App\Controller\Frontoffice\HomeController;
 use App\Controller\Frontoffice\PostController;
 use App\Controller\Frontoffice\UserController;
+use App\Controller\Backoffice\CommentController;
+use App\Controller\Backoffice\HomeController as BackofficeHomeController;
+use App\Controller\Backoffice\PostController as BackofficePostController;
+use App\Controller\Backoffice\UserController as BackofficeUserController;
 
 // TODO cette classe router est un exemple très basic. Cette façon de faire n'est pas optimale
 // TODO Le router ne devrait pas avoir la responsabilité de l'injection des dépendances
@@ -31,7 +35,7 @@ final class Router
     {
         // dépendance
         $this->config = $config;
-        $this->database = new Database($this->config->getConfig()->dbHost, $this->config->getConfig()->dbName, $this->config->getConfig()->dbUser, $this->config->getConfig()->dbPass, $this->config->getConfig()->dbPort);
+        $this->database = new Database($this->config->getConfig('dbHost'), $this->config->getConfig('dbName'), $this->config->getConfig('dbUser'), $this->config->getConfig('dbPass'), $this->config->getConfig('dbPort'));
 
         $this->session = new Session();
         $this->view = new View($this->session);
@@ -46,33 +50,66 @@ final class Router
         //Déterminer sur quelle route nous sommes // Attention algorithme naïf
         // *** @Route http://localhost:8000/?action=home ***
         if ($action === 'home') {
-            $postRepo = new PostRepository($this->database);
-            $controller = new HomeController($this->view, $this->config, $this->database, $postRepo);
+            $controller = new HomeController($this->view, $this->config);
             return $controller->homeAction($this->request);
 
             // *** @Route http://localhost:8000/?action=administration ***
         } elseif ($action === 'administration') {
-            $postRepo = new PostRepository($this->database);
-            $controller = new HomeController($this->view, $this->config, $this->database, $postRepo);
-            return $controller->administrationAction();
+
+            if (
+                $this->session->get('user') !== NULL
+                && ($this->session->get('user')->getGrade() === 'superAdmin' || $this->session->get('user')->getGrade() === 'admin')
+            ) {
+                $postRepo = new PostRepository($this->database);
+                $controller = new BackofficeHomeController($this->view, $this->config, $this->database);
+                return $controller->administrationAction();
+            }
+            $controller = new HomeController($this->view, $this->config);
+            return $controller->homeAction($this->request);
+
+
 
             // *** @Route http://localhost:8000/?action=postsAdmin ***
         } elseif ($action === 'postsAdmin') {
-            $postRepo = new PostRepository($this->database);
-            $controller = new HomeController($this->view, $this->config, $this->database, $postRepo);
-            return $controller->postAdminAction();
+
+            if (
+                $this->session->get('user') !== NULL
+                && ($this->session->get('user')->getGrade() === 'superAdmin' || $this->session->get('user')->getGrade() === 'admin')
+            ) {
+                $postRepo = new PostRepository($this->database);
+                $controller = new BackofficePostController($postRepo, $this->view);
+                return $controller->postAdminAction();
+            }
+            $controller = new HomeController($this->view, $this->config);
+            return $controller->homeAction($this->request);
 
             // *** @Route http://localhost:8000/?action=commentAdmin ***
         } elseif ($action === 'commentAdmin') {
-            $commentRepo = new commentRepository($this->database);
-            $controller = new HomeController($this->view, $this->config, $this->database, $commentRepo);
-            return $controller->postCommentAction($this->request);
+
+            if (
+                $this->session->get('user') !== NULL
+                && ($this->session->get('user')->getGrade() === 'superAdmin' || $this->session->get('user')->getGrade() === 'admin')
+            ) {
+                $commentRepo = new commentRepository($this->database);
+                $controller = new CommentController($commentRepo, $this->view);
+                return $controller->postCommentAction($this->request);
+            }
+            $controller = new HomeController($this->view, $this->config);
+            return $controller->homeAction($this->request);
+
 
             // *** @Route http://localhost:8000/?action=userAdmin ***
         } elseif ($action === 'userAdmin') {
-            $userRepo = new userRepository($this->database);
-            $controller = new HomeController($this->view, $this->config, $this->database, $userRepo);
-            return $controller->userAction($this->request);
+            if (
+                $this->session->get('user') !== NULL
+                && ($this->session->get('user')->getGrade() === 'superAdmin' || $this->session->get('user')->getGrade() === 'admin')
+            ) {
+                $userRepo = new userRepository($this->database);
+                $controller = new BackofficeUserController($userRepo, $this->view, $this->session);
+                return $controller->userAction($this->request);
+            }
+            $controller = new HomeController($this->view, $this->config);
+            return $controller->homeAction($this->request);
 
 
             // *** @Route http://localhost:8000/?action=posts ***

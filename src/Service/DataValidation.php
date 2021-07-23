@@ -13,4 +13,28 @@ final class DataValidation
         $data = htmlspecialchars($data);
         return $data;
     }
+
+    public function validateName(string $string): bool
+    {
+        if (
+            !empty($string)
+            && strlen($string) <= 20
+            && strlen($string) > 1
+            && preg_match("/^[A-Za-z '-]+$/", $string)
+        ) {
+            return true;
+        }
+        return false;
+    }
+
+    public function validateMail(string $string): bool
+    {
+        if (
+            !empty($string)
+            && filter_var($string, FILTER_VALIDATE_EMAIL)
+        ) {
+            return true;
+        }
+        return false;
+    }
 }
