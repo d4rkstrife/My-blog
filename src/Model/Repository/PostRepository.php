@@ -85,7 +85,7 @@ final class PostRepository implements EntityRepositoryInterface
             //si $post['fk_user'] n existe pas dans $users alors
             //création $user
             //$users[$post['fk_user']] = $user
-            //fin si 
+            //fin si
             //$postObject->setAutor($users[$post['fk_user']])
             $user = new User();
             $user
@@ -124,9 +124,9 @@ final class PostRepository implements EntityRepositoryInterface
     }
     public function count(): int
     {
-        $req = $this->database->getPDO()->query("SELECT COUNT(*) as NbrPosts from post");
-        $donnees = $req->fetch();
-        $req->closeCursor();
+        $stmt = $this->database->getPDO()->prepare("SELECT COUNT(*) as NbrPosts from post");
+        $stmt->execute();
+        $donnees = $stmt->fetch();
         return (int) $donnees['NbrPosts'];
     }
 }

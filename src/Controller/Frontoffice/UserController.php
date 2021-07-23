@@ -43,9 +43,7 @@ final class UserController
     public function loginAction(Request $request): Response
     {
         if ($request->getMethod() === 'POST') {
-
             if ($this->isValidLoginForm($request->request()->all())) {
-
                 return new Response($this->view->render(['template' => 'home', 'data' => []], 'Frontoffice'), 200);
             }
             $this->session->addFlashes('error', 'Mauvais identifiants ou compte non validé');

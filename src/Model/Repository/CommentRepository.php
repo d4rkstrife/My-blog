@@ -158,9 +158,9 @@ final class CommentRepository implements EntityRepositoryInterface
     }
     public function count(): int
     {
-        $req = $this->database->getPDO()->query("SELECT COUNT(*) as Nbr from comment");
-        $donnees = $req->fetch();
-        $req->closeCursor();
+        $stmt = $this->database->getPDO()->prepare("SELECT COUNT(*) as Nbr from comment");
+        $stmt->execute();
+        $donnees = $stmt->fetch();
         return (int) $donnees['Nbr'];
     }
 }

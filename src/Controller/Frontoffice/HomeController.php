@@ -6,7 +6,6 @@ namespace  App\Controller\Frontoffice;
 
 use App\View\View;
 use App\Service\Mailer;
-use App\Service\Database;
 use App\Service\ParseConfig;
 use App\Service\Http\Request;
 use App\Service\Http\Response;
@@ -15,14 +14,11 @@ final class HomeController
 {
     private View $view;
     private ParseConfig $config;
-    private Database $database;
 
-    public function __construct(View $view, ParseConfig $config, Database $database)
+    public function __construct(View $view, ParseConfig $config)
     {
-
         $this->view = $view;
         $this->config = $config;
-        $this->database = $database;
     }
 
     public function homeAction(Request $request): Response

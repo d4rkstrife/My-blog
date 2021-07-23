@@ -76,7 +76,9 @@ final class UserRepository implements EntityRepositoryInterface
         }
         return $users;
     }
-
+    /**
+     * @param User $user
+     */
     public function create(object $user): bool
     {
         $data = $user->all();
@@ -121,6 +123,9 @@ final class UserRepository implements EntityRepositoryInterface
         return false;
     }
 
+    /**
+     * @param User $user
+     */
     public function delete(object $user): bool
     {
         $stmt = $this->database->getPDO()->prepare('
@@ -132,9 +137,9 @@ final class UserRepository implements EntityRepositoryInterface
     }
     public function count(): int
     {
-        $req = $this->database->getPDO()->query("SELECT COUNT(*) as Nbr from user");
-        $donnees = $req->fetch();
-        $req->closeCursor();
+        $stmt = $this->database->getPDO()->prepare("SELECT COUNT(*) as Nbr from user");
+        $stmt->execute();
+        $donnees = $stmt->fetch();
         return (int) $donnees['Nbr'];
     }
 }

@@ -17,6 +17,7 @@ final class HomeController
 {
     private View $view;
     private Database $database;
+    private ParseConfig $config;
 
     public function __construct(View $view, ParseConfig $config, Database $database)
     {

@@ -14,7 +14,7 @@ class ParseConfig
         $this->file = $file;
     }
 
-    public function parseFile(): void
+    public function parseFile()
     {
         $iniArray = parse_ini_file($this->file);
         $this->config = $iniArray;
