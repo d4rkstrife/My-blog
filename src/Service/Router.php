@@ -21,7 +21,6 @@ use App\Controller\Backoffice\PostController as BackofficePostController;
 use App\Controller\Backoffice\UserController as BackofficeUserController;
 
 // TODO cette classe router est un exemple très basic. Cette façon de faire n'est pas optimale
-// TODO Le router ne devrait pas avoir la responsabilité de l'injection des dépendances
 
 final class Router
 {
@@ -61,7 +60,7 @@ final class Router
                 && ($this->session->get('user')->getGrade() === 'superAdmin' || $this->session->get('user')->getGrade() === 'admin')
             ) {
                 $postRepo = new PostRepository($this->database);
-                $controller = new BackofficeHomeController($this->view, $this->config, $this->database);
+                $controller = new BackofficeHomeController($this->view, $this->database);
                 return $controller->administrationAction();
             }
             $controller = new HomeController($this->view, $this->config);

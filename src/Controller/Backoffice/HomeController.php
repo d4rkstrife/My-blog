@@ -7,7 +7,6 @@ namespace  App\Controller\Backoffice;
 use App\View\View;
 use App\Service\Database;
 use App\Service\ParseConfig;
-use App\Service\Http\Request;
 use App\Service\Http\Response;
 use App\Model\Repository\PostRepository;
 use App\Model\Repository\UserRepository;
@@ -17,12 +16,10 @@ final class HomeController
 {
     private View $view;
     private Database $database;
-    private ParseConfig $config;
 
-    public function __construct(View $view, ParseConfig $config, Database $database)
+    public function __construct(View $view, Database $database)
     {
         $this->view = $view;
-        $this->config = $config;
         $this->database = $database;
     }
 
