@@ -25,21 +25,30 @@ final class UserController
 
     public function userAction(Request $request): Response
     {
-        //si le bouton supprimer a été cliqué
-        if (!empty($request->request()->all())) {
-            $post = (object) $request->request()->all();
-            $criteria = array(
-                'email' => $post->delete
-            );
-            $user = $this->userRepository->findOneBy($criteria);
-            $this->userRepository->delete($user);
+        if (
+            $this->session->get('user') !== NULL
+            && ($this->session->get('user')->getGrade() === 'superAdmin' || $this->session->get('user')->getGrade() === 'admin')
+        ) {
+            //si le bouton supprimer a été cliqué
+            if (!empty($request->request()->all())) {
+                $post = (object) $request->request()->all();
+                $criteria = array(
+                    'email' => $post->delete
+                );
+                $user = $this->userRepository->findOneBy($criteria);
+                $this->userRepository->delete($user);
+            }
+
+            $users = $this->userRepository->findAll();
+
+            return new Response($this->view->render([
+                'template' => 'user',
+                'data' => ['users' => $users],
+            ], 'Backoffice'), 200);
         }
-
-        $users = $this->userRepository->findAll();
-
         return new Response($this->view->render([
-            'template' => 'user',
-            'data' => ['users' => $users],
-        ], 'Backoffice'));
+            'template' => 'unauthorized',
+            'data' => [],
+        ], 'Frontoffice'), 404);
     }
 }

@@ -29,6 +29,7 @@ final class Router
     private Request $request;
     private Session $session;
     private ParseConfig $config;
+    private DataValidation $validator;
 
     public function __construct(Request $request, ParseConfig $config)
     {
@@ -38,6 +39,7 @@ final class Router
 
         $this->session = new Session();
         $this->view = new View($this->session);
+        $this->validator = new DataValidation();
         $this->request = $request;
     }
 
@@ -54,61 +56,32 @@ final class Router
 
             // *** @Route http://localhost:8000/?action=administration ***
         } elseif ($action === 'administration') {
-
-            if (
-                $this->session->get('user') !== NULL
-                && ($this->session->get('user')->getGrade() === 'superAdmin' || $this->session->get('user')->getGrade() === 'admin')
-            ) {
-                $postRepo = new PostRepository($this->database);
-                $controller = new BackofficeHomeController($this->view, $this->database);
-                return $controller->administrationAction();
-            }
-            $controller = new HomeController($this->view, $this->config);
-            return $controller->homeAction($this->request);
-
-
+            $postRepo = new PostRepository($this->database);
+            $controller = new BackofficeHomeController($this->view, $this->database, $this->session);
+            return $controller->administrationAction();
 
             // *** @Route http://localhost:8000/?action=postsAdmin ***
         } elseif ($action === 'postsAdmin') {
 
-            if (
-                $this->session->get('user') !== NULL
-                && ($this->session->get('user')->getGrade() === 'superAdmin' || $this->session->get('user')->getGrade() === 'admin')
-            ) {
-                $postRepo = new PostRepository($this->database);
-                $controller = new BackofficePostController($postRepo, $this->view);
-                return $controller->postAdminAction();
-            }
-            $controller = new HomeController($this->view, $this->config);
-            return $controller->homeAction($this->request);
+            $postRepo = new PostRepository($this->database);
+            $controller = new BackofficePostController($postRepo, $this->view, $this->session);
+            return $controller->postAdminAction();
+
 
             // *** @Route http://localhost:8000/?action=commentAdmin ***
         } elseif ($action === 'commentAdmin') {
 
-            if (
-                $this->session->get('user') !== NULL
-                && ($this->session->get('user')->getGrade() === 'superAdmin' || $this->session->get('user')->getGrade() === 'admin')
-            ) {
-                $commentRepo = new commentRepository($this->database);
-                $controller = new CommentController($commentRepo, $this->view);
-                return $controller->postCommentAction($this->request);
-            }
-            $controller = new HomeController($this->view, $this->config);
-            return $controller->homeAction($this->request);
+            $commentRepo = new commentRepository($this->database);
+            $controller = new CommentController($commentRepo, $this->view, $this->session);
+            return $controller->postCommentAction($this->request);
 
 
             // *** @Route http://localhost:8000/?action=userAdmin ***
         } elseif ($action === 'userAdmin') {
-            if (
-                $this->session->get('user') !== NULL
-                && ($this->session->get('user')->getGrade() === 'superAdmin' || $this->session->get('user')->getGrade() === 'admin')
-            ) {
-                $userRepo = new userRepository($this->database);
-                $controller = new BackofficeUserController($userRepo, $this->view, $this->session);
-                return $controller->userAction($this->request);
-            }
-            $controller = new HomeController($this->view, $this->config);
-            return $controller->homeAction($this->request);
+
+            $userRepo = new userRepository($this->database);
+            $controller = new BackofficeUserController($userRepo, $this->view, $this->session);
+            return $controller->userAction($this->request);
 
 
             // *** @Route http://localhost:8000/?action=posts ***
@@ -124,30 +97,28 @@ final class Router
             //injection des dépendances et instanciation du controller
             $postRepo = new PostRepository($this->database);
             $controller = new PostController($postRepo, $this->view);
-
             $commentRepo = new CommentRepository($this->database);
 
-            //  return $controller->displayOneAction((int) $this->request->query()->get('id'), $commentRepo);
             return $controller->displayOneAction((object) $this->request, $commentRepo, $this->session->get('user'));
 
             // *** @Route http://localhost:8000/?action=login ***
         } elseif ($action === 'login') {
             $userRepo = new UserRepository($this->database);
-            $controller = new UserController($userRepo, $this->view, $this->session);
+            $controller = new UserController($userRepo, $this->view, $this->session, $this->validator);
 
             return $controller->loginAction($this->request);
 
             // *** @Route http://localhost:8000/?action=register ***
         } elseif ($action === 'register') {
             $userRepo = new UserRepository($this->database);
-            $controller = new UserController($userRepo, $this->view, $this->session);
+            $controller = new UserController($userRepo, $this->view, $this->session, $this->validator);
 
             return $controller->registerAction($this->request);
 
             // *** @Route http://localhost:8000/?action=logout ***
         } elseif ($action === 'logout') {
             $userRepo = new UserRepository($this->database);
-            $controller = new UserController($userRepo, $this->view, $this->session);
+            $controller = new UserController($userRepo, $this->view, $this->session, $this->validator);
 
             return $controller->logoutAction();
         }
