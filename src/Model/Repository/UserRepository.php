@@ -81,41 +81,18 @@ final class UserRepository implements EntityRepositoryInterface
      */
     public function create(object $user): bool
     {
-        $data = $user->all();
-        //sortir le if
-        if (
-            !empty($data['nom'])
-            && strlen($data['nom']) <= 20
-            && strlen($data['nom']) > 1
-            && preg_match("/^[A-Za-z '-]+$/", $data['nom'])
-            && !empty($data['prenom'])
-            && strlen($data['prenom']) <= 20
-            && strlen($data['prenom']) > 1
-            && preg_match("/^[A-Za-z '-]+$/", $data['prenom'])
-            && !empty($data['pseudo'])
-            && strlen($data['pseudo']) <= 20
-            && strlen($data['pseudo']) > 1
-            && preg_match("/^[A-Za-z '-]+$/", $data['pseudo'])
-            && !empty($data['password'])
-            && strlen($data['password']) <= 20
-            && strlen($data['password']) > 4
-            && !empty($data['email'])
-            && filter_var($data['email'], FILTER_VALIDATE_EMAIL)
-        ) {
-            $stmt = $this->database->getPDO()->prepare('
+        $stmt = $this->database->getPDO()->prepare('
             INSERT INTO `user`(`name`, `surname`, `pseudo`, `mail`, `password`)
             VALUES (:name, :surname, :pseudo, :mail, :password)
             ');
-            $stmt->bindValue('name', $data['nom']);
-            $stmt->bindValue('surname', $data['prenom']);
-            $stmt->bindValue('pseudo', $data['pseudo']);
-            $stmt->bindValue('mail', $data['email']);
-            $stmt->bindValue('password', password_hash($data['password'], PASSWORD_DEFAULT));
+        $stmt->bindValue('name', $user->getName());
+        $stmt->bindValue('surname', $user->getSurname());
+        $stmt->bindValue('pseudo', $user->getPseudo());
+        $stmt->bindValue('mail', $user->getEmail());
+        $stmt->bindValue('password', password_hash($user->getPassword(), PASSWORD_DEFAULT));
 
-            $stmt->execute();
-            return true;
-        }
-        return false;
+        $state = $stmt->execute();
+        return true;
     }
 
     public function update(object $user): bool

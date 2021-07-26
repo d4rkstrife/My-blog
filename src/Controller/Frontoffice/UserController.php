@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace  App\Controller\Frontoffice;
 
 use App\View\View;
+use App\Model\Entity\User;
 use App\Service\Http\Request;
 use App\Service\Http\Response;
+use App\Service\DataValidation;
 use App\Service\Http\Session\Session;
 use App\Model\Repository\UserRepository;
 
@@ -15,12 +17,14 @@ final class UserController
     private UserRepository $userRepository;
     private View $view;
     private Session $session;
+    private DataValidation $validator;
 
-    public function __construct(UserRepository $userRepository, View $view, Session $session)
+    public function __construct(UserRepository $userRepository, View $view, Session $session, DataValidation $validator)
     {
         $this->userRepository = $userRepository;
         $this->view = $view;
         $this->session = $session;
+        $this->validator = $validator;
     }
 
     private function isValidLoginForm(?array $infoUser): bool
@@ -61,8 +65,40 @@ final class UserController
     {
         if ($request->getMethod() === 'POST') {
             //validation ici
-            $this->userRepository->create($request->request());
-            $this->session->addFlashes('success', 'Compte créé,connectez vous');
+
+            $infoUser = $request->request();
+
+            $name = $this->validator->validate($infoUser->get('nom'));
+            $surname = $this->validator->validate($infoUser->get('prenom'));
+            $pseudo = $this->validator->validate($infoUser->get('pseudo'));
+            $mail = $this->validator->validate($infoUser->get('email'));
+            $password = $this->validator->validate($infoUser->get('password'));
+            $repassword = $this->validator->validate($infoUser->get('repassword'));
+
+
+            if ($password !== $repassword) {
+                $this->session->addFlashes('error', 'Les mots de passe ne correspondent pas');
+            } elseif (!$this->validator->isValidEntry($name)) {
+                $this->session->addFlashes('error', 'Nom invalide : caractères spéciaux interdits');
+            } elseif (!$this->validator->isValidEntry($surname)) {
+                $this->session->addFlashes('error', 'Prénom invalide : caractères spéciaux interdits');
+            } elseif (!$this->validator->isValidMail($mail)) {
+                $this->session->addFlashes('error', 'Mail non valide');
+            } else {
+                $name = $this->validator->validate($name);
+                $surname = $this->validator->validate($surname);
+                $pseudo = $this->validator->validate($pseudo);
+
+                $user = new User();
+                $user
+                    ->setName($name)
+                    ->setSurname($surname)
+                    ->setEmail($mail)
+                    ->setPseudo($pseudo)
+                    ->setPassword($password);
+                $this->userRepository->create($user);
+                $this->session->addFlashes('success', 'Compte créé,connectez vous');
+            }
         }
         return new Response($this->view->render([
             'template' => 'register',

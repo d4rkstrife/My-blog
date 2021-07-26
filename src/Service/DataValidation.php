@@ -6,28 +6,28 @@ namespace App\Service;
 
 final class DataValidation
 {
-    public function validate(string $data): string
+    public function validate(string $string): string
     {
-        $data = trim($data);
-        $data = stripslashes($data);
-        $data = htmlspecialchars($data);
-        return $data;
+        $string = trim($string);
+        $string = stripslashes($string);
+        $string = htmlspecialchars($string);
+        return $string;
     }
 
-    public function validateName(string $string): bool
+    public function isValidEntry(string $string): bool
     {
         if (
             !empty($string)
             && strlen($string) <= 20
             && strlen($string) > 1
-            && preg_match("/^[A-Za-z '-]+$/", $string)
+            && preg_match("/^[a-zA-Zéèà]+$/", $string)
         ) {
             return true;
         }
         return false;
     }
 
-    public function validateMail(string $string): bool
+    public function isValidMail(string $string): bool
     {
         if (
             !empty($string)

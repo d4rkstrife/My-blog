@@ -6,9 +6,8 @@ namespace  App\Controller\Backoffice;
 
 use App\View\View;
 use App\Service\Database;
-use App\Service\ParseConfig;
-use App\Service\Http\Request;
 use App\Service\Http\Response;
+use App\Service\Http\Session\Session;
 use App\Model\Repository\PostRepository;
 use App\Model\Repository\UserRepository;
 use App\Model\Repository\CommentRepository;
@@ -17,29 +16,38 @@ final class HomeController
 {
     private View $view;
     private Database $database;
-    private ParseConfig $config;
+    private Session $session;
 
-    public function __construct(View $view, ParseConfig $config, Database $database)
+    public function __construct(View $view, Database $database, Session $session)
     {
         $this->view = $view;
-        $this->config = $config;
         $this->database = $database;
+        $this->session = $session;
     }
 
 
     public function administrationAction(): Response
     {
-        $postRepository = new PostRepository($this->database);
-        $commentRepository = new CommentRepository($this->database);
-        $userRepository = new UserRepository($this->database);
+        if (
+            $this->session->get('user') !== NULL
+            && ($this->session->get('user')->getGrade() === 'superAdmin' || $this->session->get('user')->getGrade() === 'admin')
+        ) {
+            $postRepository = new PostRepository($this->database);
+            $commentRepository = new CommentRepository($this->database);
+            $userRepository = new UserRepository($this->database);
 
+            return new Response($this->view->render([
+                'template' => 'home',
+                'data' => [
+                    'nbrPost' => $postRepository->count(),
+                    'nbrUser' => $userRepository->count(),
+                    'nbrComment' => $commentRepository->count(),
+                ],
+            ], 'Backoffice'), 200);
+        }
         return new Response($this->view->render([
-            'template' => 'home',
-            'data' => [
-                'nbrPost' => $postRepository->count(),
-                'nbrUser' => $userRepository->count(),
-                'nbrComment' => $commentRepository->count(),
-            ],
-        ], 'Backoffice'));
+            'template' => 'unauthorized',
+            'data' => [],
+        ], 'Frontoffice'), 404);
     }
 }
