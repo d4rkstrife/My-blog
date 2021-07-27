@@ -67,6 +67,7 @@ final class UserController
             //validation ici
 
             $infoUser = $request->request();
+            $mailExist = $this->userRepository->findOneBy(['email' => $infoUser->get('email')]);
 
             $name = $this->validator->validate($infoUser->get('nom'));
             $surname = $this->validator->validate($infoUser->get('prenom'));
@@ -77,17 +78,16 @@ final class UserController
 
 
             if ($password !== $repassword) {
-                $this->session->addFlashes('error', 'Les mots de passe ne correspondent pas');
+                $this->session->addFlashes('error', 'Les mots de passe ne correspondent pas.');
+            } elseif ($mailExist !== null) {
+                $this->session->addFlashes('error', "L'adresse email est déjà utilisée.");
             } elseif (!$this->validator->isValidEntry($name)) {
-                $this->session->addFlashes('error', 'Nom invalide : caractères spéciaux interdits');
+                $this->session->addFlashes('error', 'Nom invalide : caractères spéciaux interdits.');
             } elseif (!$this->validator->isValidEntry($surname)) {
-                $this->session->addFlashes('error', 'Prénom invalide : caractères spéciaux interdits');
+                $this->session->addFlashes('error', 'Prénom invalide : caractères spéciaux interdits.');
             } elseif (!$this->validator->isValidMail($mail)) {
-                $this->session->addFlashes('error', 'Mail non valide');
+                $this->session->addFlashes('error', 'Mail non valide.');
             } else {
-                $name = $this->validator->validate($name);
-                $surname = $this->validator->validate($surname);
-                $pseudo = $this->validator->validate($pseudo);
 
                 $user = new User();
                 $user
@@ -103,6 +103,6 @@ final class UserController
         return new Response($this->view->render([
             'template' => 'register',
             'data' => []
-        ], 'Frontoffice'));
+        ], 'Frontoffice'), 200);
     }
 }
