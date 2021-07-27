@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:3306
--- Généré le : jeu. 22 juil. 2021 à 07:14
+-- Généré le : mar. 27 juil. 2021 à 16:41
 -- Version du serveur :  5.7.24
 -- Version de PHP : 7.4.1
 
@@ -44,7 +44,7 @@ CREATE TABLE `comment` (
 INSERT INTO `comment` (`content`, `state`, `fk_user`, `fk_post`, `date`, `id`) VALUES
 ('Hate de te lire!! A très vite :)', 1, 11, 10, '2021-07-20 23:06:34', 24),
 ('En plus tu écris tellement bien...', 1, 11, 10, '2021-07-20 23:21:57', 25),
-('Merci!', 1, 10, 10, '2021-07-22 00:03:12', 30);
+('fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff', 1, 10, 13, '2021-07-22 23:26:15', 27);
 
 -- --------------------------------------------------------
 
@@ -67,7 +67,10 @@ CREATE TABLE `post` (
 --
 
 INSERT INTO `post` (`title`, `chapo`, `content`, `date`, `fk_user`, `id`, `date_modif`) VALUES
-('Bienvenue sur mon blog', 'Trop content de vous accueillir sur mon site.', 'Bienvenue sur mon blog! Vous trouverez ici toutes mes dernières news, toutes les choses que j\'ai envie de partager chaque jour avec vous! N\'hésitez pas à me laisser vos impressions...\r\nA très vite pour plein de sujets intéressants!', '2021-07-20 23:05:58', 10, 10, NULL);
+('Bienvenue sur mon blog', 'Trop content de vous accueillir sur mon site.', 'Bienvenue sur mon blog! Vous trouverez ici toutes mes dernières news, toutes les choses que j\'ai envie de partager chaque jour avec vous! N\'hésitez pas à me laisser vos impressions...\r\nA très vite pour plein de sujets intéressants!', '2021-07-20 23:05:58', 10, 10, '2021-07-22 11:00:03'),
+('Lorem Ipsum', 'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus bibendum, ipsum at suscipit blandit, nulla metus mollis felis, id blandit lectus nulla sed neque. Aenean vel ante metus. Cras ultrices egestas accumsan. Etiam nec nunc id mauris iaculis vestibulum. Aliquam tellus leo, luctus id porttitor id, tincidunt ut purus. Fusce elementum mi orci, eu suscipit massa mollis quis. Vestibulum vulputate fringilla justo vel viverra.\r\n\r\nDuis enim nisl, consequat viverra maximus eu, lobortis pretium arcu. Nulla a interdum tellus. Nam euismod volutpat nulla vel imperdiet. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Nam lacinia nulla ultricies pellentesque luctus. Curabitur sagittis vulputate lacus in luctus. Sed rutrum sodales rutrum. Integer a sodales tellus, in gravida neque. Aenean sit amet libero placerat, ultrices eros sed, sagittis purus. Mauris egestas aliquet porttitor. Sed ac eros egestas, aliquam neque vitae, mattis lacus. Vestibulum id mattis nibh. Curabitur ipsum dui, sagittis id ultricies quis, dignissim eu tellus.', '2021-07-22 09:02:33', 10, 11, NULL),
+('Lorem ipsum', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus bibendum, ipsum at suscipit blandit, nulla metus mollis felis, id blandit lectus nulla sed neque. Aenean vel ante metus.', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus bibendum, ipsum at suscipit blandit, nulla metus mollis felis, id blandit lectus nulla sed neque. Aenean vel ante metus. Cras ultrices egestas accumsan. Etiam nec nunc id mauris iaculis vestibulum. Aliquam tellus leo, luctus id porttitor id, tincidunt ut purus. Fusce elementum mi orci, eu suscipit massa mollis quis. Vestibulum vulputate fringilla justo vel viverra.\r\n\r\nDuis enim nisl, consequat viverra maximus eu, lobortis pretium arcu. Nulla a interdum tellus. Nam euismod volutpat nulla vel imperdiet. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Nam lacinia nulla ultricies pellentesque luctus. Curabitur sagittis vulputate lacus in luctus. Sed rutrum sodales rutrum. Integer a sodales tellus, in gravida neque. Aenean sit amet libero placerat, ultrices eros sed, sagittis purus. Mauris egestas aliquet porttitor. Sed ac eros egestas, aliquam neque vitae, mattis lacus. Vestibulum id mattis nibh. Curabitur ipsum dui, sagittis id ultricies quis, dignissim eu tellus.', '2021-07-22 09:02:51', 10, 12, NULL),
+('Lorem ipsum dolor sit ametd neque. Aenean vel ante metus.', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus bibendum, ipsum at suscipit blandit, nulla metus mollis felis, id blandit lectus nulla sed neque. Aenean vel ante metus.', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus bibendum, ipsum at suscipit blandit, nulla metus mollis felis, id blandit lectus nulla sed neque. Aenean vel ante metus. Cras ultrices egestas accumsan. Etiam nec nunc id mauris iaculis vestibulum. Aliquam tellus leo, luctus id porttitor id, tincidunt ut purus. Fusce elementum mi orci, eu suscipit massa mollis quis. Vestibulum vulputate fringilla justo vel viverra.\r\n\r\nDuis enim nisl, consequat viverra maximus eu, lobortis pretium arcu. Nulla a interdum tellus. Nam euismod volutpat nulla vel imperdiet. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Nam lacinia nulla ultricies pellentesque luctus. Curabitur sagittis vulputate lacus in luctus. Sed rutrum sodales rutrum. Integer a sodales tellus, in gravida neque. Aenean sit amet libero placerat, ultrices eros sed, sagittis purus. Mauris egestas aliquet porttitor. Sed ac eros egestas, aliquam neque vitae, mattis lacus. Vestibulum id mattis nibh. Curabitur ipsum dui, sagittis id ultricies quis, dignissim eu tellus.', '2021-07-22 09:03:22', 10, 13, NULL);
 
 -- --------------------------------------------------------
 
@@ -94,7 +97,7 @@ CREATE TABLE `user` (
 INSERT INTO `user` (`name`, `surname`, `pseudo`, `mail`, `grade`, `password`, `inscription_date`, `is_validate`, `user_id`) VALUES
 ('Grandclement', 'Pierre', 'D4rkstrife', 'p.gdc85@gmail.com', 'superAdmin', '$2y$10$8cRhFES66gzPA3PS6ZN.f.sFSSdCENa2pCLmu92EdH6RkFnS6gV0m', '2021-07-20 22:59:27', 1, 10),
 ('Patrice', 'Dupont', 'Patoche', 'patoche@gmail.com', 'member', '$2y$10$d9oHQ1nahTiHlY3YUBXX5eUaVVPj0tmz0npsYo3isErXv8GBKPngW', '2021-07-20 23:00:04', 1, 11),
-('Sue', 'Ellen', 'Jack Daniels', 'sue.ellen@gmail.com', 'member', '$2y$10$deaFmcCFq0VRt4JsRGFP3ew4W2qKUtJmOr.Ltkf8S/zB0Z/Lqijsu', '2021-07-21 12:50:11', 0, 17);
+('Ellen', 'Sue', 'Heineken', 'sue.ellen@gmail.com', 'member', '$2y$10$NyRSaTq3dloQonDCZXDhMe1ZtGc9EhH7HhXZlHsRh5y79ObA5GhG.', '2021-07-26 08:12:01', 1, 20);
 
 --
 -- Index pour les tables déchargées
@@ -133,13 +136,13 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT pour la table `comment`
 --
 ALTER TABLE `comment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT pour la table `post`
 --
 ALTER TABLE `post`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT pour la table `user`
