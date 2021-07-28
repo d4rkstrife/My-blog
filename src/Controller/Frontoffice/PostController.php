@@ -33,6 +33,7 @@ final class PostController
             'template' => 'unauthorized',
             'data' => [],
         ], 'Frontoffice'), 404);
+
         if (($post !== null) && ($request->request()->has('comment'))) {
             $content = $request->request()->get('comment');
             if ($content != '') {

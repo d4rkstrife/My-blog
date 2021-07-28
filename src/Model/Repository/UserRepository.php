@@ -112,10 +112,23 @@ final class UserRepository implements EntityRepositoryInterface
         $stmt->execute();
         return true;
     }
-    public function count(): int
+    public function count(array $criteria = null): int
     {
-        $stmt = $this->database->getPDO()->prepare("SELECT COUNT(*) as Nbr from user");
-        $stmt->execute();
+        $countType = '';
+        if ($criteria !== null) {
+            $key = array_keys($criteria);
+            $countType = $key[0];
+        }
+
+        if ($countType === 'email') {
+            $stmt = $this->database->getPDO()->prepare('SELECT COUNT(*) as Nbr from user where mail=:email');
+        } elseif ($countType === 'pseudo') {
+            $stmt = $this->database->getPDO()->prepare('SELECT COUNT(*) as Nbr from user where pseudo=:pseudo');
+        } else {
+            $stmt = $this->database->getPDO()->prepare("SELECT COUNT(*) as Nbr from user");
+        }
+
+        $stmt->execute($criteria);
         $donnees = $stmt->fetch();
         return (int) $donnees['Nbr'];
     }

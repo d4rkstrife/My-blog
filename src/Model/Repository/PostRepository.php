@@ -122,7 +122,7 @@ final class PostRepository implements EntityRepositoryInterface
     {
         return false;
     }
-    public function count(): int
+    public function count(array $criteria = null): int
     {
         $stmt = $this->database->getPDO()->prepare("SELECT COUNT(*) as NbrPosts from post");
         $stmt->execute();
