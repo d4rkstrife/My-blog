@@ -32,9 +32,11 @@ final class UserController
         if ($infoUser === null) {
             return false;
         }
+        $mail = $this->validator->validate($infoUser['email']);
+        $password = $this->validator->validate($infoUser['password']);
 
-        $user = $this->userRepository->findOneBy(['email' => $infoUser['email']]);
-        if ($user === null || !password_verify($infoUser['password'], $user->getPassword()) || $user->getState() != 1) {
+        $user = $this->userRepository->findOneBy(['email' => $mail]);
+        if ($user === null || !password_verify($password, $user->getPassword()) || $user->getState() != 1) {
             return false;
         }
         $this->session->set('user', $user);
