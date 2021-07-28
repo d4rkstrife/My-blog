@@ -67,7 +67,6 @@ final class UserController
             //validation ici
 
             $infoUser = $request->request();
-            $mailExist = $this->userRepository->findOneBy(['email' => $infoUser->get('email')]);
 
             $name = $this->validator->validate($infoUser->get('nom'));
             $surname = $this->validator->validate($infoUser->get('prenom'));
@@ -75,12 +74,15 @@ final class UserController
             $mail = $this->validator->validate($infoUser->get('email'));
             $password = $this->validator->validate($infoUser->get('password'));
             $repassword = $this->validator->validate($infoUser->get('repassword'));
-
+            $mailExist = $this->userRepository->count(['email' => $mail]);
+            $pseudoExist = $this->userRepository->count(['pseudo' => $pseudo]);
 
             if ($password !== $repassword) {
                 $this->session->addFlashes('error', 'Les mots de passe ne correspondent pas.');
-            } elseif ($mailExist !== null) {
+            } elseif ($mailExist !== 0) {
                 $this->session->addFlashes('error', "L'adresse email est déjà utilisée.");
+            } elseif ($pseudoExist !== 0) {
+                $this->session->addFlashes('error', "Le pseudo est déjà utilisé.");
             } elseif (!$this->validator->isValidEntry($name)) {
                 $this->session->addFlashes('error', 'Nom invalide : caractères spéciaux interdits.');
             } elseif (!$this->validator->isValidEntry($surname)) {

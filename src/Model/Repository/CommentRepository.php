@@ -156,7 +156,7 @@ final class CommentRepository implements EntityRepositoryInterface
         $stmt->execute();
         return true;
     }
-    public function count(): int
+    public function count(array $criteria = null): int
     {
         $stmt = $this->database->getPDO()->prepare("SELECT COUNT(*) as Nbr from comment");
         $stmt->execute();

@@ -20,7 +20,7 @@ interface EntityRepositoryInterface
 
     public function delete(object $entity): bool;
 
-    public function count(): int;
+    public function count(array $criteria = null): int;
 
     //rajouter function count
 }
