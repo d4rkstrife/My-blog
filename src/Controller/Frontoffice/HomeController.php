@@ -13,19 +13,17 @@ use App\Service\Http\Response;
 final class HomeController
 {
     private View $view;
-    private ParseConfig $config;
 
-    public function __construct(View $view, ParseConfig $config)
+    public function __construct(View $view, Mailer $mailer)
     {
         $this->view = $view;
-        $this->config = $config;
+        $this->mailer = $mailer;
     }
 
     public function homeAction(Request $request): Response
     {
         if (!empty($request->request()->all())) {
-            $mail = new Mailer($this->config->getConfig('host'), $this->config->getConfig('username'), $this->config->getConfig('password'));
-            $mail->send($request->request()->all());
+            $this->mailer->send($request->request()->all());
         }
         return new Response($this->view->render([
             'template' => 'home',

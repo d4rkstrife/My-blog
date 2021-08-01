@@ -45,9 +45,8 @@ final class HomeController
                 ],
             ], 'Backoffice'), 200);
         }
-        return new Response($this->view->render([
-            'template' => 'unauthorized',
-            'data' => [],
-        ], 'Frontoffice'), 404);
+        return new Response('<head>
+        <meta http-equiv="refresh" content="0; URL=index.php?action=home" />
+      </head>');
     }
 }

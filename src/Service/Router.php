@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace  App\Service;
 
 use App\View\View;
+use App\Service\Mailer;
 use App\Service\Database;
 use App\Service\Http\Request;
 use App\Service\Http\Response;
@@ -30,13 +31,14 @@ final class Router
     private Session $session;
     private ParseConfig $config;
     private DataValidation $validator;
+    private Mailer $mailer;
 
     public function __construct(Request $request, ParseConfig $config)
     {
         // dépendance
         $this->config = $config;
         $this->database = new Database($this->config->getConfig('dbHost'), $this->config->getConfig('dbName'), $this->config->getConfig('dbUser'), $this->config->getConfig('dbPass'), $this->config->getConfig('dbPort'));
-
+        $this->mailer = new Mailer($this->config->getConfig('host'), $this->config->getConfig('username'), $this->config->getConfig('password'));
         $this->session = new Session();
         $this->view = new View($this->session);
         $this->validator = new DataValidation();
@@ -51,7 +53,7 @@ final class Router
         //Déterminer sur quelle route nous sommes // Attention algorithme naïf
         // *** @Route http://localhost:8000/?action=home ***
         if ($action === 'home') {
-            $controller = new HomeController($this->view, $this->config);
+            $controller = new HomeController($this->view, $this->mailer);
             return $controller->homeAction($this->request);
 
             // *** @Route http://localhost:8000/?action=administration ***
@@ -104,23 +106,30 @@ final class Router
             // *** @Route http://localhost:8000/?action=login ***
         } elseif ($action === 'login') {
             $userRepo = new UserRepository($this->database);
-            $controller = new UserController($userRepo, $this->view, $this->session, $this->validator);
+            $controller = new UserController($userRepo, $this->view, $this->session, $this->validator, $this->mailer);
 
             return $controller->loginAction($this->request);
 
             // *** @Route http://localhost:8000/?action=register ***
         } elseif ($action === 'register') {
             $userRepo = new UserRepository($this->database);
-            $controller = new UserController($userRepo, $this->view, $this->session, $this->validator);
+            $controller = new UserController($userRepo, $this->view, $this->session, $this->validator, $this->mailer);
 
             return $controller->registerAction($this->request);
 
             // *** @Route http://localhost:8000/?action=logout ***
         } elseif ($action === 'logout') {
             $userRepo = new UserRepository($this->database);
-            $controller = new UserController($userRepo, $this->view, $this->session, $this->validator);
+            $controller = new UserController($userRepo, $this->view, $this->session, $this->validator, $this->mailer);
 
             return $controller->logoutAction();
+
+            // *** @Route http://localhost:8000/?action=validation ***
+        } else if ($action === 'validation') {
+            $userRepo = new UserRepository($this->database);
+            $controller = new UserController($userRepo, $this->view, $this->session, $this->validator, $this->mailer);
+
+            $controller->validationAction($this->request);
         }
 
         return new Response("Error 404 - cette page n'existe pas<br><a href='index.php?action=home'>Aller Ici</a>", 404);

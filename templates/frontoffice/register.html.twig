@@ -34,7 +34,7 @@
 										<div class="col-md-12">
 											<div class="position-relative form-group">
 												<label for="exampleEmail11" class="">Email</label>
-												<input name="email" id="exampleEmail11" placeholder="" type="email" class="form-control" required>
+												<input name="email" id="exampleEmail11" value={% if mail %} {{ mail }} {% else %} '' {% endif %} type="email" class="form-control" required>
 											</div>
 										</div>
 										<div class="col-md-6">
@@ -52,19 +52,19 @@
 										<div class="col-md-6">
 											<div class="position-relative form-group">
 												<label for="nom" class="">Nom</label>
-												<input name="nom" id="nom" placeholder="" type="text" class="form-control" minlength="2" maxlength="20" required>
+												<input name="nom" id="nom" value={% if name %} {{ name }} {% else %} '' {% endif %} type="text" class="form-control" minlength="2" maxlength="20" required>
 											</div>
 										</div>
 										<div class="col-md-6">
 											<div class="position-relative form-group">
 												<label for="prenom" class="">Prénom</label>
-												<input name="prenom" id="prenom" placeholder="" type="text" class="form-control" minlength="2" maxlength="20" required>
+												<input name="prenom" id="prenom" value={% if surname %} {{ surname }} {% else %} '' {% endif %} type="text" class="form-control" minlength="2" maxlength="20" required>
 											</div>
 										</div>
 										<div class="col-md-6">
 											<div class="position-relative form-group">
 												<label for="pseudo" class="">Pseudo</label>
-												<input name="pseudo" id="pseudo" placeholder="" type="text" class="form-control" minlength="2" maxlength="20" required>
+												<input name="pseudo" id="pseudo" value={% if pseudo %} {{ pseudo }} {% else %} '' {% endif %} type="text" class="form-control" minlength="2" maxlength="20" required>
 											</div>
 										</div>
 									</div>

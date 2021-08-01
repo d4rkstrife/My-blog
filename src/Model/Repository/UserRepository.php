@@ -20,7 +20,18 @@ final class UserRepository implements EntityRepositoryInterface
 
     public function find(int $id): ?User
     {
-        return null;
+        $stmt = $this->database->getPDO()->prepare('select * from user where user_id=:id');
+        $stmt->bindValue('id', $id);
+        $stmt->execute();
+        $data = $stmt->fetch();
+
+        if ($data === false) {
+            return null;
+        }
+        $user = new User();
+        $user
+            ->setRegistrationKey($data['registration_key']);
+        return $user;
     }
 
     public function findOneBy(array $criteria, array $orderBy = null): ?User
@@ -35,11 +46,14 @@ final class UserRepository implements EntityRepositoryInterface
         $user = new User();
         $user
             ->setId((int) $data['user_id'])
+            ->setName($data['name'])
+            ->setSurname($data['surname'])
             ->setPseudo($data['pseudo'])
             ->setEmail($data['mail'])
             ->setPassword($data['password'])
             ->setGrade($data['grade'])
-            ->setState((int) $data['is_validate']);
+            ->setState((int) $data['is_validate'])
+            ->setRegistrationKey($data['registration_key']);
         return $user;
     }
 
@@ -82,22 +96,29 @@ final class UserRepository implements EntityRepositoryInterface
     public function create(object $user): bool
     {
         $stmt = $this->database->getPDO()->prepare('
-            INSERT INTO `user`(`name`, `surname`, `pseudo`, `mail`, `password`)
-            VALUES (:name, :surname, :pseudo, :mail, :password)
+            INSERT INTO `user`(`name`, `surname`, `pseudo`, `mail`, `password`, `registration_key`)
+            VALUES (:name, :surname, :pseudo, :mail, :password, :registrationKey)
             ');
         $stmt->bindValue('name', $user->getName());
         $stmt->bindValue('surname', $user->getSurname());
         $stmt->bindValue('pseudo', $user->getPseudo());
         $stmt->bindValue('mail', $user->getEmail());
+        $stmt->bindValue('registrationKey', $user->getRegistrationKey());
         $stmt->bindValue('password', password_hash($user->getPassword(), PASSWORD_DEFAULT));
 
         $state = $stmt->execute();
-        return true;
+        return $state;
     }
 
     public function update(object $user): bool
     {
-        return false;
+        $stmt = $this->database->getPDO()->prepare('
+        UPDATE `user` SET `is_validate`= 1 WHERE `registration_key` = :key
+        ');
+        $stmt->bindValue('key', $user->getRegistrationKey());
+        $state = $stmt->execute();
+
+        return $state;
     }
 
     /**
