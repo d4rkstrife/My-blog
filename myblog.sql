@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:3306
--- Généré le : mar. 27 juil. 2021 à 16:41
+-- Généré le : Dim 01 août 2021 à 06:52
 -- Version du serveur :  5.7.24
 -- Version de PHP : 7.4.1
 
@@ -87,17 +87,21 @@ CREATE TABLE `user` (
   `password` varchar(256) NOT NULL,
   `inscription_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `is_validate` tinyint(1) NOT NULL DEFAULT '0',
-  `user_id` int(11) NOT NULL
+  `user_id` int(11) NOT NULL,
+  `registration_key` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `user`
 --
 
-INSERT INTO `user` (`name`, `surname`, `pseudo`, `mail`, `grade`, `password`, `inscription_date`, `is_validate`, `user_id`) VALUES
-('Grandclement', 'Pierre', 'D4rkstrife', 'p.gdc85@gmail.com', 'superAdmin', '$2y$10$8cRhFES66gzPA3PS6ZN.f.sFSSdCENa2pCLmu92EdH6RkFnS6gV0m', '2021-07-20 22:59:27', 1, 10),
-('Patrice', 'Dupont', 'Patoche', 'patoche@gmail.com', 'member', '$2y$10$d9oHQ1nahTiHlY3YUBXX5eUaVVPj0tmz0npsYo3isErXv8GBKPngW', '2021-07-20 23:00:04', 1, 11),
-('Ellen', 'Sue', 'Heineken', 'sue.ellen@gmail.com', 'member', '$2y$10$NyRSaTq3dloQonDCZXDhMe1ZtGc9EhH7HhXZlHsRh5y79ObA5GhG.', '2021-07-26 08:12:01', 1, 20);
+INSERT INTO `user` (`name`, `surname`, `pseudo`, `mail`, `grade`, `password`, `inscription_date`, `is_validate`, `user_id`, `registration_key`) VALUES
+('Grandclement', 'Pierre', 'D4rkstrife', 'p.gdc85@gmail.com', 'superAdmin', '$2y$10$8cRhFES66gzPA3PS6ZN.f.sFSSdCENa2pCLmu92EdH6RkFnS6gV0m', '2021-07-20 22:59:27', 1, 10, '0'),
+('Patrice', 'Dupont', 'Patoche', 'patoche@gmail.com', 'member', '$2y$10$d9oHQ1nahTiHlY3YUBXX5eUaVVPj0tmz0npsYo3isErXv8GBKPngW', '2021-07-20 23:00:04', 1, 11, '0'),
+('Ellen', 'Sue', 'Heineken', 'sue.ellen@gmail.com', 'member', '$2y$10$NyRSaTq3dloQonDCZXDhMe1ZtGc9EhH7HhXZlHsRh5y79ObA5GhG.', '2021-07-26 08:12:01', 1, 20, '0'),
+('Poulette', 'Jean', 'Cocotte', 'blabla@gmail.com', 'member', '$2y$10$Ru92Js56ojsk/gSCjJvOmeMNoEJu2LqMqO1PqE7.N2zxKHOutBAM2', '2021-07-31 17:03:04', 0, 22, '0'),
+('bladj', 'khfshu', 'nnbxhg', 'blabl@gmail.com', 'member', '$2y$10$GbkFfK4bv9NAKWZs6tHgU.rmRJRrws3I8/09tvLzdCn6EBlH41C.e', '2021-08-01 07:16:12', 0, 23, '1c8a9531ed1fc4dbc1268a1a5261869a'),
+('Docteur', 'Strife', 'Darkstrife', 'd4rkstrife@gmail.com', 'member', '$2y$10$jj3WuiLangwMTLBAv.ksEOHwc7AB6opPG1wbgdqiRgNiLbS38mAIa', '2021-08-01 08:48:07', 1, 39, 'ca3fe5f374bf2e324996868a0dae4409');
 
 --
 -- Index pour les tables déchargées
@@ -136,7 +140,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT pour la table `comment`
 --
 ALTER TABLE `comment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT pour la table `post`
@@ -148,7 +152,7 @@ ALTER TABLE `post`
 -- AUTO_INCREMENT pour la table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- Contraintes pour les tables déchargées
