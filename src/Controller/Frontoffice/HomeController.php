@@ -28,12 +28,12 @@ final class HomeController
     public function homeAction(Request $request): Response
     {
         if (!empty($request->request()->all())) {
-            $infoContact = (object) $request->request()->all();
+            $infoContact =  $request->request()->all();
 
-            $name = $this->validator->validate($infoContact->name);
-            $surname = $this->validator->validate($infoContact->surname);
-            $mail = $this->validator->validate($infoContact->mail);
-            $content = $this->validator->validate($infoContact->content);
+            $name = $this->validator->validate($infoContact['name']);
+            $surname = $this->validator->validate($infoContact['surname']);
+            $mail = $this->validator->validate($infoContact['mail']);
+            $content = $this->validator->validate($infoContact['content']);
 
             $error = false;
             $flashes = '';
@@ -53,7 +53,12 @@ final class HomeController
             if ($error === true) {
                 $this->session->addFlashes('error', $flashes);
             } else {
-                $this->mailer->send($infoContact);
+                $this->mailer->send([
+                    'name' => $name,
+                    'surname' => $surname,
+                    'mail' => $mail,
+                    'content' => $content
+                ]);
             }
         }
         return new Response($this->view->render([
