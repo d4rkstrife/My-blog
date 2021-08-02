@@ -26,6 +26,11 @@
 				</header>
 
 				<form method="Post">
+					{% for message in flashes %}
+						<div>
+							<p class="danger">{{ message }}</p>
+						</div>
+					{% endfor %}
 					<div class="row" style="display: flex">
 						<div class=" col-sm-3">
 							<label for='name'>Nom</label>

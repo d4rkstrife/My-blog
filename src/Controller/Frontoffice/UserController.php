@@ -155,6 +155,7 @@ final class UserController
         $infos = (array) $request->query()->all();
         $user = $this->userRepository->find((int) $infos['id']);
         $this->userRepository->update($user);
+        $this->session->addFlashes('success', 'Compte validé, connectez-vous');
 
         return new Response('<head>
         <meta http-equiv="refresh" content="0; URL=index.php?action=login" />

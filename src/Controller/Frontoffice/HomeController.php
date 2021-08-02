@@ -6,24 +6,55 @@ namespace  App\Controller\Frontoffice;
 
 use App\View\View;
 use App\Service\Mailer;
-use App\Service\ParseConfig;
 use App\Service\Http\Request;
 use App\Service\Http\Response;
+use App\Service\DataValidation;
+use App\Service\Http\Session\Session;
 
 final class HomeController
 {
     private View $view;
+    private DataValidation $validator;
+    private Session $session;
 
-    public function __construct(View $view, Mailer $mailer)
+    public function __construct(View $view, Mailer $mailer, Session $session, DataValidation $validator)
     {
         $this->view = $view;
         $this->mailer = $mailer;
+        $this->session = $session;
+        $this->validator = $validator;
     }
 
     public function homeAction(Request $request): Response
     {
         if (!empty($request->request()->all())) {
-            $this->mailer->send($request->request()->all());
+            $infoContact = (object) $request->request()->all();
+
+            $name = $this->validator->validate($infoContact->name);
+            $surname = $this->validator->validate($infoContact->surname);
+            $mail = $this->validator->validate($infoContact->mail);
+            $content = $this->validator->validate($infoContact->content);
+
+            $error = false;
+            $flashes = '';
+
+            if (!$this->validator->isValidEntry($name)) {
+                $flashes .= 'Nom incorrect.';
+                $error = true;
+            }
+            if (!$this->validator->isValidEntry($surname)) {
+                $flashes .= 'Prenom incorrect.';
+                $error = true;
+            }
+            if (!$this->validator->isValidMail($mail)) {
+                $flashes .= 'Mail incorrect.';
+                $error = true;
+            }
+            if ($error === true) {
+                $this->session->addFlashes('error', $flashes);
+            } else {
+                $this->mailer->send($infoContact);
+            }
         }
         return new Response($this->view->render([
             'template' => 'home',

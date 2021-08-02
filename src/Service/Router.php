@@ -53,7 +53,7 @@ final class Router
         //Déterminer sur quelle route nous sommes // Attention algorithme naïf
         // *** @Route http://localhost:8000/?action=home ***
         if ($action === 'home') {
-            $controller = new HomeController($this->view, $this->mailer);
+            $controller = new HomeController($this->view, $this->mailer, $this->session, $this->validator);
             return $controller->homeAction($this->request);
 
             // *** @Route http://localhost:8000/?action=administration ***
@@ -129,7 +129,7 @@ final class Router
             $userRepo = new UserRepository($this->database);
             $controller = new UserController($userRepo, $this->view, $this->session, $this->validator, $this->mailer);
 
-            $controller->validationAction($this->request);
+            return $controller->validationAction($this->request);
         }
 
         return new Response("Error 404 - cette page n'existe pas<br><a href='index.php?action=home'>Aller Ici</a>", 404);
