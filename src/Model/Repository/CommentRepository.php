@@ -26,14 +26,15 @@ final class CommentRepository implements EntityRepositoryInterface
     public function findOneBy(array $criteria, array $orderBy = null): ?Comment
     {
         $stmt = $this->database->getPDO()->prepare('
-        SELECT * FROM comment        
+        SELECT * FROM comment    
         WHERE comment.id=:id
         ');
         $stmt->execute($criteria);
-        $data = $stmt->fetchAll();
+        $data = $stmt->fetch();
+
         $comment = new Comment();
         $comment
-            ->setId((int) $criteria['id']);
+            ->setId((int) $data['id']);
         return $comment;
     }
 
@@ -48,13 +49,12 @@ final class CommentRepository implements EntityRepositoryInterface
         $stmt->execute($criteria);
         $data = $stmt->fetchAll();
 
-        if ($data == null) {
+        if ($data === null) {
             return null;
         }
 
         // réfléchir à l'hydratation des entités;
         $comments = [];
-        $users = [];
         foreach ($data as $comment) {
             $newComment = new Comment();
             //tester si l utilisateur existe déjà
@@ -93,7 +93,6 @@ final class CommentRepository implements EntityRepositoryInterface
 
         // réfléchir à l'hydratation des entités;
         $comments = [];
-        $users = [];
         foreach ($data as $comment) {
             $newComment = new Comment();
             //tester si l utilisateur existe déjà

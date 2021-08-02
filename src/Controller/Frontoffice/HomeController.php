@@ -15,6 +15,7 @@ final class HomeController
 {
     private View $view;
     private DataValidation $validator;
+    private Mailer $mailer;
     private Session $session;
 
     public function __construct(View $view, Mailer $mailer, Session $session, DataValidation $validator)

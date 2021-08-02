@@ -137,7 +137,7 @@ final class UserController
                 ->setRegistrationKey($registrationKey);
             $this->userRepository->create($user);
             $newUser = $this->userRepository->findOneBy(['email' => $mail]);
-            $this->mailer->sendConfirmationMessage($newUser, $registrationKey);
+            $this->mailer->sendConfirmationMessage($newUser);
             $this->session->addFlashes('success', 'Compte créé, Cliquez sur le lien dans vos mails pour valider votre compte.');
 
             return new Response($this->view->render([

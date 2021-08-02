@@ -50,7 +50,7 @@ class Mailer
         $mail->send();
     }
 
-    public function sendConfirmationMessage(User $user)
+    public function sendConfirmationMessage(User $user): bool
     {
         $mail = new PHPMailer(true);
         $mail->isSMTP();                                            //Send using SMTP
@@ -73,6 +73,8 @@ class Mailer
         $mail->Subject = 'Inscription sur My Blog';
         $mail->Body    = 'http://localhost:8000/index.php?action=validation&amp;id=' . $user->getId() . '&amp;key=' . $user->getRegistrationKey() . '';
 
-        $mail->send();
+        $state = $mail->send();
+
+        return $state;
     }
 }

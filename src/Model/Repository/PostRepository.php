@@ -79,7 +79,6 @@ final class PostRepository implements EntityRepositoryInterface
             return null;
         }
         $posts = [];
-        $users = [];
         foreach ($data as $post) {
             $postObj = new Post();
             //si $post['fk_user'] n existe pas dans $users alors

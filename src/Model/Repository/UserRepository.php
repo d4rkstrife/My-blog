@@ -110,6 +110,9 @@ final class UserRepository implements EntityRepositoryInterface
         return $state;
     }
 
+    /**
+     * @param User $user
+     */
     public function update(object $user): bool
     {
         $stmt = $this->database->getPDO()->prepare('
