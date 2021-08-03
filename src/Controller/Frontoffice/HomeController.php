@@ -15,6 +15,7 @@ final class HomeController
 {
     private View $view;
     private DataValidation $validator;
+    private Mailer $mailer;
     private Session $session;
 
     public function __construct(View $view, Mailer $mailer, Session $session, DataValidation $validator)
@@ -34,33 +35,36 @@ final class HomeController
             $surname = $this->validator->validate($infoContact['surname']);
             $mail = $this->validator->validate($infoContact['mail']);
             $content = $this->validator->validate($infoContact['content']);
-
+            $mailIsSend = true;
             $error = false;
             $flashes = '';
 
             if (!$this->validator->isValidEntry($name)) {
-                $flashes .= 'Nom incorrect.';
+                $flashes .= 'Nom incorrect. ';
                 $error = true;
             }
             if (!$this->validator->isValidEntry($surname)) {
-                $flashes .= 'Prenom incorrect.';
+                $flashes .= 'Prenom incorrect. ';
                 $error = true;
             }
             if (!$this->validator->isValidMail($mail)) {
-                $flashes .= 'Mail incorrect.';
+                $flashes .= 'Mail incorrect. ';
                 $error = true;
             }
-            if ($error === true) {
-                $this->session->addFlashes('error', $flashes);
-            } else {
-                $this->mailer->send([
+            if (!$error) {
+                $mailIsSend = $this->mailer->send([
                     'name' => $name,
                     'surname' => $surname,
                     'mail' => $mail,
                     'content' => $content
                 ]);
             }
+            if (!$mailIsSend || $error) {
+                $flashes .= "Le mail n'a pas pu être envoyé. ";
+                $this->session->addFlashes('error', $flashes);
+            }
         }
+
         return new Response($this->view->render([
             'template' => 'home',
             'data' => [],

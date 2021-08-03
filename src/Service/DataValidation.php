@@ -37,4 +37,14 @@ final class DataValidation
         }
         return false;
     }
+    public function isValidPassword(string $string): bool
+    {
+        if (
+            !empty($string)
+            && preg_match("/^\S*(?=\S{8,})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$/", $string)
+        ) {
+            return true;
+        }
+        return false;
+    }
 }

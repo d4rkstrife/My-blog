@@ -26,14 +26,15 @@ final class CommentRepository implements EntityRepositoryInterface
     public function findOneBy(array $criteria, array $orderBy = null): ?Comment
     {
         $stmt = $this->database->getPDO()->prepare('
-        SELECT * FROM comment        
+        SELECT * FROM comment    
         WHERE comment.id=:id
         ');
         $stmt->execute($criteria);
-        $data = $stmt->fetchAll();
+        $data = $stmt->fetch();
+
         $comment = new Comment();
         $comment
-            ->setId((int) $criteria['id']);
+            ->setId((int) $data['id']);
         return $comment;
     }
 
@@ -48,7 +49,7 @@ final class CommentRepository implements EntityRepositoryInterface
         $stmt->execute($criteria);
         $data = $stmt->fetchAll();
 
-        if ($data == null) {
+        if ($data === null) {
             return null;
         }
 
@@ -58,17 +59,21 @@ final class CommentRepository implements EntityRepositoryInterface
         foreach ($data as $comment) {
             $newComment = new Comment();
             //tester si l utilisateur existe déjà
-            $user = new User();
-            $user
-                ->setId((int) $comment['fk_user'])
-                ->setPseudo($comment['pseudo'])
-                ->setName($comment['name'])
-                ->setSurname($comment['surname'])
-                ->setEmail($comment['mail']);
+            if (!in_array($comment['fk_user'], $users)) {
+                $user = new User();
+                $user
+                    ->setId((int) $comment['fk_user'])
+                    ->setPseudo($comment['pseudo'])
+                    ->setName($comment['name'])
+                    ->setSurname($comment['surname'])
+                    ->setEmail($comment['mail']);
+                $users[$comment['fk_user']] = $user;
+            }
+
             $newComment
                 ->setId((int) $comment['id'])
                 ->setText($comment['content'])
-                ->setUser($user)
+                ->setUser($users[$comment['fk_user']])
                 ->setIdPost((int) $comment['fk_post'])
                 ->setDate($comment['date']);
             $comments[] = $newComment;
@@ -91,23 +96,25 @@ final class CommentRepository implements EntityRepositoryInterface
             return null;
         }
 
-        // réfléchir à l'hydratation des entités;
         $comments = [];
         $users = [];
         foreach ($data as $comment) {
             $newComment = new Comment();
-            //tester si l utilisateur existe déjà
-            $user = new User();
-            $user
-                ->setId((int) $comment['fk_user'])
-                ->setPseudo($comment['pseudo'])
-                ->setName($comment['name'])
-                ->setSurname($comment['surname'])
-                ->setEmail($comment['mail']);
+            if (!in_array($comment['fk_user'], $users)) {
+                $user = new User();
+                $user
+                    ->setId((int) $comment['fk_user'])
+                    ->setPseudo($comment['pseudo'])
+                    ->setName($comment['name'])
+                    ->setSurname($comment['surname'])
+                    ->setEmail($comment['mail']);
+                $users[$comment['fk_user']] = $user;
+            }
+
             $newComment
                 ->setId((int) $comment['id'])
                 ->setText($comment['content'])
-                ->setUser($user)
+                ->setUser($users[$comment['fk_user']])
                 ->setIdPost((int) $comment['fk_post'])
                 ->setDate($comment['date']);
             $comments[] = $newComment;

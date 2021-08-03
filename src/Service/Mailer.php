@@ -19,7 +19,7 @@ class Mailer
         $this->username = $userName;
         $this->password = $password;
     }
-    public function send(array $infoUser): void
+    public function send(array $infoUser): bool
     {
 
         $infoObject = (object)$infoUser;
@@ -47,10 +47,12 @@ class Mailer
                 Mail : ' . $infoObject->mail . '<br/>
                 Message : ' . $infoObject->content;
 
-        $mail->send();
+        $state = $mail->send();
+
+        return $state;
     }
 
-    public function sendConfirmationMessage(User $user)
+    public function sendConfirmationMessage(User $user): bool
     {
         $mail = new PHPMailer(true);
         $mail->isSMTP();                                            //Send using SMTP
@@ -71,8 +73,10 @@ class Mailer
         //Content
         $mail->isHTML(true);                                  //Set email format to HTML
         $mail->Subject = 'Inscription sur My Blog';
-        $mail->Body    = 'http://localhost:8000/index.php?action=validation&amp;id=' . $user->getId() . '&amp;key=' . $user->getRegistrationKey() . '';
+        $mail->Body    = 'Votre compte sur My Blog a bien été créé. Afin de le valider, veuillez cliquer sur le lien : http://localhost:8000/index.php?action=validation&amp;id=' . $user->getId() . '&amp;key=' . $user->getRegistrationKey() . '';
 
-        $mail->send();
+        $state = $mail->send();
+
+        return $state;
     }
 }

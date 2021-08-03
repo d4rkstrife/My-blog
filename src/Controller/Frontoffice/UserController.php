@@ -53,7 +53,9 @@ final class UserController
     {
         if ($request->getMethod() === 'POST') {
             if ($this->isValidLoginForm($request->request()->all())) {
-                return new Response($this->view->render(['template' => 'home', 'data' => []], 'Frontoffice'), 200);
+                return new Response('<head>
+                <meta http-equiv="refresh" content="0; URL=index.php?action=home" />
+              </head>');
             }
             $this->session->addFlashes('error', 'Mauvais identifiants ou compte non validé');
         }
@@ -84,7 +86,10 @@ final class UserController
 
             $error = false;
             $flashes = '';
-
+            if (!$this->validator->isValidPassword($password)) {
+                $flashes .= 'Le mot de passe doit contenir huit caractères, au moins une majuscule, une minuscule et un chiffre.';
+                $error = true;
+            }
             if ($password !== $repassword) {
                 $flashes .= 'Les mots de passe ne correspondent pas.';
                 $error = true;
@@ -137,7 +142,7 @@ final class UserController
                 ->setRegistrationKey($registrationKey);
             $this->userRepository->create($user);
             $newUser = $this->userRepository->findOneBy(['email' => $mail]);
-            $this->mailer->sendConfirmationMessage($newUser, $registrationKey);
+            $this->mailer->sendConfirmationMessage($newUser);
             $this->session->addFlashes('success', 'Compte créé, Cliquez sur le lien dans vos mails pour valider votre compte.');
 
             return new Response($this->view->render([
@@ -150,6 +155,7 @@ final class UserController
             'data' => []
         ], 'Frontoffice'), 200);
     }
+
     public function validationAction(Request $request): Response
     {
         $infos = (array) $request->query()->all();
