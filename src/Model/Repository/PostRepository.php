@@ -79,6 +79,7 @@ final class PostRepository implements EntityRepositoryInterface
             return null;
         }
         $posts = [];
+        $users = [];
         foreach ($data as $post) {
             $postObj = new Post();
             //si $post['fk_user'] n existe pas dans $users alors
@@ -86,15 +87,19 @@ final class PostRepository implements EntityRepositoryInterface
             //$users[$post['fk_user']] = $user
             //fin si
             //$postObject->setAutor($users[$post['fk_user']])
-            $user = new User();
-            $user
-                ->setId((int) $post['fk_user'])
-                ->setPseudo($post['pseudo'])
-                ->setName($post['name'])
-                ->setSurname($post['surname'])
-                ->setEmail($post['mail']);
+            if (!in_array($post['fk_user'], $users)) {
+                $user = new User();
+                $user
+                    ->setId((int) $post['fk_user'])
+                    ->setPseudo($post['pseudo'])
+                    ->setName($post['name'])
+                    ->setSurname($post['surname'])
+                    ->setEmail($post['mail']);
+                $users[(int) $post['fk_user']] = $user;
+            }
+
             $postObj
-                ->setAutor($user)
+                ->setAutor($users[$post['fk_user']])
                 ->setId((int) $post['id'])
                 ->setTitle($post['title'])
                 ->setContent($post['content'])
