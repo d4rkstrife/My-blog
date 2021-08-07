@@ -49,7 +49,7 @@ final class CommentRepository implements EntityRepositoryInterface
         $stmt->execute($criteria);
         $data = $stmt->fetchAll();
 
-        if ($data === null) {
+        if ($data === false) {
             return null;
         }
 
@@ -58,7 +58,7 @@ final class CommentRepository implements EntityRepositoryInterface
         $users = [];
         foreach ($data as $comment) {
             $newComment = new Comment();
-            //tester si l utilisateur existe déjà
+
             if (!in_array($comment['fk_user'], $users)) {
                 $user = new User();
                 $user
@@ -92,7 +92,7 @@ final class CommentRepository implements EntityRepositoryInterface
         $stmt->execute();
         $data = $stmt->fetchAll();
 
-        if ($data == null) {
+        if ($data === null) {
             return null;
         }
 

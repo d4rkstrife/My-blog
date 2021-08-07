@@ -17,14 +17,6 @@ final class Post
     private ?string $modif;
     private User $autor;
 
-    /*   public function __construct(int $id, string $title, string $text, string $chapo)
-    {
-        $this->id = $id;
-        $this->title = $title;
-        $this->text = $text;
-        $this->chapo = $chapo;
-    }*/
-
     public function getId(): int
     {
         return $this->id;

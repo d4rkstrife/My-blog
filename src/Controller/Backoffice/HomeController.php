@@ -7,6 +7,7 @@ namespace  App\Controller\Backoffice;
 use App\View\View;
 use App\Service\Database;
 use App\Service\Http\Response;
+use App\Service\Http\Redirection;
 use App\Service\Http\Session\Session;
 use App\Model\Repository\PostRepository;
 use App\Model\Repository\UserRepository;
@@ -26,27 +27,28 @@ final class HomeController
     }
 
 
-    public function administrationAction(): Response
+    public function administrationAction()
     {
         if (
-            $this->session->get('user') !== NULL
-            && ($this->session->get('user')->getGrade() === 'superAdmin' || $this->session->get('user')->getGrade() === 'admin')
+            $this->session->get('user') === null
+            || ($this->session->get('user')->getGrade() !== 'superAdmin'
+                && $this->session->get('user')->getGrade() !== 'admin')
         ) {
-            $postRepository = new PostRepository($this->database);
-            $commentRepository = new CommentRepository($this->database);
-            $userRepository = new UserRepository($this->database);
-
-            return new Response($this->view->render([
-                'template' => 'home',
-                'data' => [
-                    'nbrPost' => $postRepository->count(),
-                    'nbrUser' => $userRepository->count(),
-                    'nbrComment' => $commentRepository->count(),
-                ],
-            ], 'Backoffice'), 200);
+            $redirect = new Redirection($this->view);
+            return $redirect->send('home');
         }
-        return new Response('<head>
-        <meta http-equiv="refresh" content="0; URL=index.php?action=home" />
-      </head>');
+
+        $postRepository = new PostRepository($this->database);
+        $commentRepository = new CommentRepository($this->database);
+        $userRepository = new UserRepository($this->database);
+
+        return new Response($this->view->render([
+            'template' => 'home',
+            'data' => [
+                'nbrPost' => $postRepository->count(),
+                'nbrUser' => $userRepository->count(),
+                'nbrComment' => $commentRepository->count(),
+            ],
+        ], 'Backoffice'), 200);
     }
 }

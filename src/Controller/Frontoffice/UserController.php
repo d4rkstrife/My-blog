@@ -103,11 +103,11 @@ final class UserController
                 $error = true;
             }
             if (!$this->validator->isValidEntry($name)) {
-                $flashes .= 'Nom invalide : caractères spéciaux interdits.';
+                $flashes .= 'Nom invalide : caractères spéciaux interdits. ';
                 $error = true;
             }
             if (!$this->validator->isValidEntry($surname)) {
-                $flashes .= 'Prénom invalide : caractères spéciaux interdits.';
+                $flashes .= 'Prénom invalide : caractères spéciaux interdits. ';
                 $error = true;
             }
             if (!$this->validator->isValidMail($mail)) {
@@ -160,6 +160,7 @@ final class UserController
     {
         $infos = (array) $request->query()->all();
         $user = $this->userRepository->find((int) $infos['id']);
+        //verifier clé ici
         $this->userRepository->update($user);
         $this->session->addFlashes('success', 'Compte validé, connectez-vous');
 

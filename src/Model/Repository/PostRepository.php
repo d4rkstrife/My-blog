@@ -112,9 +112,20 @@ final class PostRepository implements EntityRepositoryInterface
         return $posts;
     }
 
+    /**
+     * @param Post $post
+     */
     public function create(object $post): bool
     {
-        return false;
+        $stmt = $this->database->getPDO()->prepare('
+        INSERT INTO post(`title`, `chapo`, `content`,`fk_user`)
+        VALUES (:title,:chapo, :content, :userId)');
+        $stmt->bindValue('title', $post->getTitle());
+        $stmt->bindValue('chapo', $post->getChapo());
+        $stmt->bindValue('content', $post->getContent());
+        $stmt->bindValue('userId', $post->getAutor()->getId());
+
+        return $stmt->execute();
     }
 
     public function update(object $post): bool
