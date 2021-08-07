@@ -69,7 +69,7 @@ final class PostRepository implements EntityRepositoryInterface
         SELECT * FROM post
         INNER JOIN user    
         ON post.fk_user = user.user_id
-        ORDER BY post.date
+        ORDER BY post.date_modif
         DESC');
         $stmt->execute();
         $data = $stmt->fetchAll();
@@ -128,15 +128,34 @@ final class PostRepository implements EntityRepositoryInterface
         return $stmt->execute();
     }
 
+    /**
+     * @param Post $post
+     */
     public function update(object $post): bool
     {
-        return false;
+        $stmt = $this->database->getPdo()->prepare('
+        UPDATE `post` 
+        SET `title`=:title,`chapo`=:chapo,`content`=:content,`date_modif`= datetime 
+        WHERE `id` = :id
+        ');
+        $stmt->bindValue('title', $post->getTitle());
+        $stmt->bindValue('chapo', $post->getChapo());
+        $stmt->bindValue('content', $post->getContent());
+        $stmt->bindValue('id', $post->getId());
+
+        return $stmt->execute();
     }
 
+    /**
+     * @param Post $post
+     */
     public function delete(object $post): bool
     {
-        return false;
+        $stmt = $this->database->getPDO()->prepare('DELETE FROM `post` WHERE `id`= :id');
+        $stmt->bindValue('id', $post->getId());
+        return $stmt->execute();
     }
+
     public function count(array $criteria = null): int
     {
         $stmt = $this->database->getPDO()->prepare("SELECT COUNT(*) as NbrPosts from post");

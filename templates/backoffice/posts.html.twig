@@ -24,6 +24,7 @@
 								<th>Auteur</th>
 								<th>Date de mise en ligne</th>
 								<th>Dernière modification</th>
+								<th>Administration</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -34,12 +35,24 @@
 									<td>{{ post.autor.pseudo }}</td>
 									<td>{{ post.date  }}</td>
 									<td>{{ post.modif }}</td>
+									<td>
+
+										<form method="post" action="index.php?action=updatePost">
+											<button name="modif" value="{{ post.id }}" class="btn-wide btn btn-success">
+												Modifier
+											</button>
+										</form>
+
+										<form method='POST'>
+											<button type="submit" name="delete" value="{{ post.id }}" class="btn-wide btn-shadow btn btn-danger">Supprimer</button>
+										</form>
+									</td>
 								</tr>
-							{% endfor %}
+							</td>
 						</tbody>
-					</table>
-				</div>
-			</div>
-		</div>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
 	</div>
-{% endblock %}
+</div></div></div>{% endblock %}

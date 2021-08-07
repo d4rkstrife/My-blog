@@ -66,7 +66,13 @@ final class Router
         } elseif ($action === 'postsAdmin') {
             $postRepo = new PostRepository($this->database);
             $controller = new BackofficePostController($postRepo, $this->view, $this->session);
-            return $controller->postAdminAction();
+            return $controller->postAdminAction($this->request);
+
+            // *** @Route http://localhost:8000/?action=updatePost ***
+        } elseif ($action === 'updatePost') {
+            $postRepo = new PostRepository($this->database);
+            $controller = new BackofficePostController($postRepo, $this->view, $this->session);
+            return $controller->updateAction($this->request);
 
 
             // *** @Route http://localhost:8000/?action=commentAdmin ***
