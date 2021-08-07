@@ -26,10 +26,9 @@ final class CommentController
     public function postCommentAction(Request $request): Response
     {
         if (
-            $this->session->get('user') !== NULL
+            $this->session->get('user') !== null
             && ($this->session->get('user')->getGrade() === 'superAdmin' || $this->session->get('user')->getGrade() === 'admin')
         ) {
-
             //si un des boutons a été cliqué
             if (!empty($request->request()->all())) {
                 $post = (object) $request->request()->all();

@@ -26,7 +26,7 @@ final class UserController
     public function userAction(Request $request): Response
     {
         if (
-            $this->session->get('user') !== NULL
+            $this->session->get('user') !== null
             && ($this->session->get('user')->getGrade() === 'superAdmin' || $this->session->get('user')->getGrade() === 'admin')
         ) {
             //si le bouton supprimer a été cliqué

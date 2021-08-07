@@ -20,7 +20,7 @@ final class DataValidation
             !empty($string)
             && strlen($string) <= 20
             && strlen($string) > 1
-            && preg_match("/^[a-zA-Z êôùîïéèà]+$/", $string)
+            && preg_match("/^[a-zA-Z êôùîïéèà-]+$/", $string)
         ) {
             return true;
         }

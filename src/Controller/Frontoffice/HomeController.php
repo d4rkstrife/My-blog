@@ -59,9 +59,14 @@ final class HomeController
                     'content' => $content
                 ]);
             }
-            if (!$mailIsSend || $error) {
-                $flashes .= "Le mail n'a pas pu être envoyé. ";
+
+            if ($error) {
                 $this->session->addFlashes('error', $flashes);
+            } elseif (!$mailIsSend) {
+                $flashes = "Le mail n'a pas pu être envoyé. ";
+                $this->session->addFlashes('error', $flashes);
+            } elseif ($mailIsSend) {
+                $this->session->addFlashes('success', 'Message envoyé.');
             }
         }
 

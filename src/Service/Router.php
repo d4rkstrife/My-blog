@@ -64,7 +64,6 @@ final class Router
 
             // *** @Route http://localhost:8000/?action=postsAdmin ***
         } elseif ($action === 'postsAdmin') {
-
             $postRepo = new PostRepository($this->database);
             $controller = new BackofficePostController($postRepo, $this->view, $this->session);
             return $controller->postAdminAction();
@@ -72,7 +71,6 @@ final class Router
 
             // *** @Route http://localhost:8000/?action=commentAdmin ***
         } elseif ($action === 'commentAdmin') {
-
             $commentRepo = new commentRepository($this->database);
             $controller = new CommentController($commentRepo, $this->view, $this->session);
             return $controller->postCommentAction($this->request);
@@ -80,7 +78,6 @@ final class Router
 
             // *** @Route http://localhost:8000/?action=userAdmin ***
         } elseif ($action === 'userAdmin') {
-
             $userRepo = new userRepository($this->database);
             $controller = new BackofficeUserController($userRepo, $this->view, $this->session);
             return $controller->userAction($this->request);
@@ -125,11 +122,16 @@ final class Router
             return $controller->logoutAction();
 
             // *** @Route http://localhost:8000/?action=validation ***
-        } else if ($action === 'validation') {
+        } elseif ($action === 'validation') {
             $userRepo = new UserRepository($this->database);
             $controller = new UserController($userRepo, $this->view, $this->session, $this->validator, $this->mailer);
 
             return $controller->validationAction($this->request);
+        } elseif ($action === 'newPost') {
+            $postRepo = new PostRepository($this->database);
+            $controller = new BackofficePostController($postRepo, $this->view, $this->session);
+
+            return $controller->newPostAction($this->request);
         }
 
         return new Response("Error 404 - cette page n'existe pas<br><a href='index.php?action=home'>Aller Ici</a>", 404);
