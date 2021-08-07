@@ -22,9 +22,9 @@
 						<div class="panel panel-default">
 							<div class="panel-body">
 								<h3 class="thin text-center">Créer un compte</h3>
-								{% for message in flashes %}
+								{% for key, message in flashes %}
 									<div>
-										<p class="danger">{{ message }}</p>
+										<p class={{ key }}>{{ message }}</p>
 									</div>
 								{% endfor %}
 

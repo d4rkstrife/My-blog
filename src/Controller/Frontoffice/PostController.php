@@ -10,6 +10,7 @@ use App\Model\Entity\Comment;
 use App\Service\Http\Request;
 use App\Service\Http\Response;
 use App\Service\DataValidation;
+use App\Service\Http\Session\Session;
 use App\Model\Repository\PostRepository;
 use App\Model\Repository\CommentRepository;
 
@@ -18,10 +19,11 @@ final class PostController
     private PostRepository $postRepository;
     private View $view;
 
-    public function __construct(PostRepository $postRepository, View $view)
+    public function __construct(PostRepository $postRepository, View $view, Session $session)
     {
         $this->postRepository = $postRepository;
         $this->view = $view;
+        $this->session = $session;
     }
 
     public function displayOneAction(Request $request, CommentRepository $commentRepository, ?User $user): Response
@@ -46,7 +48,7 @@ final class PostController
                     ->setIdPost((int) $id)
                     ->setUser($newUser);
 
-                $commentRepository->create($newComment);
+                $commentRepository->create($newComment) ? $this->session->addFlashes('success', 'Commentaire en attente de validation') : $this->session->addFlashes('error', 'Enregistrement du commentaire impossible');
             }
         }
 

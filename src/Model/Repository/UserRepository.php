@@ -106,8 +106,7 @@ final class UserRepository implements EntityRepositoryInterface
         $stmt->bindValue('registrationKey', $user->getRegistrationKey());
         $stmt->bindValue('password', password_hash($user->getPassword(), PASSWORD_DEFAULT));
 
-        $state = $stmt->execute();
-        return $state;
+        return $stmt->execute();
     }
 
     /**
@@ -119,9 +118,7 @@ final class UserRepository implements EntityRepositoryInterface
         UPDATE `user` SET `is_validate`= 1 WHERE `registration_key` = :key
         ');
         $stmt->bindValue('key', $user->getRegistrationKey());
-        $state = $stmt->execute();
-
-        return $state;
+        return $stmt->execute();
     }
 
     /**
@@ -133,8 +130,7 @@ final class UserRepository implements EntityRepositoryInterface
         DELETE FROM `user` WHERE user_id = :id
         ');
         $stmt->bindValue('id', $user->getId());
-        $stmt->execute();
-        return true;
+        return $stmt->execute();
     }
     public function count(array $criteria = null): int
     {

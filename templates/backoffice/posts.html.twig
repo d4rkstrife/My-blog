@@ -11,6 +11,11 @@
 			<div class="main-card mb-3 card">
 				<div class="card-body">
 					<h5 class="card-title">Liste des Posts</h5>
+					{% for key, message in flashes %}
+						<div>
+							<p class={{ key }}>{{ message }}</p>
+						</div>
+					{% endfor %}
 					<table class="mb-0 table table-bordered">
 						<thead>
 							<tr>

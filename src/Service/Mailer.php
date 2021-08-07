@@ -47,9 +47,7 @@ class Mailer
                 Mail : ' . $infoObject->mail . '<br/>
                 Message : ' . $infoObject->content;
 
-        $state = $mail->send();
-
-        return $state;
+        return $mail->send();
     }
 
     public function sendConfirmationMessage(User $user): bool
@@ -75,8 +73,6 @@ class Mailer
         $mail->Subject = 'Inscription sur My Blog';
         $mail->Body    = 'Votre compte sur My Blog a bien été créé. Afin de le valider, veuillez cliquer sur le lien : http://localhost:8000/index.php?action=validation&amp;id=' . $user->getId() . '&amp;key=' . $user->getRegistrationKey() . '';
 
-        $state = $mail->send();
-
-        return $state;
+        return $mail->send();
     }
 }

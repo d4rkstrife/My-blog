@@ -134,8 +134,7 @@ final class CommentRepository implements EntityRepositoryInterface
         $stmt->bindValue('text', $comment->getText());
         $stmt->bindValue('idPost', $comment->getIdPost());
         $stmt->bindValue('user', $comment->getUser()->getId());
-        $stmt->execute();
-        return true;
+        return $stmt->execute();
     }
 
     /**
@@ -147,8 +146,7 @@ final class CommentRepository implements EntityRepositoryInterface
         UPDATE `comment` SET `state`= 1 WHERE id = :id
         ');
         $stmt->bindValue('id', $comment->getId());
-        $stmt->execute();
-        return true;
+        return $stmt->execute();
     }
 
     /**
@@ -160,8 +158,7 @@ final class CommentRepository implements EntityRepositoryInterface
         DELETE FROM `comment` WHERE id = :id
         ');
         $stmt->bindValue('id', $comment->getId());
-        $stmt->execute();
-        return true;
+        return $stmt->execute();
     }
     public function count(array $criteria = null): int
     {

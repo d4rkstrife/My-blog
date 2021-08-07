@@ -1,5 +1,8 @@
-.danger {
+.error {
     color: red;
+}
+.success {
+    color : green;
 }
 .post-page {
     display: flex;
