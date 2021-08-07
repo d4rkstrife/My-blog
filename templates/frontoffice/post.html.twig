@@ -37,6 +37,11 @@
 			{% endif %}
 			<section class="com-section">
 				<h4>Commentaires</h4>
+				{% for key, message in flashes %}
+					<div>
+						<p class={{ key }}>{{ message }}</p>
+					</div>
+				{% endfor %}
 				{% if comments %}
 					{% for comment in comments %}
 						<article class="col-sm-7">

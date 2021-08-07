@@ -74,81 +74,92 @@ final class UserController
             //validation ici
 
             $infoUser = $request->request();
-
-            $name = $this->validator->validate($infoUser->get('nom'));
-            $surname = $this->validator->validate($infoUser->get('prenom'));
             $pseudo = $this->validator->validate($infoUser->get('pseudo'));
             $mail = $this->validator->validate($infoUser->get('email'));
-            $password = $this->validator->validate($infoUser->get('password'));
-            $repassword = $this->validator->validate($infoUser->get('repassword'));
             $mailExist = $this->userRepository->count(['email' => $mail]);
             $pseudoExist = $this->userRepository->count(['pseudo' => $pseudo]);
 
-            $error = false;
-            $flashes = '';
-            if (!$this->validator->isValidPassword($password)) {
-                $flashes .= 'Le mot de passe doit contenir huit caractères, au moins une majuscule, une minuscule et un chiffre.';
-                $error = true;
-            }
-            if ($password !== $repassword) {
-                $flashes .= 'Les mots de passe ne correspondent pas.';
-                $error = true;
-            }
-            if ($mailExist !== 0) {
-                $flashes .= "L'adresse email est déjà utilisée.";
-                $error = true;
-            }
-            if ($pseudoExist !== 0) {
-                $flashes .= "Le pseudo est déjà utilisé.";
-                $error = true;
-            }
-            if (!$this->validator->isValidEntry($name)) {
-                $flashes .= 'Nom invalide : caractères spéciaux interdits. ';
-                $error = true;
-            }
-            if (!$this->validator->isValidEntry($surname)) {
-                $flashes .= 'Prénom invalide : caractères spéciaux interdits. ';
-                $error = true;
-            }
-            if (!$this->validator->isValidMail($mail)) {
-                $flashes .= 'Mail non valide.';
-                $error = true;
-            }
-            if (!$name || !$surname || !$pseudo || !$password || !$repassword || !$mail) {
-                $flashes .=  'Remplir tous les champs.';
-                $error = true;
-            }
-            if ($error === true) {
-                $this->session->addFlashes('error', $flashes);
-                return new Response($this->view->render([
-                    'template' => 'register',
-                    'data' => [
-                        'mail' => $mail,
-                        'name' => $name,
-                        'surname' => $surname,
-                        'pseudo' => $pseudo
-                    ]
-                ], 'Frontoffice'), 200);
-            }
-            $user = new User();
-            $registrationKey = md5((string) time());
+            if ($mailExist) {
+                $this->session->addFlashes('error', 'Cette adresse mail est déjà utilisée');
+            } elseif ($pseudoExist) {
+                $this->session->addFlashes('error', 'Ce pseudo est déjà utilisé');
+            } elseif (!$pseudoExist && !$mailExist) {
+                $name = $this->validator->validate($infoUser->get('nom'));
+                $surname = $this->validator->validate($infoUser->get('prenom'));
+                $password = $this->validator->validate($infoUser->get('password'));
+                $repassword = $this->validator->validate($infoUser->get('repassword'));
 
-            $user
-                ->setName($name)
-                ->setSurname($surname)
-                ->setEmail($mail)
-                ->setPseudo($pseudo)
-                ->setPassword($password)
-                ->setRegistrationKey($registrationKey);
-            $this->userRepository->create($user);
-            $newUser = $this->userRepository->findOneBy(['email' => $mail]);
-            $this->mailer->sendConfirmationMessage($newUser);
-            $this->session->addFlashes('success', 'Compte créé, Cliquez sur le lien dans vos mails pour valider votre compte.');
+                $error = false;
+                $flashes = '';
 
-            return new Response($this->view->render([
-                'template' => 'login',
-                'data' => []
-            ], 'Frontoffice'), 200);
+                if (!$this->validator->isValidPassword($password)) {
+                    $flashes .= 'Le mot de passe doit contenir huit caractères, au moins une majuscule, une minuscule et un chiffre.';
+                    $error = true;
+                }
+
+                if ($password !== $repassword) {
+                    $flashes .= 'Les mots de passe ne correspondent pas.';
+                    $error = true;
+                }
+
+                if (!$this->validator->isValidEntry($name)) {
+                    $flashes .= 'Nom invalide : caractères spéciaux interdits. ';
+                    $error = true;
+                }
+
+                if (!$this->validator->isValidEntry($surname)) {
+                    $flashes .= 'Prénom invalide : caractères spéciaux interdits. ';
+                    $error = true;
+                }
+
+                if (!$this->validator->isValidMail($mail)) {
+                    $flashes .= 'Mail non valide.';
+                    $error = true;
+                }
+
+                if (!$name || !$surname || !$pseudo || !$password || !$repassword || !$mail) {
+                    $flashes .=  'Remplir tous les champs.';
+                    $error = true;
+                }
+
+                if ($error === true) {
+                    $this->session->addFlashes('error', $flashes);
+                    return new Response($this->view->render([
+                        'template' => 'register',
+                        'data' => [
+                            'mail' => $mail,
+                            'name' => $name,
+                            'surname' => $surname,
+                            'pseudo' => $pseudo
+                        ]
+                    ], 'Frontoffice'), 200);
+                }
+
+                $user = new User();
+                $registrationKey = md5((string) time());
+
+                $user
+                    ->setName($name)
+                    ->setSurname($surname)
+                    ->setEmail($mail)
+                    ->setPseudo($pseudo)
+                    ->setPassword($password)
+                    ->setRegistrationKey($registrationKey);
+
+                $isCreated = $this->userRepository->create($user);
+                if ($isCreated) {
+                    $newUser = $this->userRepository->findOneBy(['email' => $mail]);
+                    $this->mailer->sendConfirmationMessage($newUser);
+                    $this->session->addFlashes('success', 'Compte créé, Cliquez sur le lien dans vos mails pour valider votre compte.');
+
+                    return new Response($this->view->render([
+                        'template' => 'login',
+                        'data' => []
+                    ], 'Frontoffice'), 200);
+                } elseif (!$isCreated) {
+                    $this->session->addFlashes('error', "Le compte n'a pas pu être créé");
+                }
+            }
         }
         return new Response($this->view->render([
             'template' => 'register',

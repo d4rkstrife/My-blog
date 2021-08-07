@@ -87,7 +87,7 @@ final class Router
         } elseif ($action === 'posts') {
             //injection des dépendances et instanciation du controller
             $postRepo = new PostRepository($this->database);
-            $controller = new PostController($postRepo, $this->view);
+            $controller = new PostController($postRepo, $this->view, $this->session);
 
             return $controller->displayAllAction();
 
@@ -95,7 +95,7 @@ final class Router
         } elseif ($action === 'post' && $this->request->query()->has('id')) {
             //injection des dépendances et instanciation du controller
             $postRepo = new PostRepository($this->database);
-            $controller = new PostController($postRepo, $this->view);
+            $controller = new PostController($postRepo, $this->view, $this->session);
             $commentRepo = new CommentRepository($this->database);
 
             return $controller->displayOneAction((object) $this->request, $commentRepo, $this->session->get('user'));

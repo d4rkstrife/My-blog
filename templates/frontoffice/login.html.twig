@@ -40,9 +40,9 @@
 										</label>
 										<input type="password" id="password" name="password" class="form-control" required>
 									</div>
-									{% for message in flashes %}
+									{% for key, message in flashes %}
 										<div>
-											<p class="danger">{{ message }}</p>
+											<p class={{ key }}>{{ message }}</p>
 										</div>
 									{% endfor %}
 

@@ -39,7 +39,7 @@ final class CommentController
                         'id' => $post->delete
                     );
                     $comment = $this->commentRepository->findOneBy($criteria);
-                    $this->commentRepository->delete($comment);
+                    $this->commentRepository->delete($comment) ? $this->session->addFlashes('success', 'Commentaire supprimé.') : $this->session->addFlashes('error', 'Suppression impossible.');
 
                     //bouton valider
                 } elseif (isset($post->validate)) {
@@ -47,7 +47,7 @@ final class CommentController
                         'id' => $post->validate
                     );
                     $comment = $this->commentRepository->findOneBy($criteria);
-                    $this->commentRepository->update($comment);
+                    $this->commentRepository->update($comment) ? $this->session->addFlashes('success', 'Commentaire validé.') : $this->session->addFlashes('error', 'validation impossible.');
                 }
             }
             $comments = $this->commentRepository->findAll();
