@@ -15,11 +15,10 @@
 			{% endfor %}
 			<form method="Post">
 				<div class="row" style="display: flex">
-					<input class="form-control" id="id" name="id" type="text" value=" {{ post.id }} " hidden>
 
 					<div class=" col-sm-10">
 						<label for='title'>Titre</label>
-						<input class="form-control" id="title" name="title" type="text" value=" {{ post.title }} " required>
+						<input class="form-control" id="title" name="title" type="text" value="{{ post.title }}" required>
 					</div>
 					<div class=" col-sm-10">
 						<label for='chapo'>Chapô</label>
@@ -30,7 +29,7 @@
 						<textarea id="content" name="content" class="form-control" rows="9" required>{{ post.content }}</textarea>
 					</div>
 					<div class="col-sm-6">
-						<input class="btn btn-action" type="submit">
+						<button class="btn btn-action" name="id" value="{{ post.id }}" type="submit">Modifier</button>
 					</div>
 
 				</div>
