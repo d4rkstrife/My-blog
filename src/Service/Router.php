@@ -32,6 +32,7 @@ final class Router
     private ParseConfig $config;
     private DataValidation $validator;
     private Mailer $mailer;
+    private Pagination $pagination;
 
     public function __construct(Request $request, ParseConfig $config)
     {
@@ -43,6 +44,7 @@ final class Router
         $this->view = new View($this->session);
         $this->validator = new DataValidation();
         $this->request = $request;
+        $this->pagination = new Pagination($this->config->getConfig('postPerPage'), $this->config->getConfig('orderBy'));
     }
 
     public function run(): Response
@@ -65,13 +67,13 @@ final class Router
             // *** @Route http://localhost:8000/?action=postsAdmin ***
         } elseif ($action === 'postsAdmin') {
             $postRepo = new PostRepository($this->database);
-            $controller = new BackofficePostController($postRepo, $this->view, $this->session);
+            $controller = new BackofficePostController($postRepo, $this->view, $this->session, $this->validator);
             return $controller->postAdminAction($this->request);
 
             // *** @Route http://localhost:8000/?action=updatePost ***
         } elseif ($action === 'updatePost') {
             $postRepo = new PostRepository($this->database);
-            $controller = new BackofficePostController($postRepo, $this->view, $this->session);
+            $controller = new BackofficePostController($postRepo, $this->view, $this->session, $this->validator);
             return $controller->updateAction($this->request);
 
 
@@ -93,15 +95,15 @@ final class Router
         } elseif ($action === 'posts') {
             //injection des dépendances et instanciation du controller
             $postRepo = new PostRepository($this->database);
-            $controller = new PostController($postRepo, $this->view, $this->session);
+            $controller = new PostController($postRepo, $this->view, $this->session, $this->validator);
 
-            return $controller->displayAllAction();
+            return $controller->displayAllAction($this->pagination, $this->request);
 
             // *** @Route http://localhost:8000/?action=post&id=5 ***
         } elseif ($action === 'post' && $this->request->query()->has('id')) {
             //injection des dépendances et instanciation du controller
             $postRepo = new PostRepository($this->database);
-            $controller = new PostController($postRepo, $this->view, $this->session);
+            $controller = new PostController($postRepo, $this->view, $this->session, $this->validator);
             $commentRepo = new CommentRepository($this->database);
 
             return $controller->displayOneAction((object) $this->request, $commentRepo, $this->session->get('user'));
@@ -135,7 +137,7 @@ final class Router
             return $controller->validationAction($this->request);
         } elseif ($action === 'newPost') {
             $postRepo = new PostRepository($this->database);
-            $controller = new BackofficePostController($postRepo, $this->view, $this->session);
+            $controller = new BackofficePostController($postRepo, $this->view, $this->session, $this->validator);
 
             return $controller->newPostAction($this->request);
         }

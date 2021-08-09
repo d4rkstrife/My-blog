@@ -92,7 +92,7 @@ final class CommentRepository implements EntityRepositoryInterface
         $stmt->execute();
         $data = $stmt->fetchAll();
 
-        if ($data === null) {
+        if ($data === false) {
             return null;
         }
 

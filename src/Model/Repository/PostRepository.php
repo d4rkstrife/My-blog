@@ -58,7 +58,50 @@ final class PostRepository implements EntityRepositoryInterface
 
     public function findBy(array $criteria, array $orderBy = null, int $limit = null, int $offset = null): ?array
     {
-        return null;
+        $stmt = $this->database->getPDO()->prepare('
+        SELECT * FROM post
+        INNER JOIN user    
+        ON post.fk_user = user.user_id
+        ORDER BY :orderBy
+        ASC LIMIT :limit OFFSET :offset');
+        $stmt->bindValue('orderBy', $orderBy['order']);
+        $stmt->bindValue('limit', (int)$limit, PDO::PARAM_INT);
+        $stmt->bindValue('offset', (int)$offset, PDO::PARAM_INT);
+
+        $stmt->execute();
+        $data = $stmt->fetchAll();
+
+        if ($data === false) {
+            return null;
+        }
+        $posts = [];
+        $users = [];
+        foreach ($data as $post) {
+            $postObj = new Post();
+
+            if (!in_array($post['fk_user'], $users)) {
+                $user = new User();
+                $user
+                    ->setId((int) $post['fk_user'])
+                    ->setPseudo($post['pseudo'])
+                    ->setName($post['name'])
+                    ->setSurname($post['surname'])
+                    ->setEmail($post['mail']);
+                $users[(int) $post['fk_user']] = $user;
+            }
+
+            $postObj
+                ->setAutor($users[$post['fk_user']])
+                ->setId((int) $post['id'])
+                ->setTitle($post['title'])
+                ->setContent($post['content'])
+                ->setChapo($post['chapo'])
+                ->setModif($post['date_modif'])
+                ->setDate($post['date']);
+
+            $posts[] = $postObj;
+        }
+        return $posts;
     }
 
     public function findAll(): ?array
@@ -75,7 +118,7 @@ final class PostRepository implements EntityRepositoryInterface
         $data = $stmt->fetchAll();
 
 
-        if ($data == null) {
+        if ($data === false) {
             return null;
         }
         $posts = [];

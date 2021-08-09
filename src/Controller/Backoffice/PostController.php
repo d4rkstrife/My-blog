@@ -8,6 +8,7 @@ use App\View\View;
 use App\Model\Entity\Post;
 use App\Service\Http\Request;
 use App\Service\Http\Response;
+use App\Service\DataValidation;
 use App\Service\Http\Session\Session;
 use App\Model\Repository\PostRepository;
 
@@ -16,12 +17,14 @@ final class PostController
     private PostRepository $postRepository;
     private View $view;
     private Session $session;
+    private DataValidation $validator;
 
-    public function __construct(PostRepository $postRepository, View $view, Session $session)
+    public function __construct(PostRepository $postRepository, View $view, Session $session, DataValidation $validator)
     {
         $this->postRepository = $postRepository;
         $this->view = $view;
         $this->session = $session;
+        $this->validator = $validator;
     }
 
     public function postAdminAction(Request $request): Response
@@ -69,13 +72,16 @@ final class PostController
 
             $post = $this->postRepository->findOneBy($criteria);
         } elseif (!isset($action->modif)) {
-            $criteria = array(
+            $title = $this->validator->validate($action->title);
+            $chapo = $this->validator->validate($action->chapo);
+            $content = $this->validator->validate($action->content);
+            /*   $criteria = array(
                 'id' => $action->id,
-                'title' => $action->title,
-                'chapo' => $action->chapo,
-                'content' => $action->content
+                'title' => $title,
+                'chapo' => $chapo,
+                'content' => $content
 
-            );
+            ); */
             $post = new Post();
             $post
                 ->setId((int) $action->id)
@@ -102,11 +108,14 @@ final class PostController
             if (!empty($request->request()->all())) {
 
                 $data = $request->request();
+                $title = $this->validator->validate($data->get('title'));
+                $chapo = $this->validator->validate($data->get('chapo'));
+                $content = $this->validator->validate($data->get('content'));
                 $newPost = new Post();
                 $newPost
-                    ->setTitle($data->get('title'))
-                    ->setChapo($data->get('chapo'))
-                    ->setContent($data->get('content'))
+                    ->setTitle($title)
+                    ->setChapo($chapo)
+                    ->setContent($content)
                     ->setAutor($this->session->get('user'));
 
                 $this->postRepository->create($newPost) ? $this->session->addFlashes('success', 'Post enregistré avec succès') : $this->session->addFlashes('Error', "Le Post n' a pas pu être enregistré.");

@@ -27,7 +27,7 @@ final class HomeController
     }
 
 
-    public function administrationAction()
+    public function administrationAction(): Response
     {
         if (
             $this->session->get('user') === null
