@@ -38,8 +38,8 @@
 										<th scope="row">{{ post.id}}</th>
 										<td>{{ post.title }}</td>
 										<td>{{ post.autor.pseudo }}</td>
-										<td>{{ post.date  }}</td>
-										<td>{{ post.modif }}</td>
+										<td>{{ post.date|date("d/m/y à H\\hm")  }}</td>
+										<td>{{ post.modif|date("d/m/y à H\\hm")   }}</td>
 										<td>
 
 											<form method="post" action="index.php?action=updatePost">

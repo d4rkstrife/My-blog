@@ -40,11 +40,16 @@
 										<td>{{ user.pseudo }}</td>
 										<td>{{ user.grade }}</td>
 										<td>{{ user.email }}</td>
-										<td>{{ user.date }}</td>
+										<td>{{ user.date|date("d/m/y à H\\hm")   }}</td>
 										<td>{{ user.state }}</td>
 										<td>
 											<form method='POST'>
 												<button type="submit" name="delete" value="{{ user.email }}" class="btn-wide btn-shadow btn btn-danger">Supprimer</button>
+											</form>
+											<form method="post" action="index.php?action=userAccount">
+												<button name="mail" value="{{ user.email }}" class="btn-wide btn btn-success">
+													Modifier
+												</button>
 											</form>
 										</td>
 									</tr>

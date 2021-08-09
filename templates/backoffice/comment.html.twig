@@ -33,7 +33,7 @@
 										<th scope="row">{{ comment.id }}</th>
 										<td>{{ comment.text }}</td>
 										<td>{{ comment.user.pseudo }}</td>
-										<td>{{ comment.date }}</td>
+										<td>{{ comment.date|date("d/m/y à H\\hm") }}</td>
 										<td>
 											<form method='POST'>
 												<button type="submit" name="validate" value="{{ comment.id }}" class="btn-wide btn btn-success">Valider</button>

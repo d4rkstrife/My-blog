@@ -21,7 +21,6 @@ use App\Controller\Backoffice\HomeController as BackofficeHomeController;
 use App\Controller\Backoffice\PostController as BackofficePostController;
 use App\Controller\Backoffice\UserController as BackofficeUserController;
 
-// TODO cette classe router est un exemple très basic. Cette façon de faire n'est pas optimale
 
 final class Router
 {
@@ -44,7 +43,7 @@ final class Router
         $this->view = new View($this->session);
         $this->validator = new DataValidation();
         $this->request = $request;
-        $this->pagination = new Pagination($this->config->getConfig('postPerPage'), $this->config->getConfig('orderBy'));
+        $this->pagination = new Pagination($this->config->getConfig('postPerPage'));
     }
 
     public function run(): Response
@@ -98,6 +97,14 @@ final class Router
             $controller = new PostController($postRepo, $this->view, $this->session, $this->validator);
 
             return $controller->displayAllAction($this->pagination, $this->request);
+
+            // *** @Route http://localhost:8000/?action=userAccount ***
+        } elseif ($action === 'userAccount') {
+            //injection des dépendances et instanciation du controller
+            $userRepo = new UserRepository($this->database);
+            $controller = new BackofficeUserController($userRepo, $this->view, $this->session);
+
+            return $controller->userAccountAction($this->request);
 
             // *** @Route http://localhost:8000/?action=post&id=5 ***
         } elseif ($action === 'post' && $this->request->query()->has('id')) {
