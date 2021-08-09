@@ -6,6 +6,7 @@ namespace  App\Controller\Frontoffice;
 
 use App\View\View;
 use App\Model\Entity\User;
+use App\Service\Pagination;
 use App\Model\Entity\Comment;
 use App\Service\Http\Request;
 use App\Service\Http\Response;
@@ -18,12 +19,15 @@ final class PostController
 {
     private PostRepository $postRepository;
     private View $view;
+    private Session $session;
+    private Datavalidation $validator;
 
-    public function __construct(PostRepository $postRepository, View $view, Session $session)
+    public function __construct(PostRepository $postRepository, View $view, Session $session, DataValidation $validator)
     {
         $this->postRepository = $postRepository;
         $this->view = $view;
         $this->session = $session;
+        $this->validator = $validator;
     }
 
     public function displayOneAction(Request $request, CommentRepository $commentRepository, ?User $user): Response
@@ -40,11 +44,10 @@ final class PostController
             $content = $request->request()->get('comment');
             if ($content != '') {
                 $newComment = new Comment();
-                $validation = new DataValidation();
                 $newUser = new User();
                 $newUser->setId($user->getId());
                 $newComment
-                    ->setText($validation->validate($content))
+                    ->setText($this->validator->validate($content))
                     ->setIdPost((int) $id)
                     ->setUser($newUser);
 
@@ -68,13 +71,26 @@ final class PostController
         return $response;
     }
 
-    public function displayAllAction(): Response
+    public function displayAllAction(Pagination $pagination, Request $request): Response
     {
-        $posts = $this->postRepository->findAll();
+
+        $page = (int) $request->query()->get('page');
+        $infos = $pagination->render($this->postRepository->count(), $page);
+        $criteria = array(
+            'table' => 'post'
+        );
+        $limit = $infos['limit'];
+        $offset = $infos['offset'];
+        $order = array(
+            'order' => $infos['order']
+        );
+
+
+        $posts = $this->postRepository->findBy($criteria, $order, $limit, $offset);
 
         return new Response($this->view->render([
             'template' => 'posts',
-            'data' => ['posts' => $posts],
+            'data' => ['posts' => $posts, 'page' => $page, 'nbrPages' => round($infos['nbrPages'])],
         ], 'Frontoffice'));
     }
 }

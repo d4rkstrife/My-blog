@@ -52,21 +52,16 @@ final class HomeController
                 $error = true;
             }
             if (!$error) {
-                $mailIsSend = $this->mailer->send([
+                $this->mailer->send([
                     'name' => $name,
                     'surname' => $surname,
                     'mail' => $mail,
                     'content' => $content
-                ]);
+                ]) ? $this->session->addFlashes('success', 'Message envoyé.') : $this->session->addFlashes('error', "Le mail n'a pas pu être envoyé.");
             }
 
             if ($error) {
                 $this->session->addFlashes('error', $flashes);
-            } elseif (!$mailIsSend) {
-                $flashes = "Le mail n'a pas pu être envoyé. ";
-                $this->session->addFlashes('error', $flashes);
-            } elseif ($mailIsSend) {
-                $this->session->addFlashes('success', 'Message envoyé.');
             }
         }
 

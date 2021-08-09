@@ -58,7 +58,50 @@ final class PostRepository implements EntityRepositoryInterface
 
     public function findBy(array $criteria, array $orderBy = null, int $limit = null, int $offset = null): ?array
     {
-        return null;
+        $stmt = $this->database->getPDO()->prepare('
+        SELECT * FROM post
+        INNER JOIN user    
+        ON post.fk_user = user.user_id
+        ORDER BY :orderBy
+        ASC LIMIT :limit OFFSET :offset');
+        $stmt->bindValue('orderBy', $orderBy['order']);
+        $stmt->bindValue('limit', (int)$limit, PDO::PARAM_INT);
+        $stmt->bindValue('offset', (int)$offset, PDO::PARAM_INT);
+
+        $stmt->execute();
+        $data = $stmt->fetchAll();
+
+        if ($data === false) {
+            return null;
+        }
+        $posts = [];
+        $users = [];
+        foreach ($data as $post) {
+            $postObj = new Post();
+
+            if (!in_array($post['fk_user'], $users)) {
+                $user = new User();
+                $user
+                    ->setId((int) $post['fk_user'])
+                    ->setPseudo($post['pseudo'])
+                    ->setName($post['name'])
+                    ->setSurname($post['surname'])
+                    ->setEmail($post['mail']);
+                $users[(int) $post['fk_user']] = $user;
+            }
+
+            $postObj
+                ->setAutor($users[$post['fk_user']])
+                ->setId((int) $post['id'])
+                ->setTitle($post['title'])
+                ->setContent($post['content'])
+                ->setChapo($post['chapo'])
+                ->setModif($post['date_modif'])
+                ->setDate($post['date']);
+
+            $posts[] = $postObj;
+        }
+        return $posts;
     }
 
     public function findAll(): ?array
@@ -69,13 +112,13 @@ final class PostRepository implements EntityRepositoryInterface
         SELECT * FROM post
         INNER JOIN user    
         ON post.fk_user = user.user_id
-        ORDER BY post.date
+        ORDER BY post.date_modif
         DESC');
         $stmt->execute();
         $data = $stmt->fetchAll();
 
 
-        if ($data == null) {
+        if ($data === false) {
             return null;
         }
         $posts = [];
@@ -128,15 +171,34 @@ final class PostRepository implements EntityRepositoryInterface
         return $stmt->execute();
     }
 
+    /**
+     * @param Post $post
+     */
     public function update(object $post): bool
     {
-        return false;
+        $stmt = $this->database->getPdo()->prepare('
+        UPDATE `post` 
+        SET `title`=:title,`chapo`=:chapo,`content`=:content,`date_modif`= current_timestamp 
+        WHERE `id` = :id
+        ');
+        $stmt->bindValue('title', $post->getTitle());
+        $stmt->bindValue('chapo', $post->getChapo());
+        $stmt->bindValue('content', $post->getContent());
+        $stmt->bindValue('id', $post->getId());
+
+        return $stmt->execute();
     }
 
+    /**
+     * @param Post $post
+     */
     public function delete(object $post): bool
     {
-        return false;
+        $stmt = $this->database->getPDO()->prepare('DELETE FROM `post` WHERE `id`= :id');
+        $stmt->bindValue('id', $post->getId());
+        return $stmt->execute();
     }
+
     public function count(array $criteria = null): int
     {
         $stmt = $this->database->getPDO()->prepare("SELECT COUNT(*) as NbrPosts from post");

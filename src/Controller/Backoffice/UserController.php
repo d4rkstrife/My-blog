@@ -47,7 +47,7 @@ final class UserController
             ], 'Backoffice'), 200);
         }
         return new Response('<head>
-        <meta http-equiv="refresh" content="0; URL=index.php?action=home" />
+        <meta http-equiv="refresh" content="0; URL=index.php?action=unauthorized" />
       </head>');
     }
 }
