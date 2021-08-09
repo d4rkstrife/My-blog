@@ -50,4 +50,19 @@ final class UserController
         <meta http-equiv="refresh" content="0; URL=index.php?action=unauthorized" />
       </head>');
     }
+
+    public function userAccountAction(Request $request): Response
+    {
+        $user = $this->userRepository->findOneBy(array('email' => $request->request()->get('mail')));
+
+        if ($request->request()->get('grade')) {
+            $user->setGrade($request->request()->get('grade'));
+            $this->userRepository->updateGrade($user) ? $this->session->addFlashes('success', 'Grade mis à jour') : $this->session->addFlashes('error', 'Impossible de mettre à jour');
+        }
+
+        return new Response($this->view->render([
+            'template' => 'userAccount',
+            'data' => ['user' => $user],
+        ], 'Backoffice'), 200);
+    }
 }

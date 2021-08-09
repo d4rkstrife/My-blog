@@ -62,9 +62,8 @@ final class PostRepository implements EntityRepositoryInterface
         SELECT * FROM post
         INNER JOIN user    
         ON post.fk_user = user.user_id
-        ORDER BY :orderBy
-        ASC LIMIT :limit OFFSET :offset');
-        $stmt->bindValue('orderBy', $orderBy['order']);
+        ORDER BY post.date
+        DESC LIMIT :limit OFFSET :offset');
         $stmt->bindValue('limit', (int)$limit, PDO::PARAM_INT);
         $stmt->bindValue('offset', (int)$offset, PDO::PARAM_INT);
 
@@ -112,7 +111,7 @@ final class PostRepository implements EntityRepositoryInterface
         SELECT * FROM post
         INNER JOIN user    
         ON post.fk_user = user.user_id
-        ORDER BY post.date_modif
+        ORDER BY post.date
         DESC');
         $stmt->execute();
         $data = $stmt->fetchAll();

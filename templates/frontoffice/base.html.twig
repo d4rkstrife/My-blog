@@ -2,6 +2,7 @@
 <html lang="fr">
 	<head>
 		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>Blog
 			{% block title %}{% endblock %}
 		</title>
@@ -17,9 +18,8 @@
 		<link href="css/style.css" rel="stylesheet">
 	</head>
 
-	<body
-		class="home">
-		<!-- Fixed navbar -->
+	<body class="home">
+
 		<div class="navbar navbar-inverse navbar-fixed-top headroom">
 			<div class="container" style="display: flex; justify-content: space-around">
 				<div
@@ -43,90 +43,78 @@
 						<li>
 							<a href="CV.pdf">Mon CV</a>
 						</li>
+						{% if session.user %}
+
+							<li class="user-connected" style="text-align: center">
+								<p style="color:white">{{ session.user.pseudo }}</p>
+								<a href="index.php?action=logout" style="color : red;padding:0">Se Déconnecter</a><br>
+							</li>
+
+						{% else %}
+							<li style="display:flex">
+								<a class="btn" href="index.php?action=login">Se connecter</a>
+								<a class="btn" href="index.php?action=register">S'inscrire</a>
+							</li>
+
+						{% endif %}
 					</ul>
+
 				</div>
-				{% if session.user %}
 
-					<div class="user-connected">
-						<p style="color:white">{{ session.user.pseudo }}</p>
-						<a href="index.php?action=logout" style="color : red">Se Déconnecter</a><br>
-					</div>
-
-				{% else %}
-					<div>
-						<a class="btn" href="index.php?action=login">Se connecter</a>
-						<a class="btn" href="index.php?action=register">S'inscrire</a>
-					</div>
-
-				{% endif %}
 				<!--/.nav-collapse -->
+			</body>
+		</html>
+	</body>
+</html></div></div><!-- Navigation --><main>{% block content %}{% endblock %}</main><footer id="footer" class="top-space"><div class="footer1">
+<div class="container">
+
+	<div class="row" style="display: flex;justify-content: space-around;">
+		<div class="col-md-3 widget">
+			<h3 class="widget-title">Contact</h3>
+			<div class="widget-body">
+				<p>0616165257<br>
+
+					Rue F. Mermet, 69160 Tassin-La-Demi-Lune
+				</p>
 			</div>
 		</div>
-		<!-- Navigation -->
-		<main>
 
-			{% block content %}{% endblock %}
-		</main>
-		<footer id="footer" class="top-space">
-			<div class="footer1">
-				<div class="container">
-
-					<div class="row" style="display: flex;justify-content: space-around;">
-						<div class="col-md-3 widget">
-							<h3 class="widget-title">Contact</h3>
-							<div class="widget-body">
-								<p>0616165257<br>
-
-									Rue F. Mermet, 69160 Tassin-La-Demi-Lune
-								</p>
-							</div>
-						</div>
-
-						<div class="col-md-3 widget">
-							<h3 class="widget-title">Follow me</h3>
-							<div class="widget-body">
-								<p class="follow-me-icons">
-									<a href="">
-										<i class="fa fa-twitter fa-2"></i>
-									</a>
-									<a href="">
-										<i class="fa fa-github fa-2"></i>
-									</a>
-								</p>
-							</div>
-						</div>
-
-						<div class="col-md-3 widget">
-							<p>{{ session.user.grade }}</p>
-							{% if (session.user.grade == 'superAdmin') or (session.user.grade == 'admin') %}
-								<a href="index.php?action=administration">Administration</a>
-							{% endif %}
-						</div>
-
-					</div>
-					<!-- /row of widgets -->
-				</div>
+		<div class="col-md-3 widget">
+			<h3 class="widget-title">Follow me</h3>
+			<div class="widget-body">
+				<p class="follow-me-icons">
+					<a href="">
+						<i class="fa fa-twitter fa-2"></i>
+					</a>
+					<a href="">
+						<i class="fa fa-github fa-2"></i>
+					</a>
+				</p>
 			</div>
-			<div class="footer2">
-				<div class="container">
-					<div class="row">
+		</div>
 
-						<div class="col-md-6 widget">
-							<div class="widget-body">
-								<p class="text-right">
-									Copyright &copy; 2021, Pierre Grandclement. Designed by
-									<a href="http://gettemplate.com/" rel="designer">gettemplate</a>
-								</p>
-							</div>
-						</div>
+		<div class="col-md-3 widget">
+			<p>{{ session.user.grade }}</p>
+			{% if (session.user.grade == 'superAdmin') or (session.user.grade == 'admin') %}
+				<a href="index.php?action=administration">Administration</a>
+			{% endif %}
+		</div>
 
-					</div>
-					<!-- /row of widgets -->
-				</div>
+	</div>
+	<!-- /row of widgets -->
+</div></div><div class="footer2">
+<div class="container">
+	<div class="row">
+
+		<div class="col-md-6 widget">
+			<div class="widget-body">
+				<p class="text-right">
+					Copyright &copy; 2021, Pierre Grandclement. Designed by
+					<a href="http://gettemplate.com/" rel="designer">gettemplate</a>
+				</p>
 			</div>
-		</body><!-- JavaScript libs are placed at the end of the document so the pages load faster --><script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-		<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-		<script src="js/headroom.min.js"></script>
-		<script src="js/jQuery.headroom.min.js"></script>
-	</body>
-</html>
+		</div>
+
+	</div>
+	<!-- /row of widgets -->
+</div></div></body><!-- JavaScript libs are placed at the end of the document so the pages load faster --><script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script><script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script><script src="js/headroom.min.js"></script><script src="js/jQuery.headroom.min.js"></script></body></html>

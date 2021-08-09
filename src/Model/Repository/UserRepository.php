@@ -47,6 +47,7 @@ final class UserRepository implements EntityRepositoryInterface
         $user
             ->setId((int) $data['user_id'])
             ->setName($data['name'])
+            ->setDate($data['inscription_date'])
             ->setSurname($data['surname'])
             ->setPseudo($data['pseudo'])
             ->setEmail($data['mail'])
@@ -118,6 +119,19 @@ final class UserRepository implements EntityRepositoryInterface
         UPDATE `user` SET `is_validate`= 1 WHERE `registration_key` = :key
         ');
         $stmt->bindValue('key', $user->getRegistrationKey());
+        return $stmt->execute();
+    }
+
+    /**
+     * @param User $user
+     */
+    public function updateGrade(object $user): bool
+    {
+        $stmt = $this->database->getPDO()->prepare('
+        UPDATE `user` SET `grade`= :grade WHERE `mail` = :mail
+        ');
+        $stmt->bindValue('grade', $user->getGrade());
+        $stmt->bindValue('mail', $user->getEmail());
         return $stmt->execute();
     }
 

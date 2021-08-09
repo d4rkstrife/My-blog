@@ -9,6 +9,8 @@ use App\Service\Http\Response;
 
 final class Redirection
 {
+    private View $view;
+
     public function __construct(View $view)
     {
         $this->view = $view;

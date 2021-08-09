@@ -7,12 +7,12 @@ namespace App\Service;
 final class Pagination
 {
 
-    private ParseConfig $parseConfig;
+    private string $config;
 
-    public function __construct(string $config, string $order)
+
+    public function __construct(string $config)
     {
         $this->config = $config;
-        $this->order = $order;
     }
     public function render(int $itemNumber, int $page): array
     {
@@ -21,7 +21,6 @@ final class Pagination
         $infos = array(
             'limit' => (int) $this->config,
             'offset' => $offset,
-            'order' => $this->order,
             'nbrPages' => $nbrPage
         );
         return $infos;

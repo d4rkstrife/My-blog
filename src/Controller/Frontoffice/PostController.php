@@ -81,12 +81,8 @@ final class PostController
         );
         $limit = $infos['limit'];
         $offset = $infos['offset'];
-        $order = array(
-            'order' => $infos['order']
-        );
 
-
-        $posts = $this->postRepository->findBy($criteria, $order, $limit, $offset);
+        $posts = $this->postRepository->findBy($criteria, null, $limit, $offset);
 
         return new Response($this->view->render([
             'template' => 'posts',

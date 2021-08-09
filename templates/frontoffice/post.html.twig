@@ -16,10 +16,10 @@
 				<p>{{ post.content }}</p>
 				<p>{{ post.autor.pseudo }}
 					le
-					{{ post.date | date("d/m/Y à h\\hm") }}
+					{{ post.date | date("d/m/y à H\\hm")   }}
 					{% if post.modif != NULL %}
 						modifié le
-						{{ comment.modif  | date("d/m/Y à h\\hm") }}</p>
+						{{ post.modif  | date("d/m/y à H\\hm")   }}</p>
 				{% endif %}
 			</article>
 
