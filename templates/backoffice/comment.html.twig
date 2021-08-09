@@ -16,34 +16,36 @@
 							<p class={{ key }}>{{ message }}</p>
 						</div>
 					{% endfor %}
-					<table class="mb-0 table table-bordered">
-						<thead>
-							<tr>
-								<th>#</th>
-								<th>Contenu</th>
-								<th>Auteur</th>
-								<th>Date de mise en ligne</th>
-								<th>Administration</th>
-							</tr>
-						</thead>
-						<tbody>
-							{% for comment in comments %}
+					<div class="table-responsive">
+						<table class="mb-0 table table-bordered">
+							<thead>
 								<tr>
-									<th scope="row">{{ comment.id }}</th>
-									<td>{{ comment.text }}</td>
-									<td>{{ comment.user.pseudo }}</td>
-									<td>{{ comment.date }}</td>
-									<td>
-										<form method='POST'>
-											<button type="submit" name="validate" value="{{ comment.id }}" class="btn-wide btn btn-success">Valider</button>
-
-											<button type="submit" name="delete" value="{{ comment.id }}" class="btn-wide btn-shadow btn btn-danger">Supprimer</button>
-										</form>
-									</td>
+									<th>#</th>
+									<th>Contenu</th>
+									<th>Auteur</th>
+									<th>Date de mise en ligne</th>
+									<th>Administration</th>
 								</tr>
-							{% endfor %}
-						</tbody>
-					</table>
+							</thead>
+							<tbody>
+								{% for comment in comments %}
+									<tr>
+										<th scope="row">{{ comment.id }}</th>
+										<td>{{ comment.text }}</td>
+										<td>{{ comment.user.pseudo }}</td>
+										<td>{{ comment.date }}</td>
+										<td>
+											<form method='POST'>
+												<button type="submit" name="validate" value="{{ comment.id }}" class="btn-wide btn btn-success">Valider</button>
+
+												<button type="submit" name="delete" value="{{ comment.id }}" class="btn-wide btn-shadow btn btn-danger">Supprimer</button>
+											</form>
+										</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
 		</div>

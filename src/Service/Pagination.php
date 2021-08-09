@@ -7,7 +7,9 @@ namespace App\Service;
 final class Pagination
 {
 
-    private ParseConfig $parseConfig;
+    private string $config;
+    private string $order;
+
 
     public function __construct(string $config, string $order)
     {

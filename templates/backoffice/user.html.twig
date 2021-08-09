@@ -16,40 +16,42 @@
 							<p class={{ key }}>{{ message }}</p>
 						</div>
 					{% endfor %}
-					<table class="mb-0 table table-bordered">
-						<thead>
-							<tr>
-								<th>#</th>
-								<th>Nom</th>
-								<th>Prénom</th>
-								<th>Pseudo</th>
-								<th>Grade</th>
-								<th>Mail</th>
-								<th>Date d'inscription</th>
-								<th>Statut</th>
-								<th>Administration</th>
-							</tr>
-						</thead>
-						<tbody>
-							{% for user in users %}
+					<div class="table-responsive">
+						<table class="mb-0 table table-bordered">
+							<thead>
 								<tr>
-									<th scope="row">{{ user.id}}</th>
-									<td>{{ user.name }}</td>
-									<td>{{ user.surname }}</td>
-									<td>{{ user.pseudo }}</td>
-									<td>{{ user.grade }}</td>
-									<td>{{ user.email }}</td>
-									<td>{{ user.date }}</td>
-									<td>{{ user.state }}</td>
-									<td>
-										<form method='POST'>
-											<button type="submit" name="delete" value="{{ user.email }}" class="btn-wide btn-shadow btn btn-danger">Supprimer</button>
-										</form>
-									</td>
+									<th>#</th>
+									<th>Nom</th>
+									<th>Prénom</th>
+									<th>Pseudo</th>
+									<th>Grade</th>
+									<th>Mail</th>
+									<th>Date d'inscription</th>
+									<th>Statut</th>
+									<th>Administration</th>
 								</tr>
-							{% endfor %}
-						</tbody>
-					</table>
+							</thead>
+							<tbody>
+								{% for user in users %}
+									<tr>
+										<th scope="row">{{ user.id}}</th>
+										<td>{{ user.name }}</td>
+										<td>{{ user.surname }}</td>
+										<td>{{ user.pseudo }}</td>
+										<td>{{ user.grade }}</td>
+										<td>{{ user.email }}</td>
+										<td>{{ user.date }}</td>
+										<td>{{ user.state }}</td>
+										<td>
+											<form method='POST'>
+												<button type="submit" name="delete" value="{{ user.email }}" class="btn-wide btn-shadow btn btn-danger">Supprimer</button>
+											</form>
+										</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
 		</div>
