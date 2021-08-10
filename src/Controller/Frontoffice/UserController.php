@@ -169,11 +169,14 @@ final class UserController
 
     public function validationAction(Request $request): Response
     {
-        $infos = (array) $request->query()->all();
-        $user = $this->userRepository->find((int) $infos['id']);
-        //verifier clé ici
-        $this->userRepository->update($user);
-        $this->session->addFlashes('success', 'Compte validé, connectez-vous');
+        $infos = $request->query();
+        $user = $this->userRepository->find((int) $infos->get('id'));
+
+        if ($infos->get('key') === $user->getRegistrationKey()) {
+            $user->setState(1);
+            $this->userRepository->update($user) ? $this->session->addFlashes('success', 'Compte validé, connectez-vous') : $this->session->addFlashes('error', 'Impossible de valider le compte');
+        }
+
 
         return new Response('<head>
         <meta http-equiv="refresh" content="0; URL=index.php?action=login" />

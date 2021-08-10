@@ -57,7 +57,7 @@ final class UserController
 
         if ($request->request()->get('grade')) {
             $user->setGrade($request->request()->get('grade'));
-            $this->userRepository->updateGrade($user) ? $this->session->addFlashes('success', 'Grade mis à jour') : $this->session->addFlashes('error', 'Impossible de mettre à jour');
+            $this->userRepository->update($user) ? $this->session->addFlashes('success', 'Grade mis à jour') : $this->session->addFlashes('error', 'Impossible de mettre à jour');
         }
 
         return new Response($this->view->render([
