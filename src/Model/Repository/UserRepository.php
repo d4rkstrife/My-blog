@@ -29,7 +29,15 @@ final class UserRepository implements EntityRepositoryInterface
             return null;
         }
         $user = new User();
-        $user
+        $user->setId((int) $data['user_id'])
+            ->setName($data['name'])
+            ->setDate($data['inscription_date'])
+            ->setSurname($data['surname'])
+            ->setPseudo($data['pseudo'])
+            ->setEmail($data['mail'])
+            ->setPassword($data['password'])
+            ->setGrade($data['grade'])
+            ->setState((int) $data['is_validate'])
             ->setRegistrationKey($data['registration_key']);
         return $user;
     }
@@ -116,22 +124,18 @@ final class UserRepository implements EntityRepositoryInterface
     public function update(object $user): bool
     {
         $stmt = $this->database->getPDO()->prepare('
-        UPDATE `user` SET `is_validate`= 1 WHERE `registration_key` = :key
-        ');
-        $stmt->bindValue('key', $user->getRegistrationKey());
-        return $stmt->execute();
-    }
-
-    /**
-     * @param User $user
-     */
-    public function updateGrade(object $user): bool
-    {
-        $stmt = $this->database->getPDO()->prepare('
-        UPDATE `user` SET `grade`= :grade WHERE `mail` = :mail
-        ');
-        $stmt->bindValue('grade', $user->getGrade());
+        UPDATE `user` 
+        SET `name`=:name,`surname`=:surname,`pseudo`=:pseudo,`mail`=:mail,`grade`=:grade,`password`=:password,`is_validate`=:isValidate 
+        WHERE `user_id` = :id');
+        $stmt->bindValue('name', $user->getName());
+        $stmt->bindValue('surname', $user->getSurname());
+        $stmt->bindValue('pseudo', $user->getPseudo());
         $stmt->bindValue('mail', $user->getEmail());
+        $stmt->bindValue('grade', $user->getGrade());
+        $stmt->bindValue('password', $user->getPassword());
+        $stmt->bindValue('isValidate', $user->getState());
+        $stmt->bindValue('id', $user->getId());
+
         return $stmt->execute();
     }
 
@@ -146,6 +150,7 @@ final class UserRepository implements EntityRepositoryInterface
         $stmt->bindValue('id', $user->getId());
         return $stmt->execute();
     }
+
     public function count(array $criteria = null): int
     {
         $stmt = $this->database->getPDO()->prepare("SELECT COUNT(*) as Nbr from user");
