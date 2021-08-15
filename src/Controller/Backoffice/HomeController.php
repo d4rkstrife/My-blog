@@ -7,7 +7,6 @@ namespace  App\Controller\Backoffice;
 use App\View\View;
 use App\Service\Database;
 use App\Service\Http\Response;
-use App\Service\Http\Redirection;
 use App\Service\Http\Session\Session;
 use App\Model\Repository\PostRepository;
 use App\Model\Repository\UserRepository;
@@ -34,8 +33,7 @@ final class HomeController
             || ($this->session->get('user')->getGrade() !== 'superAdmin'
                 && $this->session->get('user')->getGrade() !== 'admin')
         ) {
-            $redirect = new Redirection($this->view);
-            return $redirect->send('home');
+            return new Response('', 301, ['redirect' => 'home']);
         }
 
         $postRepository = new PostRepository($this->database);

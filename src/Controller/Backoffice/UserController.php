@@ -46,9 +46,7 @@ final class UserController
                 'data' => ['users' => $users],
             ], 'Backoffice'), 200);
         }
-        return new Response('<head>
-        <meta http-equiv="refresh" content="0; URL=index.php?action=unauthorized" />
-      </head>');
+        return new Response('', 304, ['redirect' => 'home']);
     }
 
     public function userAccountAction(Request $request): Response

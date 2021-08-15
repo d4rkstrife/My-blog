@@ -26,11 +26,15 @@ final class PostRepository implements EntityRepositoryInterface
 
     public function findOneBy(array $criteria, array $orderBy = null): ?Post
     {
-        $stmt = $this->database->getPDO()->prepare('
+        $sql = '
         SELECT * FROM post
         INNER JOIN user
         ON post.fk_user = user.user_id
-        WHERE post.id=:id');
+        WHERE post.id=:id';
+        if ($orderBy !== null) {
+            $sql .= ' ORDER BY ' . $orderBy['order'] . ' ' . $orderBy['type'];
+        }
+        $stmt = $this->database->getPDO()->prepare($sql);
         $stmt->execute($criteria);
         $data = $stmt->fetch();
 
@@ -58,15 +62,23 @@ final class PostRepository implements EntityRepositoryInterface
 
     public function findBy(array $criteria, array $orderBy = null, int $limit = null, int $offset = null): ?array
     {
-        $stmt = $this->database->getPDO()->prepare('
+        $sql = "
         SELECT * FROM post
         INNER JOIN user    
-        ON post.fk_user = user.user_id
-        ORDER BY post.date
-        DESC LIMIT :limit OFFSET :offset');
-        $stmt->bindValue('limit', (int)$limit, PDO::PARAM_INT);
-        $stmt->bindValue('offset', (int)$offset, PDO::PARAM_INT);
-
+        ON post.fk_user = user.user_id ";
+        if ($criteria !== []) {
+            $sql .= "WHERE post.id = " . $criteria['id'];
+        };
+        if ($orderBy !== null) {
+            $sql .= "ORDER BY " . $orderBy['order'] . " DESC ";
+        };
+        if ($limit !== null) {
+            $sql .= "LIMIT " . $limit;
+        };
+        if ($offset !== null) {
+            $sql .= " OFFSET " . $offset;
+        };
+        $stmt = $this->database->getPDO()->prepare($sql);
         $stmt->execute();
         $data = $stmt->fetchAll();
 

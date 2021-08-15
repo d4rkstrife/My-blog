@@ -7,7 +7,7 @@ namespace App\Service;
 class ParseConfig
 {
     public string $file;
-    public array $config;
+    public ?array $config;
 
     public function __construct(string $file)
     {
@@ -16,9 +16,10 @@ class ParseConfig
 
     public function parseFile(): void
     {
-        /* $iniArray = parse_ini_file($this->file);
-        $this->config = $iniArray; */
-        $this->config = parse_ini_file($this->file);
+        $parsedFile = parse_ini_file($this->file);
+        if ($parsedFile !== false) {
+            $this->config = $parsedFile;
+        }
     }
     public function getConfig(string $param): string
     {

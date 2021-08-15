@@ -11,17 +11,20 @@ use App\Service\Http\Response;
 use App\Service\DataValidation;
 use App\Service\Http\Session\Session;
 use App\Model\Repository\PostRepository;
+use App\Model\Repository\UserRepository;
 
 final class PostController
 {
     private PostRepository $postRepository;
+    private UserRepository $userRepository;
     private View $view;
     private Session $session;
     private DataValidation $validator;
 
-    public function __construct(PostRepository $postRepository, View $view, Session $session, DataValidation $validator)
+    public function __construct(PostRepository $postRepository, UserRepository $userRepository, View $view, Session $session, DataValidation $validator)
     {
         $this->postRepository = $postRepository;
+        $this->userRepository = $userRepository;
         $this->view = $view;
         $this->session = $session;
         $this->validator = $validator;
@@ -56,9 +59,7 @@ final class PostController
                 'data' => ['posts' => $posts],
             ], 'Backoffice'));
         }
-        return new Response('<head>
-        <meta http-equiv="refresh" content="0; URL=index.php?action=home" />
-      </head>');
+        return new Response('', 301, ['redirect' => 'home']);
     }
 
     public function updateAction(Request $request): Response
@@ -72,24 +73,25 @@ final class PostController
 
             $post = $this->postRepository->findOneBy($criteria);
         } elseif (!isset($action->modif)) {
+            $autor = $this->validator->validate($action->autor);
             $title = $this->validator->validate($action->title);
             $chapo = $this->validator->validate($action->chapo);
             $content = $this->validator->validate($action->content);
-            /*   $criteria = array(
-                'id' => $action->id,
-                'title' => $title,
-                'chapo' => $chapo,
-                'content' => $content
 
-            ); */
+            $user = $this->userRepository->findOneBy(['pseudo' => $autor]);
             $post = new Post();
-            $post
-                ->setId((int) $action->id)
-                ->setTitle($action->title)
-                ->setChapo($action->chapo)
-                ->setContent($action->content);
+            $post->setId((int) $action->id)
+                ->setTitle($title)
+                ->setChapo($chapo)
+                ->setContent($content);
 
-            $this->postRepository->update($post) ? $this->session->addFlashes('success', 'Post mis à jour') : $this->session->addFlashes('error', 'Mise à jour du post impossible.');
+            if ($user) {
+                $post->setAutor($user);
+                $this->postRepository->update($post) ? $this->session->addFlashes('success', 'Post mis à jour') : $this->session->addFlashes('error', 'Mise à jour du post impossible.');
+            } elseif (!$user) {
+                $post->setAutor($this->session->get('user'));
+                $this->session->addFlashes('error', "Cet utilisateur n'existe pas.");
+            }
         }
 
 
@@ -125,8 +127,6 @@ final class PostController
                 'data' => [],
             ], 'Backoffice'));
         }
-        return new Response('<head>
-        <meta http-equiv="refresh" content="0; URL=index.php?action=home" />
-      </head>');
+        return new Response('', 304, ['redirect' => 'home']);
     }
 }
