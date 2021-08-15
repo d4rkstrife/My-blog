@@ -16,12 +16,16 @@ final class Pagination
     }
     public function render(int $itemNumber, int $page): array
     {
-        $nbrPage = $itemNumber / (int)$this->config;
+        $nbrPage = ceil($itemNumber / (int)$this->config);
+        if ($page === 0 || $page > $nbrPage) {
+            $page = 1;
+        }
         $offset = ($page * (int)$this->config) - (int)$this->config;
         $infos = array(
             'limit' => (int) $this->config,
             'offset' => $offset,
-            'nbrPages' => $nbrPage
+            'nbrPages' => $nbrPage,
+            'page' => $page
         );
         return $infos;
     }

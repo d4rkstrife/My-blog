@@ -36,7 +36,7 @@ final class PostController
         $post = $this->postRepository->findOneBy(['id' => $id]);
         $comments = $commentRepository->findBy(['idPost' => $id, 'state' => 1]);
         $response = new Response($this->view->render([
-            'template' => 'unauthorized',
+            'template' => 'home',
             'data' => [],
         ], 'Frontoffice'), 404);
 
@@ -76,17 +76,12 @@ final class PostController
 
         $page = (int) $request->query()->get('page');
         $infos = $pagination->render($this->postRepository->count(), $page);
-        $criteria = array(
-            'table' => 'post'
-        );
-        $limit = $infos['limit'];
-        $offset = $infos['offset'];
 
-        $posts = $this->postRepository->findBy($criteria, null, $limit, $offset);
+        $posts = $this->postRepository->findBy([], ['order' => 'post.date'], $infos['limit'], $infos['offset']);
 
         return new Response($this->view->render([
             'template' => 'posts',
-            'data' => ['posts' => $posts, 'page' => $page, 'nbrPages' => round($infos['nbrPages'])],
+            'data' => ['posts' => $posts, 'page' => $infos['page'], 'nbrPages' => $infos['nbrPages']],
         ], 'Frontoffice'));
     }
 }

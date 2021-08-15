@@ -66,13 +66,15 @@ final class Router
             // *** @Route http://localhost:8000/?action=postsAdmin ***
         } elseif ($action === 'postsAdmin') {
             $postRepo = new PostRepository($this->database);
-            $controller = new BackofficePostController($postRepo, $this->view, $this->session, $this->validator);
+            $userRepo = new UserRepository($this->database);
+            $controller = new BackofficePostController($postRepo, $userRepo, $this->view, $this->session, $this->validator);
             return $controller->postAdminAction($this->request);
 
             // *** @Route http://localhost:8000/?action=updatePost ***
         } elseif ($action === 'updatePost') {
             $postRepo = new PostRepository($this->database);
-            $controller = new BackofficePostController($postRepo, $this->view, $this->session, $this->validator);
+            $userRepo = new UserRepository($this->database);
+            $controller = new BackofficePostController($postRepo, $userRepo, $this->view, $this->session, $this->validator);
             return $controller->updateAction($this->request);
 
 
@@ -142,13 +144,15 @@ final class Router
             $controller = new UserController($userRepo, $this->view, $this->session, $this->validator, $this->mailer);
 
             return $controller->validationAction($this->request);
+
+            // *** @Route http://localhost:8000/?action=newPost ***
         } elseif ($action === 'newPost') {
             $postRepo = new PostRepository($this->database);
-            $controller = new BackofficePostController($postRepo, $this->view, $this->session, $this->validator);
+            $userRepo = new UserRepository($this->database);
+            $controller = new BackofficePostController($postRepo, $userRepo, $this->view, $this->session, $this->validator);
 
             return $controller->newPostAction($this->request);
         }
-
-        return new Response("Error 404 - cette page n'existe pas<br><a href='index.php?action=home'>Aller Ici</a>", 404);
+        return new Response('', 304, ['redirect' => 'home']);
     }
 }

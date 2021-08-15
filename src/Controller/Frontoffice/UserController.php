@@ -53,9 +53,7 @@ final class UserController
     {
         if ($request->getMethod() === 'POST') {
             if ($this->isValidLoginForm($request->request()->all())) {
-                return new Response('<head>
-                <meta http-equiv="refresh" content="0; URL=index.php?action=home" />
-              </head>');
+                return new Response('', 304, ['redirect' => 'home']);
             }
             $this->session->addFlashes('error', 'Mauvais identifiants ou compte non validé');
         }
@@ -70,6 +68,7 @@ final class UserController
 
     public function registerAction(Request $request): Response
     {
+        $data = [];
         if ($request->getMethod() === 'POST') {
             //validation ici
 
@@ -124,62 +123,62 @@ final class UserController
 
                 if ($error === true) {
                     $this->session->addFlashes('error', $flashes);
-                    return new Response($this->view->render([
-                        'template' => 'register',
-                        'data' => [
-                            'mail' => $mail,
-                            'name' => $name,
-                            'surname' => $surname,
-                            'pseudo' => $pseudo
-                        ]
-                    ], 'Frontoffice'), 200);
-                }
+                    $data = [
+                        'mail' => $mail,
+                        'name' => $name,
+                        'surname' => $surname,
+                        'pseudo' => $pseudo
+                    ];
+                } else if ($error === false) {
 
-                $user = new User();
-                $registrationKey = md5((string) time());
+                    $user = new User();
+                    $registrationKey = md5((string) time());
 
-                $user
-                    ->setName($name)
-                    ->setSurname($surname)
-                    ->setEmail($mail)
-                    ->setPseudo($pseudo)
-                    ->setPassword($password)
-                    ->setRegistrationKey($registrationKey);
+                    $user
+                        ->setName($name)
+                        ->setSurname($surname)
+                        ->setEmail($mail)
+                        ->setPseudo($pseudo)
+                        ->setPassword($password)
+                        ->setRegistrationKey($registrationKey);
 
-                $isCreated = $this->userRepository->create($user);
-                if ($isCreated) {
-                    $newUser = $this->userRepository->findOneBy(['email' => $mail]);
-                    $this->mailer->sendConfirmationMessage($newUser);
-                    $this->session->addFlashes('success', 'Compte créé, Cliquez sur le lien dans vos mails pour valider votre compte.');
+                    $isCreated = $this->userRepository->create($user);
+                    if ($isCreated) {
+                        $newUser = $this->userRepository->findOneBy(['email' => $mail]);
+                        $this->mailer->sendConfirmationMessage($newUser);
+                        $this->session->addFlashes('success', 'Compte créé, Cliquez sur le lien dans vos mails pour valider votre compte.');
 
-                    return new Response($this->view->render([
-                        'template' => 'login',
-                        'data' => []
-                    ], 'Frontoffice'), 200);
-                } elseif (!$isCreated) {
-                    $this->session->addFlashes('error', "Le compte n'a pas pu être créé");
+                        return new Response('', 304, ['redirect' => 'login']);
+                    } elseif (!$isCreated) {
+                        $this->session->addFlashes('error', "Le compte n'a pas pu être créé");
+                    }
                 }
             }
         }
         return new Response($this->view->render([
             'template' => 'register',
-            'data' => []
+            'data' => $data
         ], 'Frontoffice'), 200);
     }
 
     public function validationAction(Request $request): Response
     {
         $infos = $request->query();
+
         $user = $this->userRepository->find((int) $infos->get('id'));
 
-        if ($infos->get('key') === $user->getRegistrationKey()) {
-            $user->setState(1);
-            $this->userRepository->update($user) ? $this->session->addFlashes('success', 'Compte validé, connectez-vous') : $this->session->addFlashes('error', 'Impossible de valider le compte');
+        if ($user->getRegistrationKey() !== null) {
+            if ($infos->get('key') === $user->getRegistrationKey()) {
+                $user->setState(1);
+                $user->setRegistrationKey(null);
+                $this->userRepository->update($user) ? $this->session->addFlashes('success', 'Compte validé, connectez-vous') : $this->session->addFlashes('error', 'Impossible de valider le compte');
+            }
+        } elseif ($user->getRegistrationKey() === null) {
+            $this->session->addFlashes('error', 'Compte déjà validé');
         }
 
 
-        return new Response('<head>
-        <meta http-equiv="refresh" content="0; URL=index.php?action=login" />
-      </head>');
+
+        return new Response('', 304, ['redirect' => 'login']);
     }
 }

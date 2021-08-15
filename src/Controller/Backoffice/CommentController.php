@@ -57,8 +57,6 @@ final class CommentController
                 'data' => ['comments' => $comments],
             ], 'Backoffice'));
         }
-        return new Response('<head>
-        <meta http-equiv="refresh" content="0; URL=index.php?action=home" />
-      </head>');
+        return new Response('', 304, ['redirect' => 'home']);;
     }
 }

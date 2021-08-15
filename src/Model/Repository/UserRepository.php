@@ -44,7 +44,18 @@ final class UserRepository implements EntityRepositoryInterface
 
     public function findOneBy(array $criteria, array $orderBy = null): ?User
     {
-        $stmt = $this->database->getPDO()->prepare('select * from user where mail=:email');
+        $sql = 'select * from user ';
+        if ($orderBy !== null) {
+            $sql .= " ORDER BY $orderBy DESC";
+        }
+        if (array_key_exists('email', $criteria)) {
+            $sql .= " WHERE mail=:email";
+        } elseif (array_key_exists('pseudo', $criteria)) {
+            $sql .= " WHERE pseudo=:pseudo";
+        }
+
+
+        $stmt = $this->database->getPDO()->prepare($sql);
         $stmt->execute($criteria);
         $data = $stmt->fetch();
 
@@ -125,7 +136,7 @@ final class UserRepository implements EntityRepositoryInterface
     {
         $stmt = $this->database->getPDO()->prepare('
         UPDATE `user` 
-        SET `name`=:name,`surname`=:surname,`pseudo`=:pseudo,`mail`=:mail,`grade`=:grade,`password`=:password,`is_validate`=:isValidate 
+        SET `name`=:name,`surname`=:surname,`pseudo`=:pseudo,`mail`=:mail,`grade`=:grade,`password`=:password,`is_validate`=:isValidate, registration_key=:registrationKey 
         WHERE `user_id` = :id');
         $stmt->bindValue('name', $user->getName());
         $stmt->bindValue('surname', $user->getSurname());
@@ -135,6 +146,7 @@ final class UserRepository implements EntityRepositoryInterface
         $stmt->bindValue('password', $user->getPassword());
         $stmt->bindValue('isValidate', $user->getState());
         $stmt->bindValue('id', $user->getId());
+        $stmt->bindValue('registrationKey', $user->getRegistrationKey());
 
         return $stmt->execute();
     }

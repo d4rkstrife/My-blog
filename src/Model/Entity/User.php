@@ -17,7 +17,7 @@ final class User
     private string $grade;
     private string $date;
     private int $state;
-    private string $registrationKey;
+    private ?string $registrationKey;
 
     public function getId(): int
     {
@@ -111,12 +111,12 @@ final class User
         $this->state = $state;
         return $this;
     }
-    public function getRegistrationKey(): string
+    public function getRegistrationKey(): ?string
     {
         return $this->registrationKey;
     }
 
-    public function setRegistrationKey(string $registrationKey): self
+    public function setRegistrationKey(?string $registrationKey): self
     {
         $this->registrationKey = $registrationKey;
         return $this;
