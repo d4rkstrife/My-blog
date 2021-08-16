@@ -70,4 +70,12 @@ final class HomeController
             'data' => [],
         ], 'Frontoffice'));
     }
+
+    public function unauthorizedAction(): Response
+    {
+        return new Response($this->view->render([
+            'template' => 'unauthorized',
+            'data' => [],
+        ], 'Frontoffice'));
+    }
 }
