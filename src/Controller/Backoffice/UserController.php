@@ -46,7 +46,7 @@ final class UserController
                 'data' => ['users' => $users],
             ], 'Backoffice'), 200);
         }
-        return new Response('', 304, ['redirect' => 'home']);
+        return new Response('', 304, ['redirect' => 'unauthorized']);
     }
 
     public function userAccountAction(Request $request): Response

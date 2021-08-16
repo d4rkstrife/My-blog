@@ -63,7 +63,7 @@ final class UserController
     public function logoutAction(): Response
     {
         $this->session->remove('user');
-        return new Response($this->view->render(['template' => 'home', 'data' => []], 'Frontoffice'), 200);
+        return new Response('', 304, ['redirect' => 'home']);
     }
 
     public function registerAction(Request $request): Response

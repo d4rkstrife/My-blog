@@ -152,6 +152,9 @@ final class Router
             $controller = new BackofficePostController($postRepo, $userRepo, $this->view, $this->session, $this->validator);
 
             return $controller->newPostAction($this->request);
+        } elseif ($action === 'unauthorized') {
+            $controller = new HomeController($this->view, $this->mailer, $this->session, $this->validator);
+            return $controller->unauthorizedAction();
         }
         return new Response('', 304, ['redirect' => 'home']);
     }

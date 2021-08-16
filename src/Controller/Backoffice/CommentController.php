@@ -57,6 +57,6 @@ final class CommentController
                 'data' => ['comments' => $comments],
             ], 'Backoffice'));
         }
-        return new Response('', 304, ['redirect' => 'home']);;
+        return new Response('', 304, ['redirect' => 'unauthorized']);;
     }
 }

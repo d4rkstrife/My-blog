@@ -59,7 +59,7 @@ final class PostController
                 'data' => ['posts' => $posts],
             ], 'Backoffice'));
         }
-        return new Response('', 301, ['redirect' => 'home']);
+        return new Response('', 301, ['redirect' => 'unauthorized']);
     }
 
     public function updateAction(Request $request): Response
@@ -127,6 +127,6 @@ final class PostController
                 'data' => [],
             ], 'Backoffice'));
         }
-        return new Response('', 304, ['redirect' => 'home']);
+        return new Response('', 304, ['redirect' => 'unauthorized']);
     }
 }
