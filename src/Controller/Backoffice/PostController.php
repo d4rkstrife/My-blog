@@ -66,6 +66,8 @@ final class PostController
     {
         $action = (object) $request->request()->all();
         $post = '';
+        $users = $this->userRepository->findBy(array('grade1' => 'admin', 'grade2' => 'superAdmin'));
+
         if (isset($action->modif)) {
             $criteria = array(
                 'id' => $action->modif
@@ -73,6 +75,7 @@ final class PostController
 
             $post = $this->postRepository->findOneBy($criteria);
         } elseif (!isset($action->modif)) {
+
             $autor = $this->validator->validate($action->autor);
             $title = $this->validator->validate($action->title);
             $chapo = $this->validator->validate($action->chapo);
@@ -86,6 +89,7 @@ final class PostController
                 ->setContent($content);
 
             if ($user) {
+
                 $post->setAutor($user);
                 $this->postRepository->update($post) ? $this->session->addFlashes('success', 'Post mis à jour') : $this->session->addFlashes('error', 'Mise à jour du post impossible.');
             } elseif (!$user) {
@@ -97,7 +101,7 @@ final class PostController
 
         return new Response($this->view->render([
             'template' => 'updatePost',
-            'data' => ['post' => $post],
+            'data' => ['post' => $post, 'users' => $users],
         ], 'Backoffice'));
     }
 

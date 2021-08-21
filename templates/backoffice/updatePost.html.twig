@@ -17,8 +17,17 @@
 				<div class="row" style="display: flex">
 					<div class=" col-sm-10">
 						<label for='autor'>Auteur</label>
-						<input class="form-control" id="autor" name="autor" type="text" value="{{ post.autor.pseudo }}" required>
+						<select type="select" id="autor" name="autor" class="custom-select">
+							<option value="{{ post.autor.pseudo }}">{{ post.autor.pseudo }}</option>
+
+							{% for user in users%}
+								<option value="{{ user.pseudo }}">{{ user.pseudo }}</option>
+							{% endfor %}
+
+
+						</select>
 					</div>
+
 					<div class=" col-sm-10">
 						<label for='title'>Titre</label>
 						<input class="form-control" id="title" name="title" type="text" value="{{ post.title }}" required>

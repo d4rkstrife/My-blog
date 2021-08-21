@@ -28,6 +28,7 @@ final class HomeController
 
     public function administrationAction(): Response
     {
+        //2 if pour chaque statut
         if (
             $this->session->get('user') === null
             || ($this->session->get('user')->getGrade() !== 'superAdmin'

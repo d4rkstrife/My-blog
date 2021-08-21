@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:3306
--- Généré le : lun. 09 août 2021 à 20:08
+-- Généré le : lun. 16 août 2021 à 18:38
 -- Version du serveur :  5.7.24
 -- Version de PHP : 7.4.1
 
@@ -42,7 +42,8 @@ CREATE TABLE `comment` (
 --
 
 INSERT INTO `comment` (`content`, `state`, `fk_user`, `fk_post`, `date`, `id`) VALUES
-('Je suis fier de moi!!', 1, 10, 41, '2021-08-09 18:38:24', 38);
+('Je suis fier de moi!!', 1, 10, 41, '2021-08-09 18:38:24', 38),
+('Félicitations!!', 1, 46, 43, '2021-08-16 18:33:41', 39);
 
 -- --------------------------------------------------------
 
@@ -70,7 +71,7 @@ INSERT INTO `post` (`title`, `chapo`, `content`, `date`, `fk_user`, `id`, `date_
 (' Modification ', 'Les posts peuvent maintenant être modifiés!', 'A compter d\'aujourd\'hui la modification des posts devient possible! Merci au dev!!', '2021-07-22 09:02:51', 10, 12, '2021-08-07 16:16:20'),
 ('Moins de Posts par page!', 'On s\'attaque à la pagination.', 'Aujourd\'hui je m\'attaque à la pagination sur la page des posts, il va falloir se concentrer!', '2021-08-09 07:34:44', 10, 40, '2021-08-09 12:38:13'),
 ('Pagination', 'Ca y est elle est en place!', 'Après plusieurs tentatives, ça y est la pagination est en place!!', '2021-08-09 07:34:53', 10, 41, '2021-08-09 18:39:12'),
-('Nombre d\'articles par page', 'Il est modifiable!', 'On peut changer le nombre d\'articles que l\'on souhaite afficher par page dans la liste des posts en modifiant le fichier config.ini!', '2021-08-09 21:11:34', 10, 43, NULL);
+('Nombre d\'articles par page', 'Il est modifiable!', 'On peut changer le nombre d\'articles que l\'on souhaite afficher par page dans la liste des posts en modifiant le fichier config.ini!', '2021-08-09 21:11:34', 10, 43, '2021-08-12 07:53:02');
 
 -- --------------------------------------------------------
 
@@ -88,7 +89,7 @@ CREATE TABLE `user` (
   `inscription_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `is_validate` tinyint(1) NOT NULL DEFAULT '0',
   `user_id` int(11) NOT NULL,
-  `registration_key` varchar(200) NOT NULL
+  `registration_key` varchar(200) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -97,7 +98,8 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`name`, `surname`, `pseudo`, `mail`, `grade`, `password`, `inscription_date`, `is_validate`, `user_id`, `registration_key`) VALUES
 ('Grandclement', 'Pierre', 'D4rkstrife', 'p.gdc85@gmail.com', 'superAdmin', '$2y$10$8cRhFES66gzPA3PS6ZN.f.sFSSdCENa2pCLmu92EdH6RkFnS6gV0m', '2021-07-20 22:59:27', 1, 10, '0'),
-('Dupont', 'Patrice', 'Patoche', 'patoche@gmail.com', 'member', '$2y$10$ZtzOsolw3DrVFUyNdQaoi..eB07vb.19vjQnfEofqbS0j/DkesZqq', '2021-08-09 21:54:51', 1, 45, '6a94bafa25fdcf774de8c6dcce643b2f');
+('Dupont', 'Patrice', 'Patoche', 'patoche@gmail.com', 'admin', '$2y$10$ZtzOsolw3DrVFUyNdQaoi..eB07vb.19vjQnfEofqbS0j/DkesZqq', '2021-08-09 21:54:51', 1, 45, '6a94bafa25fdcf774de8c6dcce643b2f'),
+('Docteur', 'Strife', 'Blablabla', 'd4rkstrife@gmail.com', 'member', '$2y$10$ti2M8pvOpA./GjUc2m2/Buv.Z/kCrb4qRpFGRZjK9CsYZKIGxo0G.', '2021-08-16 18:32:48', 1, 46, NULL);
 
 --
 -- Index pour les tables déchargées
@@ -136,7 +138,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT pour la table `comment`
 --
 ALTER TABLE `comment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT pour la table `post`
@@ -148,7 +150,7 @@ ALTER TABLE `post`
 -- AUTO_INCREMENT pour la table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- Contraintes pour les tables déchargées
