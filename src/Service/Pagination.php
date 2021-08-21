@@ -17,7 +17,7 @@ final class Pagination
     public function render(int $itemNumber, int $page): array
     {
         $nbrPage = ceil($itemNumber / (int)$this->config);
-        if ($page === 0 || $page > $nbrPage) {
+        if ($page < 1 || $page > $nbrPage) {
             $page = 1;
         }
         $offset = ($page * (int)$this->config) - (int)$this->config;

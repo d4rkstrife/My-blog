@@ -189,13 +189,14 @@ final class PostRepository implements EntityRepositoryInterface
     {
         $stmt = $this->database->getPdo()->prepare('
         UPDATE `post` 
-        SET `title`=:title,`chapo`=:chapo,`content`=:content,`date_modif`= current_timestamp 
+        SET `title`=:title,`chapo`=:chapo,`content`=:content,`date_modif`= current_timestamp, `fk_user` = :autor
         WHERE `id` = :id
         ');
         $stmt->bindValue('title', $post->getTitle());
         $stmt->bindValue('chapo', $post->getChapo());
         $stmt->bindValue('content', $post->getContent());
         $stmt->bindValue('id', $post->getId());
+        $stmt->bindValue('autor', $post->getAutor()->getId());
 
         return $stmt->execute();
     }

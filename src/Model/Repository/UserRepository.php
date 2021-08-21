@@ -79,7 +79,50 @@ final class UserRepository implements EntityRepositoryInterface
 
     public function findBy(array $criteria, array $orderBy = null, int $limit = null, int $offset = null): ?array
     {
-        return null;
+
+        $sql = '
+        SELECT * from user ';
+        if ($orderBy !== null) {
+            $sql .= "ORDER BY " . $orderBy['order'] . " DESC ";
+        };
+        if ($limit !== null) {
+            $sql .= "LIMIT " . $limit;
+        };
+        if ($offset !== null) {
+            $sql .= " OFFSET " . $offset;
+        };
+        if ($criteria !== null) {
+            $sql .= 'WHERE ';
+            if (array_key_exists('grade1', $criteria)) {
+                $sql .= "grade = :grade1 ";
+            }
+            if (array_key_exists('grade2', $criteria)) {
+                $sql .= "OR grade = :grade2 ";
+            }
+        }
+        $stmt = $this->database->getPDO()->prepare($sql);
+        $stmt->execute($criteria);
+        $data = $stmt->fetchAll();
+
+        if ($data == null) {
+            return null;
+        }
+        $users = [];
+        foreach ($data as $user) {
+            $newUser = new User();
+            $newUser
+                ->setId((int) $user['user_id'])
+                ->setPseudo($user['pseudo'])
+                ->setName($user['name'])
+                ->setSurname($user['surname'])
+                ->setEmail($user['mail'])
+                ->setGrade($user['grade'])
+                ->setDate($user['inscription_date'])
+                ->setState((int) $user['is_validate']);
+
+            $users[] = $newUser;
+        }
+        return $users;
     }
 
     public function findAll(): ?array

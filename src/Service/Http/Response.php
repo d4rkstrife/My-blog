@@ -22,13 +22,9 @@ final class Response
         if ($this->headers === null) {
             echo $this->content;
         } elseif ($this->headers !== null) {
-            $content = '<head>
-            <meta http-equiv="refresh" content="0; URL=index.php?action=' . $this->headers['redirect'] . '"/>
-          </head>';
-            echo $content;
+
+            header('Location: index.php?action=' . $this->headers['redirect'], true, $this->status);
+            exit;
         }
-
-        // TODO Il faut renvoyer aussi le status de la réponse
-
     }
 }
