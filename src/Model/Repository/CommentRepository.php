@@ -53,7 +53,6 @@ final class CommentRepository implements EntityRepositoryInterface
             return null;
         }
 
-        // réfléchir à l'hydratation des entités;
         $comments = [];
         $users = [];
         foreach ($data as $comment) {

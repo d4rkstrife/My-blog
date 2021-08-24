@@ -25,6 +25,7 @@
 
 			{% if session.user %}
 				<form method="POST">
+					<input type="hidden" id="token" name="token" class="form-control" value={{ token }} required>
 					<label for="comment">Commentaire
 					</label>
 					<input type="text" id="comment" name="comment" class="form-control" required>

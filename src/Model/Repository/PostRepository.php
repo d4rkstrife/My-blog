@@ -67,7 +67,7 @@ final class PostRepository implements EntityRepositoryInterface
         INNER JOIN user    
         ON post.fk_user = user.user_id ";
         if ($criteria !== []) {
-            $sql .= "WHERE post.id = " . $criteria['id'];
+            $sql .= "WHERE post.id = :id";
         };
         if ($orderBy !== null) {
             $sql .= "ORDER BY " . $orderBy['order'] . " DESC ";
@@ -79,7 +79,7 @@ final class PostRepository implements EntityRepositoryInterface
             $sql .= " OFFSET " . $offset;
         };
         $stmt = $this->database->getPDO()->prepare($sql);
-        $stmt->execute();
+        $stmt->execute($criteria);
         $data = $stmt->fetchAll();
 
         if ($data === false) {
@@ -136,11 +136,6 @@ final class PostRepository implements EntityRepositoryInterface
         $users = [];
         foreach ($data as $post) {
             $postObj = new Post();
-            //si $post['fk_user'] n existe pas dans $users alors
-            //création $user
-            //$users[$post['fk_user']] = $user
-            //fin si
-            //$postObject->setAutor($users[$post['fk_user']])
             if (!in_array($post['fk_user'], $users)) {
                 $user = new User();
                 $user
