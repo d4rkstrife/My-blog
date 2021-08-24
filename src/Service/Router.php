@@ -21,7 +21,6 @@ use App\Controller\Backoffice\HomeController as BackofficeHomeController;
 use App\Controller\Backoffice\PostController as BackofficePostController;
 use App\Controller\Backoffice\UserController as BackofficeUserController;
 
-
 final class Router
 {
     private Database $database;
@@ -32,6 +31,7 @@ final class Router
     private DataValidation $validator;
     private Mailer $mailer;
     private Pagination $pagination;
+    private TokenProtection $token;
 
     public function __construct(Request $request, ParseConfig $config)
     {
@@ -44,6 +44,7 @@ final class Router
         $this->validator = new DataValidation();
         $this->request = $request;
         $this->pagination = new Pagination($this->config->getConfig('postPerPage'));
+        $this->token = new TokenProtection($this->session);
     }
 
     public function run(): Response
@@ -115,7 +116,7 @@ final class Router
             $controller = new PostController($postRepo, $this->view, $this->session, $this->validator);
             $commentRepo = new CommentRepository($this->database);
 
-            return $controller->displayOneAction((object) $this->request, $commentRepo, $this->session->get('user'));
+            return $controller->displayOneAction((object) $this->request, $commentRepo, $this->session->get('user'), $this->token);
 
             // *** @Route http://localhost:8000/?action=login ***
         } elseif ($action === 'login') {

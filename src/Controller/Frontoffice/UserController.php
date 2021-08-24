@@ -129,8 +129,7 @@ final class UserController
                         'surname' => $surname,
                         'pseudo' => $pseudo
                     ];
-                } else if ($error === false) {
-
+                } elseif ($error === false) {
                     $user = new User();
                     $registrationKey = md5((string) time());
 

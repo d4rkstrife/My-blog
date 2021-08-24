@@ -22,7 +22,6 @@ final class Response
         if ($this->headers === null) {
             echo $this->content;
         } elseif ($this->headers !== null) {
-
             header('Location: index.php?action=' . $this->headers['redirect'], true, $this->status);
             exit;
         }

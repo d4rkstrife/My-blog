@@ -14,6 +14,7 @@ use App\Service\DataValidation;
 use App\Service\Http\Session\Session;
 use App\Model\Repository\PostRepository;
 use App\Model\Repository\CommentRepository;
+use App\Service\TokenProtection;
 
 final class PostController
 {
@@ -30,8 +31,9 @@ final class PostController
         $this->validator = $validator;
     }
 
-    public function displayOneAction(Request $request, CommentRepository $commentRepository, ?User $user): Response
+    public function displayOneAction(Request $request, CommentRepository $commentRepository, ?User $user, TokenProtection $token): Response
     {
+
         $id = $request->query()->get('id');
         $post = $this->postRepository->findOneBy(['id' => $id]);
         $comments = $commentRepository->findBy(['idPost' => $id, 'state' => 1]);
@@ -41,27 +43,39 @@ final class PostController
         ], 'Frontoffice'), 404);
 
         if (($post !== null) && ($request->request()->has('comment'))) {
-            $content = $request->request()->get('comment');
-            if ($content != '') {
-                $newComment = new Comment();
-                $newUser = new User();
-                $newUser->setId($user->getId());
-                $newComment
-                    ->setText($this->validator->validate($content))
-                    ->setIdPost((int) $id)
-                    ->setUser($newUser);
+            if ($request->request()->get('token') === $this->session->get('token')) {
+                $token->removeToken();
+                $content = $request->request()->get('comment');
+                if ($content != '') {
+                    $newComment = new Comment();
+                    $newUser = new User();
+                    $newUser->setId($user->getId());
+                    $newComment
+                        ->setText($this->validator->validate($content))
+                        ->setIdPost((int) $id)
+                        ->setUser($newUser);
 
-                $commentRepository->create($newComment) ? $this->session->addFlashes('success', 'Commentaire en attente de validation') : $this->session->addFlashes('error', 'Enregistrement du commentaire impossible');
+                    $commentRepository->create($newComment) ? $this->session->addFlashes('success', 'Commentaire en attente de validation') : $this->session->addFlashes('error', 'Enregistrement du commentaire impossible');
+                }
+            } else {
+                var_dump('error');
+                die;
             }
         }
 
         if ($post !== null) {
+            if ($token->getToken() === '') {
+                $token->generateToken();
+                $token->setToken();
+            }
+
             $response = new Response($this->view->render(
                 [
                     'template' => 'post',
                     'data' => [
                         'post' => $post,
-                        'comments' => $comments
+                        'comments' => $comments,
+                        'token' => $token->getToken()
                     ],
                 ],
                 'Frontoffice'

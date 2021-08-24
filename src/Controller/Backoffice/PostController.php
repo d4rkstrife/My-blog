@@ -36,7 +36,6 @@ final class PostController
             $this->session->get('user') !== null
             && ($this->session->get('user')->getGrade() === 'superAdmin' || $this->session->get('user')->getGrade() === 'admin')
         ) {
-
             //si un des boutons a été cliqué
             if (!empty($request->request()->all())) {
                 $action = (object) $request->request()->all();
@@ -88,8 +87,10 @@ final class PostController
                 ->setChapo($chapo)
                 ->setContent($content);
 
-            if ($user) {
-
+            if ($title === '' || $chapo === '' || $content === '') {
+                $this->session->addFlashes('error', 'Tous les champs doivent être remplis.');
+                $post->setAutor($user);
+            } elseif ($user) {
                 $post->setAutor($user);
                 $this->postRepository->update($post) ? $this->session->addFlashes('success', 'Post mis à jour') : $this->session->addFlashes('error', 'Mise à jour du post impossible.');
             } elseif (!$user) {
@@ -112,7 +113,6 @@ final class PostController
             && ($this->session->get('user')->getGrade() === 'superAdmin' || $this->session->get('user')->getGrade() === 'admin')
         ) {
             if (!empty($request->request()->all())) {
-
                 $data = $request->request();
                 $title = $this->validator->validate($data->get('title'));
                 $chapo = $this->validator->validate($data->get('chapo'));
