@@ -56,7 +56,7 @@ final class Router
         // *** @Route http://localhost:8000/?action=home ***
         if ($action === 'home') {
             $controller = new HomeController($this->view, $this->mailer, $this->session, $this->validator);
-            return $controller->homeAction($this->request);
+            return $controller->homeAction($this->request, $this->token);
 
             // *** @Route http://localhost:8000/?action=administration ***
         } elseif ($action === 'administration') {
@@ -129,7 +129,7 @@ final class Router
             $userRepo = new UserRepository($this->database);
             $controller = new UserController($userRepo, $this->view, $this->session, $this->validator, $this->mailer);
 
-            return $controller->registerAction($this->request);
+            return $controller->registerAction($this->request, $this->token);
 
             // *** @Route http://localhost:8000/?action=logout ***
         } elseif ($action === 'logout') {

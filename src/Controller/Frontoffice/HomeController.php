@@ -10,6 +10,7 @@ use App\Service\Http\Request;
 use App\Service\Http\Response;
 use App\Service\DataValidation;
 use App\Service\Http\Session\Session;
+use App\Service\TokenProtection;
 
 final class HomeController
 {
@@ -26,7 +27,7 @@ final class HomeController
         $this->validator = $validator;
     }
 
-    public function homeAction(Request $request): Response
+    public function homeAction(Request $request, TokenProtection $token): Response
     {
 
         if (!empty($request->request()->all())) {
@@ -53,22 +54,27 @@ final class HomeController
                 $error = true;
             }
             if (!$error) {
-                $this->mailer->send([
-                    'name' => $name,
-                    'surname' => $surname,
-                    'mail' => $mail,
-                    'content' => $content
-                ]) ? $this->session->addFlashes('success', 'Message envoyé.') : $this->session->addFlashes('error', "Le mail n'a pas pu être envoyé.");
+                if ($request->request()->get('token') === $this->session->get('token')) {
+                    $this->mailer->send([
+                        'name' => $name,
+                        'surname' => $surname,
+                        'mail' => $mail,
+                        'content' => $content
+                    ]) ? $this->session->addFlashes('success', 'Message envoyé.') : $this->session->addFlashes('error', "Le mail n'a pas pu être envoyé.");
+                } elseif ($request->request()->get('token') !== $this->session->get('token')) {
+                    $this->session->addFlashes('error', "Le mail n'a pas pu être envoyé.");
+                }
             }
 
             if ($error) {
                 $this->session->addFlashes('error', $flashes);
             }
         }
+        $token->generateToken();
 
         return new Response($this->view->render([
             'template' => 'home',
-            'data' => [],
+            'data' => ['token' => $token->getToken()],
         ], 'Frontoffice'));
     }
 

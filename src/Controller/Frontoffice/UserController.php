@@ -12,6 +12,7 @@ use App\Service\Http\Response;
 use App\Service\DataValidation;
 use App\Service\Http\Session\Session;
 use App\Model\Repository\UserRepository;
+use App\Service\TokenProtection;
 
 final class UserController
 {
@@ -66,7 +67,7 @@ final class UserController
         return new Response('', 303, ['redirect' => 'home']);
     }
 
-    public function registerAction(Request $request): Response
+    public function registerAction(Request $request, TokenProtection $token): Response
     {
         $data = [];
         if ($request->getMethod() === 'POST') {
@@ -128,7 +129,7 @@ final class UserController
                         'surname' => $surname,
                         'pseudo' => $pseudo
                     ];
-                } elseif ($error === false) {
+                } elseif ($error === false && $request->request()->get('token') === $this->session->get('token')) {
                     $user = new User();
                     $registrationKey = md5((string) time());
 
@@ -146,16 +147,30 @@ final class UserController
                         $this->mailer->sendConfirmationMessage($newUser);
                         $this->session->addFlashes('success', 'Compte créé, Cliquez sur le lien dans vos mails pour valider votre compte.');
 
-                        return new Response('', 304, ['redirect' => 'login']);
+                        return new Response('', 303, ['redirect' => 'login']);
                     } elseif (!$isCreated) {
                         $this->session->addFlashes('error', "Le compte n'a pas pu être créé");
                     }
+                } elseif ($request->request()->get('token') !== $this->session->get('token')) {
+                    $this->session->addFlashes('error', "Le compte n'a pas pu être créé");
+                    $data = [
+                        'mail' => $mail,
+                        'name' => $name,
+                        'surname' => $surname,
+                        'pseudo' => $pseudo
+                    ];
                 }
             }
         }
+
+        $token->generateToken();
+
         return new Response($this->view->render([
             'template' => 'register',
-            'data' => $data
+            'data' => [
+                'data' => $data,
+                'token' => $token->getToken()
+            ]
         ], 'Frontoffice'), 200);
     }
 
