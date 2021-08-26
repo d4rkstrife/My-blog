@@ -32,6 +32,7 @@
 							<p class={{ key }}>{{ message }}</p>
 						</div>
 					{% endfor %}
+					<input type="hidden" id="token" name="token" class="form-control" value={{ token }} required>
 					<div class="row" style="display: flex">
 						<div class=" col-sm-3">
 							<label for='name'>Nom</label>
