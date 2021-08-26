@@ -95,7 +95,6 @@ final class Router
 
             // *** @Route http://localhost:8000/?action=posts ***
         } elseif ($action === 'posts') {
-            //injection des dépendances et instanciation du controller
             $postRepo = new PostRepository($this->database);
             $controller = new PostController($postRepo, $this->view, $this->session, $this->validator);
 
@@ -152,7 +151,9 @@ final class Router
             $userRepo = new UserRepository($this->database);
             $controller = new BackofficePostController($postRepo, $userRepo, $this->view, $this->session, $this->validator);
 
-            return $controller->newPostAction($this->request);
+            return $controller->newPostAction($this->request, $this->token);
+
+            // *** @Route http://localhost:8000/?action=unauthorized ***
         } elseif ($action === 'unauthorized') {
             $controller = new HomeController($this->view, $this->mailer, $this->session, $this->validator);
             return $controller->unauthorizedAction();

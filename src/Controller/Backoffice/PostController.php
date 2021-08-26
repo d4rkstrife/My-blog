@@ -12,6 +12,7 @@ use App\Service\DataValidation;
 use App\Service\Http\Session\Session;
 use App\Model\Repository\PostRepository;
 use App\Model\Repository\UserRepository;
+use App\Service\TokenProtection;
 
 final class PostController
 {
@@ -58,7 +59,7 @@ final class PostController
                 'data' => ['posts' => $posts],
             ], 'Backoffice'));
         }
-        return new Response('', 301, ['redirect' => 'unauthorized']);
+        return new Response('', 303, ['redirect' => 'unauthorized']);
     }
 
     public function updateAction(Request $request): Response
@@ -93,6 +94,7 @@ final class PostController
             } elseif ($user) {
                 $post->setAutor($user);
                 $this->postRepository->update($post) ? $this->session->addFlashes('success', 'Post mis à jour') : $this->session->addFlashes('error', 'Mise à jour du post impossible.');
+                return new Response('', 303, ['redirect' => 'postsAdmin']);
             } elseif (!$user) {
                 $post->setAutor($this->session->get('user'));
                 $this->session->addFlashes('error', "Cet utilisateur n'existe pas.");
@@ -106,29 +108,51 @@ final class PostController
         ], 'Backoffice'));
     }
 
-    public function newPostAction(Request $request): Response
+    public function newPostAction(Request $request, TokenProtection $token): Response
     {
         if (
             $this->session->get('user') !== null
             && ($this->session->get('user')->getGrade() === 'superAdmin' || $this->session->get('user')->getGrade() === 'admin')
         ) {
-            if (!empty($request->request()->all())) {
+            $newPost = new Post();
+            $newPost
+                ->setTitle('')
+                ->setChapo('')
+                ->setContent('');
+
+            if ($request->getMethod() === 'POST') {
                 $data = $request->request();
                 $title = $this->validator->validate($data->get('title'));
                 $chapo = $this->validator->validate($data->get('chapo'));
                 $content = $this->validator->validate($data->get('content'));
-                $newPost = new Post();
+
                 $newPost
                     ->setTitle($title)
                     ->setChapo($chapo)
                     ->setContent($content)
                     ->setAutor($this->session->get('user'));
 
-                $this->postRepository->create($newPost) ? $this->session->addFlashes('success', 'Post enregistré avec succès') : $this->session->addFlashes('Error', "Le Post n' a pas pu être enregistré.");
+                if ($request->request()->get('token') === $this->session->get('token')) {
+
+                    if ($title === '' || $chapo === '' || $content === '') {
+                        $this->session->addFlashes('error', 'Tous les champs doivent être remplis');
+                    } elseif ($title !== '' || $chapo !== '' || $content !== '') {
+                        $this->postRepository->create($newPost) ? $this->session->addFlashes('success', 'Post enregistré avec succès') : $this->session->addFlashes('Error', "Le Post n' a pas pu être enregistré.");
+                        return new Response('', 303, ['redirect' => 'postsAdmin']);
+                    }
+                } elseif ($request->request()->get('token') !== $this->session->get('token')) {
+                    $this->session->addFlashes('error', 'Impossible de créer le post');
+                }
             }
+
+            $token->generateToken();
+
             return new Response($this->view->render([
                 'template' => 'newPost',
-                'data' => [],
+                'data' => [
+                    'post' => $newPost,
+                    'token' => $token->getToken()
+                ],
             ], 'Backoffice'));
         }
         return new Response('', 304, ['redirect' => 'unauthorized']);

@@ -19,13 +19,10 @@ class TokenProtection
 
     public function generateToken(): void
     {
-        $this->token = md5((string) time());
-    }
-
-    public function setToken(): void
-    {
+        $this->token = hash("sha256", (string) time());
         $this->session->set('token', $this->token);
     }
+
     public function getToken(): ?string
     {
         return $this->token;
