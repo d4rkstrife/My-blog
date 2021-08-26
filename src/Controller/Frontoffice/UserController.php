@@ -53,7 +53,7 @@ final class UserController
     {
         if ($request->getMethod() === 'POST') {
             if ($this->isValidLoginForm($request->request()->all())) {
-                return new Response('', 301, ['redirect' => 'home']);
+                return new Response('', 303, ['redirect' => 'home']);
             }
             $this->session->addFlashes('error', 'Mauvais identifiants ou compte non validé');
         }
@@ -63,14 +63,13 @@ final class UserController
     public function logoutAction(): Response
     {
         $this->session->remove('user');
-        return new Response('', 301, ['redirect' => 'home']);
+        return new Response('', 303, ['redirect' => 'home']);
     }
 
     public function registerAction(Request $request): Response
     {
         $data = [];
         if ($request->getMethod() === 'POST') {
-            //validation ici
 
             $infoUser = $request->request();
             $pseudo = $this->validator->validate($infoUser->get('pseudo'));

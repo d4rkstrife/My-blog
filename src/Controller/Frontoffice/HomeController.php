@@ -28,6 +28,7 @@ final class HomeController
 
     public function homeAction(Request $request): Response
     {
+
         if (!empty($request->request()->all())) {
             $infoContact =  $request->request()->all();
 

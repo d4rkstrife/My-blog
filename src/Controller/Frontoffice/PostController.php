@@ -37,14 +37,12 @@ final class PostController
         $id = $request->query()->get('id');
         $post = $this->postRepository->findOneBy(['id' => $id]);
         $comments = $commentRepository->findBy(['idPost' => $id, 'state' => 1]);
-        $response = new Response($this->view->render([
-            'template' => 'home',
-            'data' => [],
-        ], 'Frontoffice'), 404);
+        if ($post === null) {
+            return new Response('', 303, ['redirect' => 'home']);
+        }
 
-        if (($post !== null) && ($request->request()->has('comment'))) {
+        if ($request->getMethod() === 'POST') {
             if ($request->request()->get('token') === $this->session->get('token')) {
-                $token->removeToken();
                 $content = $request->request()->get('comment');
                 if ($content != '') {
                     $newComment = new Comment();
@@ -57,30 +55,25 @@ final class PostController
 
                     $commentRepository->create($newComment) ? $this->session->addFlashes('success', 'Commentaire en attente de validation') : $this->session->addFlashes('error', 'Enregistrement du commentaire impossible');
                 }
-            } else {
-                var_dump('error');
-                die;
+            } elseif ($request->request()->get('token') !== $this->session->get('token')) {
+                $this->session->addFlashes('error', 'Ajout du commentaire impossible.');
             }
         }
 
-        if ($post !== null) {
-            if ($token->getToken() === '') {
-                $token->generateToken();
-                $token->setToken();
-            }
+        $token->generateToken();
 
-            $response = new Response($this->view->render(
-                [
-                    'template' => 'post',
-                    'data' => [
-                        'post' => $post,
-                        'comments' => $comments,
-                        'token' => $token->getToken()
-                    ],
+        $response = new Response($this->view->render(
+            [
+                'template' => 'post',
+                'data' => [
+                    'post' => $post,
+                    'comments' => $comments,
+                    'token' => $token->getToken()
                 ],
-                'Frontoffice'
-            ));
-        }
+            ],
+            'Frontoffice'
+        ));
+
 
         return $response;
     }

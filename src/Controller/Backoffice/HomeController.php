@@ -34,7 +34,7 @@ final class HomeController
             || ($this->session->get('user')->getGrade() !== 'superAdmin'
                 && $this->session->get('user')->getGrade() !== 'admin')
         ) {
-            return new Response('', 301, ['redirect' => 'unauthorized']);
+            return new Response('', 303, ['redirect' => 'unauthorized']);
         }
 
         $postRepository = new PostRepository($this->database);
