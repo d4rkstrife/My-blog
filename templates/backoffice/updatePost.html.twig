@@ -14,14 +14,18 @@
 				</div>
 			{% endfor %}
 			<form method="Post">
+				<input type="hidden" id="token" name="token" class="form-control" value={{ token }} required>
 				<div class="row" style="display: flex">
 					<div class=" col-sm-10">
 						<label for='autor'>Auteur</label>
 						<select type="select" id="autor" name="autor" class="custom-select">
-							<option value="{{ post.autor.pseudo }}">{{ post.autor.pseudo }}</option>
 
 							{% for user in users%}
-								<option value="{{ user.pseudo }}">{{ user.pseudo }}</option>
+								{% if post.autor.pseudo is same as(user.pseudo) %}
+									<option value="{{ user.pseudo }}" selected>{{ user.pseudo }}</option>
+								{% else %}
+									<option value="{{ user.pseudo }}">{{ user.pseudo }}</option>
+								{% endif %}
 							{% endfor %}
 
 
