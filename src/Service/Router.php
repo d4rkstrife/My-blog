@@ -76,7 +76,7 @@ final class Router
             $postRepo = new PostRepository($this->database);
             $userRepo = new UserRepository($this->database);
             $controller = new BackofficePostController($postRepo, $userRepo, $this->view, $this->session, $this->validator);
-            return $controller->updateAction($this->request);
+            return $controller->updateAction($this->request, $this->token);
 
 
             // *** @Route http://localhost:8000/?action=commentAdmin ***

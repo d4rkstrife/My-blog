@@ -62,7 +62,7 @@ final class PostController
         return new Response('', 303, ['redirect' => 'unauthorized']);
     }
 
-    public function updateAction(Request $request): Response
+    public function updateAction(Request $request, TokenProtection $token): Response
     {
         $action = (object) $request->request()->all();
         $post = '';
@@ -92,19 +92,25 @@ final class PostController
                 $this->session->addFlashes('error', 'Tous les champs doivent être remplis.');
                 $post->setAutor($user);
             } elseif ($user) {
-                $post->setAutor($user);
-                $this->postRepository->update($post) ? $this->session->addFlashes('success', 'Post mis à jour') : $this->session->addFlashes('error', 'Mise à jour du post impossible.');
-                return new Response('', 303, ['redirect' => 'postsAdmin']);
+                if ($request->request()->get('token') === $this->session->get('token')) {
+                    $post->setAutor($user);
+                    $this->postRepository->update($post) ? $this->session->addFlashes('success', 'Post mis à jour') : $this->session->addFlashes('error', 'Mise à jour du post impossible.');
+                    return new Response('', 303, ['redirect' => 'postsAdmin']);
+                } elseif ($request->request()->get('token') !== $this->session->get('token')) {
+                    $this->session->addFlashes('error', "Impossible de modifier le post.");
+                    $post->setAutor($user);
+                }
             } elseif (!$user) {
                 $post->setAutor($this->session->get('user'));
                 $this->session->addFlashes('error', "Cet utilisateur n'existe pas.");
             }
         }
 
+        $token->generateToken();
 
         return new Response($this->view->render([
             'template' => 'updatePost',
-            'data' => ['post' => $post, 'users' => $users],
+            'data' => ['post' => $post, 'users' => $users, 'token' => $token->getToken()],
         ], 'Backoffice'));
     }
 
