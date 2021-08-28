@@ -202,8 +202,6 @@ final class UserController
             $this->session->addFlashes('error', 'Compte déjà validé');
         }
 
-
-
         return new Response('', 304, ['redirect' => 'login']);
     }
 }
