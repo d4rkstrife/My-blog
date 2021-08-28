@@ -83,7 +83,6 @@ final class UserController
     {
         $data = [];
         if ($request->getMethod() === 'POST') {
-
             $infoUser = $request->request();
             $pseudo = $this->validator->validate($infoUser->get('pseudo'));
             $mail = $this->validator->validate($infoUser->get('email'));
