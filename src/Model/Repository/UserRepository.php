@@ -46,7 +46,7 @@ final class UserRepository implements EntityRepositoryInterface
     {
         $sql = 'select * from user ';
         if ($orderBy !== null) {
-            $sql .= " ORDER BY $orderBy DESC";
+            $sql .= " ORDER BY $orderBy[0] DESC";
         }
         if (array_key_exists('email', $criteria)) {
             $sql .= " WHERE mail=:email";

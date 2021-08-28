@@ -50,15 +50,27 @@ final class UserController
 
 
 
-    public function loginAction(Request $request): Response
+    public function loginAction(Request $request, TokenProtection $token): Response
     {
         if ($request->getMethod() === 'POST') {
-            if ($this->isValidLoginForm($request->request()->all())) {
-                return new Response('', 303, ['redirect' => 'home']);
+            if ($request->request()->get('token') === $this->session->get('token')) {
+                if ($this->isValidLoginForm($request->request()->all())) {
+                    return new Response('', 303, ['redirect' => 'home']);
+                }
+                $this->session->addFlashes('error', 'Mauvais identifiants ou compte non validé');
+            } elseif ($request->request()->get('token') !== $this->session->get('token')) {
+                $this->session->addFlashes('error', 'Impossible de se connecter');
             }
-            $this->session->addFlashes('error', 'Mauvais identifiants ou compte non validé');
         }
-        return new Response($this->view->render(['template' => 'login', 'data' => []], 'Frontoffice'), 200);
+
+        $token->generateToken();
+        return new Response($this->view->render(
+            [
+                'template' => 'login',
+                'data' => ['token' => $token->getToken()]
+            ],
+            'Frontoffice'
+        ), 200);
     }
 
     public function logoutAction(): Response

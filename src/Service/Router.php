@@ -122,7 +122,7 @@ final class Router
             $userRepo = new UserRepository($this->database);
             $controller = new UserController($userRepo, $this->view, $this->session, $this->validator, $this->mailer);
 
-            return $controller->loginAction($this->request);
+            return $controller->loginAction($this->request, $this->token);
 
             // *** @Route http://localhost:8000/?action=register ***
         } elseif ($action === 'register') {
