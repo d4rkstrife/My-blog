@@ -26,17 +26,22 @@ final class UserController
     public function userAction(Request $request): Response
     {
         if (
+            $this->session->get('user') === null
+            || ($this->session->get('user')->getGrade() !== 'superAdmin')
+        ) {
+            return new Response('', 303, ['redirect' => 'unauthorized']);
+        } elseif (
             $this->session->get('user') !== null
-            && ($this->session->get('user')->getGrade() === 'superAdmin' || $this->session->get('user')->getGrade() === 'admin')
+            && ($this->session->get('user')->getGrade() === 'superAdmin')
         ) {
             //si le bouton supprimer a été cliqué
-            if (!empty($request->request()->all())) {
+            if ($request->getMethod() === 'POST') {
                 $post = (object) $request->request()->all();
                 $criteria = array(
                     'email' => $post->delete
                 );
                 $user = $this->userRepository->findOneBy($criteria);
-                $this->userRepository->delete($user);
+                $this->userRepository->delete($user) ? $this->session->addFlashes('success', 'Utilisateur supprimé') : $this->session->addFlashes('error', 'Suppression impossible');
             }
 
             $users = $this->userRepository->findAll();
@@ -46,21 +51,32 @@ final class UserController
                 'data' => ['users' => $users],
             ], 'Backoffice'), 200);
         }
-        return new Response('', 304, ['redirect' => 'unauthorized']);
     }
 
     public function userAccountAction(Request $request): Response
     {
-        $user = $this->userRepository->findOneBy(array('email' => $request->request()->get('mail')));
+        if (
+            ($this->session->get('user') !== null
+            && ($this->session->get('user')->getGrade() === 'superAdmin'))
+        ) {
+            $user = $this->userRepository->findOneBy(array('email' => $request->request()->get('mail')));
 
-        if ($request->request()->get('grade')) {
-            $user->setGrade($request->request()->get('grade'));
-            $this->userRepository->update($user) ? $this->session->addFlashes('success', 'Grade mis à jour') : $this->session->addFlashes('error', 'Impossible de mettre à jour');
+            if ($request->request()->get('grade')) {
+                $user->setGrade($request->request()->get('grade'));
+                $this->userRepository->update($user) ? $this->session->addFlashes('success', 'Grade mis à jour') : $this->session->addFlashes('error', 'Impossible de mettre à jour');
+                return new Response('', 303, ['redirect' => 'userAdmin']);
+            }
+
+            return new Response($this->view->render([
+                'template' => 'userAccount',
+                'data' => ['user' => $user],
+            ], 'Backoffice'), 200);
+        } elseif (
+            ($this->session->get('user') === null
+                || ($this->session->get('user')->getGrade() !== 'superAdmin'))
+            && ($request->getMethod() !== 'POST')
+        ) {
+            return new Response('', 303, ['redirect' => 'unauthorized']);
         }
-
-        return new Response($this->view->render([
-            'template' => 'userAccount',
-            'data' => ['user' => $user],
-        ], 'Backoffice'), 200);
     }
 }

@@ -38,7 +38,7 @@ final class Router
         // dépendance
         $this->config = $config;
         $this->database = new Database($this->config->getConfig('dbHost'), $this->config->getConfig('dbName'), $this->config->getConfig('dbUser'), $this->config->getConfig('dbPass'), $this->config->getConfig('dbPort'));
-        $this->mailer = new Mailer($this->config->getConfig('host'), $this->config->getConfig('username'), $this->config->getConfig('password'));
+        $this->mailer = new Mailer($this->config->getConfig('host'), $this->config->getConfig('username'), $this->config->getConfig('password'), $this->config->getConfig('mail'));
         $this->session = new Session();
         $this->view = new View($this->session);
         $this->validator = new DataValidation();
@@ -52,7 +52,7 @@ final class Router
         //On test si une action a été défini ? si oui alors on récupére l'action : sinon on mets une action par défaut (ici l'action posts)
         $action = $this->request->query()->has('action') ? $this->request->query()->get('action') : 'home';
 
-        //Déterminer sur quelle route nous sommes // Attention algorithme naïf
+        //Déterminer sur quelle route nous sommes
         // *** @Route http://localhost:8000/?action=home ***
         if ($action === 'home') {
             $controller = new HomeController($this->view, $this->mailer, $this->session, $this->validator);

@@ -12,12 +12,14 @@ class Mailer
     private string $host;
     private string $username;
     private string $password;
+    private string $mail;
 
-    public function __construct(string $host, string $userName, string $password)
+    public function __construct(string $host, string $userName, string $password, string $mail)
     {
         $this->host = $host;
         $this->username = $userName;
         $this->password = $password;
+        $this->mail = $mail;
     }
     public function send(array $infoUser): bool
     {
@@ -35,7 +37,7 @@ class Mailer
 
         //Recipients
         $mail->setFrom($infoObject->mail, $infoObject->name);
-        $mail->addAddress('p.gdc85@gmail.com', 'me');     //Add a recipient
+        $mail->addAddress($this->mail, 'me');     //Add a recipient
 
         //Attachments
         //Optional name
@@ -62,7 +64,7 @@ class Mailer
         $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
         //Recipients
-        $mail->setFrom('p.gdc85@gmail.com', 'My Blog');
+        $mail->setFrom($this->mail, 'My Blog');
         $mail->addAddress($user->getEmail(), $user->getName());
 
         //Attachments
