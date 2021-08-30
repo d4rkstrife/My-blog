@@ -87,7 +87,7 @@ final class PostController
                 ->setChapo($chapo)
                 ->setContent($content);
 
-            if ($title === '' || $chapo === '' || $content === '') {
+            if (($title === '' || $chapo === '' || $content === '') || !$this->postRepository->findBy(['id' => $post->getId()])) {
                 $this->session->addFlashes('error', 'Tous les champs doivent être remplis.');
                 $post->setAutor($user);
             } elseif ($user) {

@@ -115,12 +115,16 @@
 										Liste des posts
 									</a>
 								</li>
-								<li>
-									<a href="index.php?action=userAdmin" class="mm-active">
-										<i class="metismenu-icon pe-7s-rocket"></i>
-										Liste des utilisateurs
-									</a>
-								</li>
+								{% if session.user.grade is same as "superAdmin" %}
+
+									<li>
+										<a href="index.php?action=userAdmin" class="mm-active">
+											<i class="metismenu-icon pe-7s-rocket"></i>
+											Liste des utilisateurs
+										</a>
+									</li>
+
+								{% endif %}
 								<li>
 									<a href="index.php?action=commentAdmin" class="mm-active">
 										<i class="metismenu-icon pe-7s-rocket"></i>
