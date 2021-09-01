@@ -14,4 +14,4 @@ User superAdmin : mail: superAdmin@mail.com , password : Password0
 
 User admin: mail : admin@mail.com  , password : Password0
 
-User user: mail : user@mail.com , password : Password0
+User user: mail : member@mail.com , password : Password0
